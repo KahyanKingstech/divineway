@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DivinewayFengshui – Hand-Consecrated Talismans by Master Louis Cheung</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@300;400;500;700&family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="icon" type="image/png" href="../divineway_logo/divineway_logo.png">
+</head>
+<body>
+
+<style>
+:root {
+  --ink:         #080604;
+  --ink-deep:    #050403;
+  --ink-mid:     #0f0d0a;
+  --ink-soft:    #181410;
+  --ink-panel:   #0c0a07;
+  --gold:        #c9a84c;
+  --gold-bright: #e2c26a;
+  --gold-dim:    #8a6b2a;
+  --gold-pale:   #f0dfa0;
+  --gold-faint:  rgba(201,168,76,0.10);
+  --gold-glow:   rgba(201,168,76,0.06);
+  --gold-border: rgba(201,168,76,0.20);
+  --gold-border2:rgba(201,168,76,0.35);
+  --cream:       #f2e8d5;
+  --cream-dim:   rgba(242,232,213,0.55);
+  --cream-faint: rgba(242,232,213,0.06);
+  --red:         #8b1a1a;
+  --red-bright:  #c0392b;
+  --text-body:   rgba(242,232,213,0.70);
+  --text-muted:  rgba(242,232,213,0.35);
+  --text-hint:   rgba(242,232,213,0.18);
+  --serif:       'EB Garamond', 'Noto Serif SC', Georgia, serif;
+  --display:     'Cinzel', 'EB Garamond', Georgia, serif;
+  --chinese:     'Noto Serif SC', serif;
+  --sans:        'Inter', system-ui, sans-serif;
+  --radius:      3px;
+  --radius-lg:   6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--serif);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── GRAIN OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ─── WRAPPER ─── */
+.wrapper {
+  border: 1px solid var(--gold-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--ink-deep);
+  position: relative;
+}
+
+/* ─── VERTICAL CHINESE TEXT ACCENT ─── */
+.vertical-accent {
+  position: absolute;
+  writing-mode: vertical-rl;
+  font-family: var(--chinese);
+  font-size: 11px;
+  color: var(--gold-border);
+  letter-spacing: 0.3em;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ─── NAV ─── */
+.nav {
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  height: 68px;
+  background: rgba(5,4,3,0.96);
+  border-bottom: 1px solid var(--gold-border);
+  justify-content: space-between;
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+
+.nav::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+
+/* .nav-icon {
+  width: 40px; height: 40px;
+  border: 1px solid var(--gold-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--gold-faint);
+  overflow: hidden;
+  position: relative;
+}
+
+.nav-icon::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 12px rgba(201,168,76,0.15);
+}
+
+*/
+
+.nav-wordmark { display: flex; flex-direction: column; line-height: 1.25; }
+.nav-wordmark strong {
+  font-family: var(--display);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--cream);
+}
+
+
+.nav-wordmark span {
+  font-family: var(--chinese);
+  font-size: 10px; color: var(--gold);
+  letter-spacing: 0.12em;
+} 
+
+/* ─── LOGO GLOW EFFECT ─── */
+.nav-icon {
+  width: 40px; height: 40px;
+  position: relative;
+}
+.nav-icon img { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; }
+
+
+
+/* Outer mystical aura */
+/* .nav-icon::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.25) 0%, transparent 70%);
+  animation: logoAura 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.nav-icon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255,220,100,0.18) 0%, transparent 65%);
+  box-shadow: 
+    0 0 12px rgba(201,168,76,0.35),
+    0 0 28px rgba(201,168,76,0.15),
+    0 0 50px rgba(139,26,26,0.12);
+  animation: logoGlow 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes logoAura {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.08); }
+}
+
+@keyframes logoGlow {
+  0%, 100% { box-shadow: 0 0 12px rgba(201,168,76,0.35), 0 0 28px rgba(201,168,76,0.15), 0 0 50px rgba(139,26,26,0.12); }
+  50%       { box-shadow: 0 0 18px rgba(201,168,76,0.55), 0 0 40px rgba(201,168,76,0.25), 0 0 70px rgba(139,26,26,0.20); }
+} */
+
+.nav-icon::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.5) 0%, rgba(201,168,76,0.15) 40%, transparent 70%);
+  animation: logoAura 2.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.nav-icon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 
+    0 0 20px 6px rgba(201,168,76,0.6),
+    0 0 50px 12px rgba(201,168,76,0.3),
+    0 0 90px 20px rgba(139,26,26,0.25),
+    inset 0 0 18px rgba(255,220,100,0.25);
+  animation: logoGlow 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes logoAura {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.18); }
+}
+
+@keyframes logoGlow {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px 6px rgba(201,168,76,0.3),
+      0 0 50px 12px rgba(201,168,76,0.2),
+      0 0 90px 20px rgba(139,26,26,0.1),
+      inset 0 0 18px rgba(255,220,100,0.1);
+  }
+  50% {
+    box-shadow: 
+      0 0 30px 10px rgba(201,168,76,0.3),
+      0 0 70px 20px rgba(201,168,76,0.3),
+      0 0 120px 30px rgba(139,26,26,0.3),
+      inset 0 0 26px rgba(255,220,100,0.1);
+  }
+}
+
+/* Wordmark subtle shimmer */
+.nav-wordmark strong {
+  background: linear-gradient(90deg, var(--cream) 0%, var(--gold-pale) 40%, var(--cream) 60%, var(--gold-bright) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmerText 4s linear infinite;
+}
+
+@keyframes shimmerText {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+.nav-links { display: flex; gap: 32px; }
+.nav-links a {
+  font-family: var(--display);
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--text-body); text-decoration: none;
+  transition: color 0.2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute; bottom: -4px; left: 0; right: 0;
+  height: 1px; background: var(--gold);
+  transform: scaleX(0); transform-origin: center;
+  transition: transform 0.2s;
+}
+.nav-links a:hover { color: var(--gold-bright); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-links a.nav-active { color: var(--gold); }
+.nav-links a.nav-active::after { transform: scaleX(1); }
+
+.nav-buttons { display: flex; gap: 10px; align-items: center; }
+
+.btn-wa {
+  background: var(--red);
+  border: 1px solid rgba(139,26,26,0.6);
+  color: var(--cream);
+  padding: 8px 18px;
+  border-radius: var(--radius);
+  font-family: var(--display);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; display: flex; align-items: center; gap: 6px;
+  transition: all 0.2s;
+}
+.btn-wa:hover { background: var(--red-bright); }
+
+.btn-cart {
+  background: transparent;
+  border: 1px solid var(--gold-border);
+  color: var(--cream);
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-family: var(--display);
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  cursor: pointer; display: flex; align-items: center; gap: 6px;
+  position: relative; transition: border-color 0.2s;
+}
+.btn-cart:hover { border-color: var(--gold); }
+
+/* ─── HERO ─── */
+.hero {
+  position: relative;
+  min-height: 640px;
+  display: flex; align-items: center;
+  overflow: hidden;
+  background: var(--ink-deep);
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+
+/* Radial glow layers */
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  top: -10%; right: -5%;
+  width: 70%; height: 120%;
+  background: radial-gradient(ellipse at 60% 40%, rgba(139,26,26,0.18) 0%, transparent 65%),
+              radial-gradient(ellipse at 80% 60%, rgba(201,168,76,0.10) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.hero-bg::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-border), transparent);
+}
+
+.hero-mandala {
+  position: absolute;
+  right: -80px; top: 50%;
+  transform: translateY(-50%);
+  width: 680px; height: 680px;
+  opacity: 0.7;
+}
+
+/* Left column decorative line */
+.hero-left-rule {
+  position: absolute;
+  left: 48px; top: 10%; bottom: 10%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--gold-border), transparent);
+}
+
+.hcon {
+  position: relative; z-index: 2;
+  padding: 80px 0 80px 80px;
+  max-width: 680px;
+}
+
+/*
+.hbadge {
+  display: inline-flex;
+  align-items: center; gap: 12px;
+  background: rgba(201,168,76,0.07);
+  border: 1px solid var(--gold-border);
+  border-radius: 1px;
+  padding: 6px 20px;
+  margin-bottom: 32px;
+  font-family: var(--display);
+  font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--gold);
+}
+.hbadge::before, .hbadge::after {
+  content: '✦'; font-size: 8px; opacity: 0.6;
+}
+
+.hh1 {
+  font-family: var(--display);
+  font-size: 52px; line-height: 1.12;
+  font-weight: 600; color: var(--cream);
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+}
+.hh1 em {
+  font-family: var(--serif);
+  color: var(--gold-bright);
+  font-style: italic; font-weight: 400;
+  font-size: 58px;
+} */
+
+.hchin-title {
+  font-family: var(--chinese);
+  font-size: 18px; color: var(--gold-dim);
+  letter-spacing: 0.2em;
+  margin-bottom: 28px;
+  display: block;
+}
+
+/* .hsub {
+  font-family: var(--sans);
+  font-size: 15px; line-height: 1.9;
+  color: var(--text-body); font-weight: 300;
+  max-width: 520px; margin-bottom: 36px;
+}
+
+.hpills {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 40px;
+}
+
+.hpill {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(201,168,76,0.18);
+  border-radius: 1px;
+  padding: 7px 16px;
+  color: var(--cream-dim);
+  font-family: var(--sans);
+  font-size: 12px; font-weight: 300;
+  cursor: pointer; transition: all 0.2s;
+}
+.hpill:hover {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+  background: var(--gold-faint);
+}
+
+.hero-ctas { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+
+.hcta {
+  background: var(--gold);
+  color: var(--ink-deep);
+  padding: 14px 44px;
+  border-radius: var(--radius);
+  font-family: var(--display);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  border: none; cursor: pointer;
+  transition: background 0.2s;
+  position: relative; overflow: hidden;
+}
+.hcta::before {
+  content: '';
+  position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left 0.4s;
+}
+.hcta:hover { background: var(--gold-bright); }
+.hcta:hover::before { left: 100%; } */
+
+/* .hcon {
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+} */
+
+.hbadge {
+  display: inline-block;
+  background: var(--gold-faint);
+  color: var(--gold);
+  font-size: 11px;
+  padding: 6px 18px;
+  border-radius: 2px;
+  margin-bottom: 28px;
+  border: 1px solid var(--gold-border);
+  letter-spacing: 0.1em;
+  font-family: var(--sans);
+  text-transform: uppercase;
+}
+
+.hh1 {
+  font-size: 54px;
+  color: var(--cream);
+  line-height: 1.1;
+  margin-bottom: 20px;
+  font-weight: 400;
+  font-family: var(--serif);
+  letter-spacing: -0.01em;
+}
+
+.hh1 em {
+  color: var(--gold-bright);
+  font-style: italic;
+}
+
+.hsub {
+  font-size: 18px;
+  color: var(--text-body);
+  max-width: 550px;
+  margin-bottom: 36px;
+  line-height: 1.85;
+  font-family: var(--sans);
+  font-weight: 300;
+}
+
+.hpills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 36px;
+}
+
+.hpill {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 2px;
+  padding: 8px 16px;
+  color: var(--cream-dim);
+  font-size: 15px;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 300;
+}
+
+.hpill:hover {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+  background: var(--gold-faint);
+}
+
+.hcta {
+  background: var(--gold);
+  color: var(--ink-deep);
+  padding: 14px 40px;
+  border-radius: var(--radius);
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-family: var(--sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background 0.2s;
+}
+
+.hcta:hover { background: var(--gold-bright); }
+
+.hnote {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  font-family: var(--sans);
+  letter-spacing: 0.03em;
+}
+
+.hcta-wa {
+  background: transparent;
+  border: 1px solid rgba(37,211,102,0.4);
+  color: #25d366;
+  padding: 13px 24px;
+  border-radius: var(--radius);
+  font-family: var(--display);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; gap: 7px;
+}
+.hcta-wa:hover { background: rgba(37,211,102,0.08); border-color: #25d366; }
+
+.hnote {
+  font-family: var(--sans);
+  font-size: 11px; color: var(--text-muted);
+  letter-spacing: 0.04em;
+  display: flex; align-items: center; gap: 16px;
+}
+.hnote-sep { color: var(--gold-border); }
+
+/* ─── DIVIDERS ─── */
+.sdiv {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-border), transparent);
+}
+
+.ornament-divider {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; padding: 20px 0;
+  background: var(--ink-deep);
+}
+.ornament-divider::before, .ornament-divider::after {
+  content: '';
+  flex: 1; height: 1px; max-width: 200px;
+  background: linear-gradient(to right, transparent, var(--gold-border));
+}
+.ornament-divider::after {
+  background: linear-gradient(to left, transparent, var(--gold-border));
+}
+.ornament-divider span {
+  font-family: var(--chinese);
+  font-size: 18px; color: var(--gold-dim);
+  letter-spacing: 0.2em;
+}
+
+/* ─── SECTION HEADERS ─── */
+.sec-eyebrow {
+  font-family: var(--display);
+  font-size: 9px; font-weight: 500;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--gold);
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 10px;
+}
+.sec-eyebrow::before {
+  content: '';
+  width: 28px; height: 1px;
+  background: var(--gold-dim);
+}
+
+.sec-title {
+  font-family: var(--display);
+  font-size: 26px; font-weight: 600;
+  color: var(--cream); letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.sec-chin {
+  font-family: var(--chinese);
+  font-size: 14px; color: var(--gold-dim);
+  letter-spacing: 0.18em; margin-bottom: 8px;
+  display: block;
+}
+
+.sec-sub {
+  font-family: var(--sans);
+  font-size: 13px; color: var(--text-muted);
+  font-weight: 300; line-height: 1.7;
+}
+
+/* ─── CATEGORIES ─── */
+.cats-sec {
+  padding: 72px 64px;
+  background: var(--ink-mid);
+  position: relative;
+}
+
+.cats-sec::before {
+  content: '道';
+  position: absolute;
+  font-family: var(--chinese);
+  font-size: 400px; color: var(--gold);
+  opacity: 0.025; line-height: 1;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.cats-header { text-align: center; margin-bottom: 48px; }
+
+.cats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.cat {
+  background: rgba(242,232,213,0.03);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-lg);
+  padding: 28px 12px 20px;
+  text-align: center;
+  transition: all 0.28s cubic-bezier(0.4,0,0.2,1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.cat::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 70%);
+  opacity: 0; transition: opacity 0.28s;
+}
+
+.cat:hover {
+  border-color: var(--gold-dim);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.15);
+}
+.cat:hover::before { opacity: 1; }
+
+.cat-glyph {
+  font-family: var(--chinese);
+  font-size: 24px; color: var(--gold);
+  opacity: 0.4; margin-bottom: 6px;
+  display: block;
+}
+
+.cat-icon { font-size: 26px; margin-bottom: 8px; }
+
+.cat-name {
+  font-family: var(--display);
+  font-size: 11px; font-weight: 600;
+  color: var(--cream); letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: 4px;
+}
+
+.cat-chin {
+  font-family: var(--chinese);
+  font-size: 11px; color: var(--gold-dim);
+  margin-bottom: 8px; letter-spacing: 0.1em;
+  display: block;
+}
+
+.cat-desc {
+  font-family: var(--sans);
+  font-size: 10px; color: var(--text-muted);
+  margin-bottom: 16px; line-height: 1.55;
+  font-weight: 300;
+}
+
+.cat-btn {
+  font-family: var(--display);
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  background: transparent; color: var(--gold);
+  border: 1px solid var(--gold-border);
+  padding: 5px 14px; border-radius: 1px;
+  cursor: pointer; width: 100%;
+  transition: all 0.2s;
+}
+.cat-btn:hover { background: var(--gold); color: var(--ink-deep); border-color: var(--gold); }
+
+/* ─── MASTER ─── */
+.master-sec {
+  padding: 80px 64px;
+  background: var(--ink-deep);
+  position: relative;
+}
+
+.master-inner {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 72px; align-items: start;
+  margin-top: 48px;
+}
+
+/* Left: decorative panel */
+.master-visual {
+  position: relative;
+}
+
+.master-portrait-frame {
+  position: relative;
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 3/4;
+  background: var(--ink-mid);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.master-portrait-frame::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 30%, rgba(201,168,76,0.08) 0%, transparent 65%);
+}
+
+.master-portrait-placeholder {
+  position: relative; z-index: 1;
+  text-align: center;
+}
+
+.master-portrait-placeholder .big-glyph {
+  font-family: var(--chinese);
+  font-size: 120px; color: var(--gold);
+  opacity: 0.12; display: block; line-height: 1;
+}
+
+.master-portrait-placeholder .portrait-label {
+  font-family: var(--display);
+  font-size: 10px; color: var(--text-muted);
+  letter-spacing: 0.2em; text-transform: uppercase;
+  margin-top: 16px; display: block;
+}
+
+.master-portrait-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover; position: absolute; inset: 0;
+}
+
+/* Corner ornaments */
+.corner-ornament {
+  position: absolute;
+  width: 20px; height: 20px;
+  border-color: var(--gold-dim);
+  border-style: solid;
+  border-width: 0;
+  opacity: 0.6;
+}
+.corner-ornament.tl { top: 8px; left: 8px; border-top-width: 1px; border-left-width: 1px; }
+.corner-ornament.tr { top: 8px; right: 8px; border-top-width: 1px; border-right-width: 1px; }
+.corner-ornament.bl { bottom: 8px; left: 8px; border-bottom-width: 1px; border-left-width: 1px; }
+.corner-ornament.br { bottom: 8px; right: 8px; border-bottom-width: 1px; border-right-width: 1px; }
+
+.master-stats-row {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 8px; margin-top: 12px;
+}
+
+.mstat {
+  background: var(--cream-faint);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius);
+  padding: 14px 10px; text-align: center;
+}
+.mstat-n {
+  font-family: var(--display);
+  font-size: 18px; color: var(--gold-bright);
+  font-weight: 700; display: block;
+}
+.mstat-l {
+  font-family: var(--sans);
+  font-size: 9px; color: var(--text-muted);
+  margin-top: 4px; letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Bio */
+.master-bio {}
+
+.master-name {
+  font-family: var(--display);
+  font-size: 34px; font-weight: 600;
+  color: var(--cream); letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+
+.master-name-chin {
+  font-family: var(--chinese);
+  font-size: 16px; color: var(--gold-dim);
+  letter-spacing: 0.2em; margin-bottom: 6px; display: block;
+}
+
+.master-title {
+  font-family: var(--display);
+  font-size: 10px; color: var(--gold);
+  letter-spacing: 0.2em; text-transform: uppercase;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--gold-border);
+}
+
+.master-bio-text {
+  font-family: var(--serif);
+  font-size: 16px; line-height: 1.9;
+  color: var(--text-body);
+  margin-bottom: 28px;
+}
+
+.master-bio-text strong {
+  color: var(--gold-bright); font-weight: 500;
+}
+
+.credentials {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 28px;
+}
+
+.credential {
+  font-family: var(--display);
+  font-size: 9px; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--gold-border);
+  color: var(--text-body);
+  padding: 5px 14px; border-radius: 1px;
+}
+
+.master-seal {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 20px;
+  background: var(--gold-faint);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius);
+}
+
+.seal-glyph {
+  font-family: var(--chinese);
+  font-size: 36px; color: var(--gold);
+  opacity: 0.7; flex-shrink: 0;
+}
+
+.seal-text {
+  font-family: var(--sans);
+  font-size: 12px; color: var(--text-body);
+  font-weight: 300; line-height: 1.6;
+}
+
+/* ─── MILESTONE / JOURNEY ─── */
+.milestone-sec {
+  padding: 80px 64px;
+  background: var(--ink-panel);
+  position: relative;
+  overflow: hidden;
+}
+
+.milestone-sec::before {
+  content: '德';
+  position: absolute;
+  font-family: var(--chinese);
+  font-size: 500px; color: var(--gold);
+  opacity: 0.018; line-height: 1;
+  right: -60px; top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.milestone-header { margin-bottom: 56px; }
+
+/* Year pillars */
+.milestone-track {
+  position: relative;
+  padding-left: 0;
+}
+
+/* Central timeline spine */
+.milestone-track::before {
+  content: '';
+  position: absolute;
+  left: 80px; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    var(--gold-border) 8%,
+    var(--gold-border) 92%,
+    transparent 100%
+  );
+}
+
+.milestone-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0 32px;
+  margin-bottom: 0;
+  position: relative;
+}
+
+.milestone-item:not(:last-child) .milestone-content {
+  padding-bottom: 40px;
+}
+
+/* Year column */
+.milestone-year-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-right: 16px;
+  padding-top: 2px;
+}
+
+.milestone-year {
+  font-family: var(--display);
+  font-size: 11px; font-weight: 700;
+  color: var(--gold); letter-spacing: 0.12em;
+}
+
+/* Dot on spine */
+.milestone-dot {
+  position: absolute;
+  left: 80px;
+  top: 6px;
+  transform: translateX(-50%);
+  width: 9px; height: 9px;
+  background: var(--ink-panel);
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.12), 0 0 12px rgba(201,168,76,0.2);
+}
+
+.milestone-content { padding-top: 0; }
+
+.milestone-title {
+  font-family: var(--display);
+  font-size: 14px; font-weight: 600;
+  color: var(--cream); letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.milestone-chin {
+  font-family: var(--chinese);
+  font-size: 11px; color: var(--gold-dim);
+  letter-spacing: 0.14em; margin-bottom: 6px;
+  display: block;
+}
+
+.milestone-desc {
+  font-family: var(--sans);
+  font-size: 12px; color: var(--text-muted);
+  line-height: 1.7; font-weight: 300;
+}
+
+/* Two column layout for milestones */
+.milestone-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 80px;
+}
+
+/* ─── PHILOSOPHY ─── */
+.philosophy-sec {
+  padding: 80px 64px;
+  background: var(--ink-mid);
+  position: relative;
+}
+
+.philosophy-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--gold-border);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-top: 48px;
+}
+
+.phil-card {
+  background: var(--ink-mid);
+  padding: 40px 32px;
+  position: relative;
+  transition: background 0.3s;
+}
+
+.phil-card:hover { background: rgba(201,168,76,0.04); }
+
+.phil-glyph {
+  font-family: var(--chinese);
+  font-size: 52px; color: var(--gold);
+  opacity: 0.25; display: block;
+  margin-bottom: 12px; line-height: 1;
+}
+
+.phil-title {
+  font-family: var(--display);
+  font-size: 13px; font-weight: 600;
+  color: var(--cream); letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 4px;
+}
+
+.phil-chin {
+  font-family: var(--chinese);
+  font-size: 11px; color: var(--gold-dim);
+  letter-spacing: 0.14em; margin-bottom: 14px;
+  display: block;
+}
+
+.phil-text {
+  font-family: var(--sans);
+  font-size: 12px; color: var(--text-muted);
+  line-height: 1.75; font-weight: 300;
+}
+
+/* ─── TESTIMONIALS ─── */
+.testi-sec {
+  padding: 80px 64px;
+  background: var(--ink-deep);
+}
+
+.tgrid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 14px; margin-top: 48px;
+}
+
+.tcard {
+  background: rgba(242,232,213,0.03);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  transition: border-color 0.25s;
+  position: relative;
+}
+
+.tcard::before {
+  content: '"';
+  font-family: var(--serif);
+  font-size: 80px; color: var(--gold);
+  opacity: 0.08; line-height: 0.8;
+  position: absolute; top: 20px; left: 20px;
+}
+
+.tcard:hover { border-color: var(--gold-dim); }
+
+.tstars {
+  color: var(--gold); font-size: 11px;
+  margin-bottom: 14px; letter-spacing: 3px;
+}
+
+.tquote {
+  font-family: var(--serif);
+  font-size: 14px; color: var(--text-body);
+  line-height: 1.85; margin-bottom: 20px;
+  font-style: italic; position: relative; z-index: 1;
+}
+
+.tperson {
+  display: flex; align-items: center; gap: 12px;
+  border-top: 1px solid rgba(201,168,76,0.1);
+  padding-top: 16px;
+}
+
+.tavatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--gold-faint);
+  border: 1px solid var(--gold-border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--display);
+  font-size: 11px; color: var(--gold); font-weight: 700;
+  flex-shrink: 0;
+}
+
+.tname {
+  font-family: var(--display);
+  font-size: 11px; color: var(--cream);
+  font-weight: 600; letter-spacing: 0.08em;
+}
+
+.tloc {
+  font-family: var(--sans);
+  font-size: 10px; color: var(--text-muted);
+  margin-top: 1px; font-weight: 300;
+}
+
+.tbadge {
+  font-family: var(--display);
+  font-size: 8px;
+  background: var(--gold-faint);
+  color: var(--gold);
+  border: 1px solid var(--gold-border);
+  border-radius: 1px;
+  padding: 2px 8px; margin-top: 4px;
+  display: inline-block; letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ─── BOTTOM CTA ─── */
+.cta-sec {
+  padding: 100px 64px;
+  background: var(--ink-panel);
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+
+.cta-sec::before {
+  content: '福';
+  position: absolute;
+  font-family: var(--chinese);
+  font-size: 380px; color: var(--gold);
+  opacity: 0.028; line-height: 1;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Horizontal rules */
+.cta-sec::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-border), transparent);
+}
+
+.cta-inner { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+
+.cta-eyebrow {
+  font-family: var(--display);
+  font-size: 9px; font-weight: 500;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+}
+.cta-eyebrow::before, .cta-eyebrow::after {
+  content: ''; flex: 1; max-width: 60px; height: 1px;
+  background: var(--gold-border);
+}
+
+.cta-title {
+  font-family: var(--display);
+  font-size: 32px; font-weight: 600;
+  color: var(--cream); letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.cta-chin {
+  font-family: var(--chinese);
+  font-size: 16px; color: var(--gold-dim);
+  letter-spacing: 0.2em; margin-bottom: 20px;
+  display: block;
+}
+
+.cta-sub {
+  font-family: var(--sans);
+  font-size: 14px; color: var(--text-body);
+  line-height: 1.8; font-weight: 300;
+  margin-bottom: 36px;
+}
+
+/* ─── CART DRAWER ─── */
+#cart-drawer {
+  display: none; position: fixed; inset: 0;
+  z-index: 9999; justify-content: flex-end; align-items: stretch;
+}
+
+.cart-overlay { flex: 1; background: rgba(0,0,0,0.7); }
+
+.cart-panel {
+  width: 360px; max-width: 95vw;
+  background: var(--ink-mid);
+  display: flex; flex-direction: column;
+  box-shadow: -8px 0 60px rgba(0,0,0,0.7);
+  border-left: 1px solid var(--gold-border);
+}
+
+.cart-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--gold-border);
+}
+
+.cart-head span {
+  font-family: var(--display);
+  font-size: 12px; color: var(--cream);
+  font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.cart-close {
+  border: none; background: none;
+  font-size: 22px; cursor: pointer;
+  color: var(--text-muted); line-height: 1;
+  transition: color 0.2s;
+}
+.cart-close:hover { color: var(--cream); }
+
+/* ─── PRODUCT MODAL ─── */
+#product-modal {
+  display: none; position: fixed; inset: 0;
+  z-index: 9998; background: rgba(0,0,0,0.8);
+  justify-content: center; align-items: center; padding: 20px;
+}
+
+.modal-panel {
+  background: var(--ink-mid);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-lg);
+  max-width: 460px; width: 100%;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+}
+
+.modal-thumb {
+  height: 140px; display: flex; align-items: center; justify-content: center;
+  font-size: 56px; position: relative;
+  background: radial-gradient(ellipse at 50% 60%, rgba(201,168,76,0.1) 0%, transparent 70%),
+              var(--ink-panel);
+  border-bottom: 1px solid var(--gold-border);
+}
+
+.modal-close {
+  position: absolute; top: 12px; right: 14px;
+  border: none; background: rgba(255,255,255,0.08);
+  color: var(--cream); border-radius: 50%;
+  width: 28px; height: 28px; font-size: 16px;
+  cursor: pointer; line-height: 1;
+  transition: background 0.2s;
+}
+.modal-close:hover { background: rgba(255,255,255,0.15); }
+
+.modal-body { padding: 24px 26px 28px; }
+.modal-sku { font-family: var(--display); font-size: 9px; color: var(--gold-dim); letter-spacing: 0.14em; margin-bottom: 5px; text-transform: uppercase; }
+.modal-name { font-family: var(--display); font-size: 18px; color: var(--cream); font-weight: 600; margin-bottom: 4px; line-height: 1.35; letter-spacing: 0.04em; }
+.modal-chin { font-family: var(--chinese); font-size: 14px; color: var(--gold-dim); margin-bottom: 16px; letter-spacing: 0.14em; }
+.modal-desc { font-family: var(--sans); font-size: 13px; color: var(--text-body); line-height: 1.8; margin-bottom: 18px; font-weight: 300; }
+.modal-note { font-family: var(--sans); font-size: 11px; color: var(--text-muted); margin-bottom: 18px; background: var(--gold-glow); border: 1px solid var(--gold-border); border-radius: var(--radius); padding: 10px 14px; line-height: 1.65; }
+.modal-price { font-family: var(--display); font-size: 24px; font-weight: 700; color: var(--cream); margin-bottom: 18px; display: block; letter-spacing: 0.04em; }
+.modal-actions { display: flex; gap: 10px; }
+.modal-addcart { flex: 1; background: var(--gold); color: var(--ink-deep); border: none; padding: 13px; border-radius: var(--radius); font-family: var(--display); font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 0.14em; text-transform: uppercase; transition: background 0.2s; }
+.modal-addcart:hover { background: var(--gold-bright); }
+.modal-wa { flex: 1; background: #25d366; color: #fff; border: none; padding: 13px; border-radius: var(--radius); font-family: var(--display); font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* ─── FOOTER ─── */
+.site-footer {
+  background: var(--ink-deep);
+  border-top: 1px solid var(--gold-border);
+  position: relative; overflow: hidden;
+}
+
+.footer-top-rule {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), var(--gold), var(--gold-dim), transparent);
+  opacity: 0.3;
+}
+
+.footer-animated-bg { position: absolute; inset: 0; pointer-events: none; }
+.footer-animated-bg svg { width: 100%; height: 100%; }
+
+@keyframes footerDrift { 0%,100%{opacity:.06} 50%{opacity:.11} }
+.footer-trigrams { animation: footerDrift 10s ease-in-out infinite; }
+
+.footer-inner { position: relative; z-index: 2; padding: 64px 64px 32px; }
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr 1fr 1.5fr;
+  gap: 56px; margin-bottom: 52px;
+}
+
+.footer-logo { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.footer-logo-icon { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--gold-border); background: var(--gold-faint); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+.footer-logo-icon img { width: 46px; height: 46px; object-fit: cover; border-radius: 50%; }
+.footer-wordmark { font-family: var(--display); font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream); }
+.footer-tagline { font-family: var(--chinese); font-size: 11px; color: var(--gold); letter-spacing: 0.1em; margin-top: 3px; }
+
+.footer-brand-desc { font-family: var(--sans); font-size: 12px; color: var(--text-muted); line-height: 1.85; margin-bottom: 24px; font-weight: 300; max-width: 320px; }
+
+.footer-socials { display: flex; gap: 8px; }
+.fsocial { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--gold-border); background: transparent; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 16px; text-decoration: none; transition: all 0.2s; }
+.fsocial:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-faint); }
+
+.footer-col-title { font-family: var(--display); font-size: 9px; color: var(--gold); font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--gold-border); }
+
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links li a { font-family: var(--sans); font-size: 12px; color: var(--text-muted); text-decoration: none; font-weight: 300; transition: color 0.18s; display: flex; align-items: center; gap: 8px; }
+.footer-links li a::before { content: '—'; font-size: 9px; color: var(--gold-dim); opacity: 0.5; }
+.footer-links li a:hover { color: var(--gold-bright); }
+
+.footer-contact-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+.footer-contact-list li { display: flex; align-items: flex-start; gap: 10px; font-family: var(--sans); font-size: 12px; color: var(--text-muted); font-weight: 300; line-height: 1.5; }
+.footer-contact-list li i { font-size: 14px; color: var(--gold-dim); margin-top: 1px; flex-shrink: 0; }
+.footer-contact-list li a { color: var(--text-muted); text-decoration: none; transition: color 0.18s; }
+.footer-contact-list li a:hover { color: var(--gold-bright); }
+
+.footer-wa-btn { display: inline-flex; align-items: center; gap: 7px; background: #25d366; color: #fff; border: none; padding: 10px 18px; border-radius: var(--radius); font-family: var(--display); font-size: 10px; font-weight: 700; cursor: pointer; text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; transition: opacity 0.2s; }
+.footer-wa-btn:hover { opacity: 0.9; }
+.footer-wa-btn i { font-size: 15px; }
+
+.footer-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--gold-border), transparent); margin-bottom: 24px; }
+
+.footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.footer-bottom-left { display: flex; align-items: center; gap: 10px; font-family: var(--sans); font-size: 10px; color: var(--text-muted); font-weight: 300; }
+.footer-seal { color: var(--gold-dim); font-size: 10px; }
+.footer-bottom-right { display: flex; align-items: center; gap: 20px; font-family: var(--sans); font-size: 10px; color: var(--text-muted); font-weight: 300; }
+.footer-chin { font-family: var(--chinese); color: var(--gold-dim); font-size: 12px; letter-spacing: 0.1em; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--ink-deep); }
+::-webkit-scrollbar-thumb { background: var(--gold-border); border-radius: 3px; }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes rotSlow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes rotSlowRev { from{transform:rotate(0deg)} to{transform:rotate(-360deg)} }
+@keyframes baguaPulse { 0%,100%{stroke-opacity:.12} 50%{stroke-opacity:.38} }
+@keyframes goldRingPulse { 0%,100%{stroke-opacity:.28} 50%{stroke-opacity:.7} }
+@keyframes centerPulse { 0%,100%{opacity:.1} 50%{opacity:.28} }
+@keyframes floatRune  { 0%,100%{opacity:.05;transform:translateY(0)} 50%{opacity:.18;transform:translateY(-10px)} }
+@keyframes driftGlow1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(22px,-16px)} }
+@keyframes driftGlow2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-18px,20px)} }
+
+.hbg-ring-outer { transform-origin:290px 290px; animation:rotSlow 100s linear infinite; }
+.hbg-ring-inner { transform-origin:290px 290px; animation:rotSlowRev 65s linear infinite; }
+.hbg-ring-mid   { transform-origin:290px 290px; animation:rotSlow 145s linear infinite; }
+.hbg-taiji      { transform-origin:290px 290px; animation:rotSlow 38s linear infinite; }
+.hbg-bagua      { animation:baguaPulse 5s ease-in-out infinite; }
+.hbg-gold-ring  { animation:goldRingPulse 7s ease-in-out infinite; }
+.hbg-center     { animation:centerPulse 6s ease-in-out infinite; }
+.hbg-rune-1     { animation:floatRune  8s ease-in-out 0s infinite; }
+.hbg-rune-2     { animation:floatRune  10s ease-in-out 1.5s infinite; }
+.hbg-rune-3     { animation:floatRune  9s ease-in-out 3.2s infinite; }
+.hbg-rune-4     { animation:floatRune  12s ease-in-out 0.8s infinite; }
+.hbg-glow-1     { animation:driftGlow1 16s ease-in-out infinite; }
+.hbg-glow-2     { animation:driftGlow2 19s ease-in-out infinite; }
+
+.hcon > * { animation: fadeUp 0.7s ease both; }
+.hcon > *:nth-child(1){animation-delay:.06s}
+.hcon > *:nth-child(2){animation-delay:.14s}
+.hcon > *:nth-child(3){animation-delay:.22s}
+.hcon > *:nth-child(4){animation-delay:.30s}
+.hcon > *:nth-child(5){animation-delay:.38s}
+.hcon > *:nth-child(6){animation-delay:.46s}
+.hcon > *:nth-child(7){animation-delay:.54s}
+</style>
+
+<div class="wrapper">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-icon">
+        <img src="../divineway_logo/divineway_logo.png" 
+            onerror="this.style.display='none';this.parentNode.innerHTML='<span style=&quot;font-family:var(--chinese);color:var(--gold);font-size:18px&quot;>道</span>'">
+      </div>
+      <div class="nav-wordmark">
+        <strong>DivinewayFengshui</strong>
+        <span>风水 · 道家法术 · 符咒</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="services.html">Services</a>
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="academy.html">Academy</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn-cart" onclick="openCart()">
+        🛒 Cart
+        <span id="cart-badge" style="display:none;position:absolute;top:-6px;right:-6px;background:#c0392b;color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;font-family:sans-serif;font-weight:700;align-items:center;justify-content:center;line-height:18px">0</span>
+      </button>
+      <button class="btn-wa">📲 WhatsApp Us</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-left-rule"></div>
+
+    <svg class="hero-mandala" viewBox="0 0 580 580" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="hg1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0.22"/><stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/></radialGradient>
+        <radialGradient id="hg2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#6b1010" stop-opacity="0.28"/><stop offset="100%" stop-color="#6b1010" stop-opacity="0"/></radialGradient>
+        <radialGradient id="hgc" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#e2c26a" stop-opacity="0.14"/><stop offset="100%" stop-color="#e2c26a" stop-opacity="0"/></radialGradient>
+        <filter id="hblur"><feGaussianBlur stdDeviation="24"/></filter>
+      </defs>
+      <rect width="580" height="580" fill="transparent"/>
+      <ellipse class="hbg-glow-2" cx="100" cy="460" rx="200" ry="200" fill="url(#hg2)" filter="url(#hblur)"/>
+      <ellipse class="hbg-glow-1" cx="460" cy="120" rx="220" ry="220" fill="url(#hg1)" filter="url(#hblur)"/>
+      <ellipse cx="290" cy="290" rx="170" ry="170" fill="url(#hgc)" filter="url(#hblur)"/>
+      <g class="hbg-ring-outer">
+        <circle cx="290" cy="290" r="268" fill="none" stroke="#c9a84c" stroke-width="0.3" stroke-opacity="0.14" stroke-dasharray="3 10"/>
+        <circle cx="290" cy="290" r="252" fill="none" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.10"/>
+        <line x1="290" y1="22" x2="290" y2="44" stroke="#c9a84c" stroke-width="1.4" stroke-opacity="0.45"/>
+        <line x1="290" y1="536" x2="290" y2="558" stroke="#c9a84c" stroke-width="1.4" stroke-opacity="0.45"/>
+        <line x1="22" y1="290" x2="44" y2="290" stroke="#c9a84c" stroke-width="1.4" stroke-opacity="0.45"/>
+        <line x1="536" y1="290" x2="558" y2="290" stroke="#c9a84c" stroke-width="1.4" stroke-opacity="0.45"/>
+      </g>
+      <g class="hbg-ring-mid">
+        <circle cx="290" cy="290" r="205" fill="none" stroke="#8a6b2a" stroke-width="0.35" stroke-opacity="0.18" stroke-dasharray="5 7"/>
+      </g>
+      <g class="hbg-ring-inner">
+        <circle cx="290" cy="290" r="158" fill="none" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.18"/>
+        <circle cx="290" cy="290" r="154" fill="none" stroke="#c9a84c" stroke-width="0.25" stroke-opacity="0.08" stroke-dasharray="2 12"/>
+      </g>
+      <g class="hbg-bagua">
+        <g transform="translate(290,290)">
+          <g transform="rotate(0)">  <rect x="-18" y="-280" width="36" height="4" fill="#c9a84c" opacity="0.55" rx="1"/><rect x="-18" y="-272" width="36" height="4" fill="#c9a84c" opacity="0.55" rx="1"/><rect x="-18" y="-264" width="36" height="4" fill="#c9a84c" opacity="0.55" rx="1"/></g>
+          <g transform="rotate(45)"> <rect x="-18" y="-280" width="14" height="4" fill="#c9a84c" opacity="0.48" rx="1"/><rect x="4" y="-280" width="14" height="4" fill="#c9a84c" opacity="0.48" rx="1"/><rect x="-18" y="-272" width="36" height="4" fill="#c9a84c" opacity="0.48" rx="1"/><rect x="-18" y="-264" width="14" height="4" fill="#c9a84c" opacity="0.48" rx="1"/><rect x="4" y="-264" width="14" height="4" fill="#c9a84c" opacity="0.48" rx="1"/></g>
+          <g transform="rotate(90)"> <rect x="-18" y="-280" width="14" height="4" fill="#c9a84c" opacity="0.52" rx="1"/><rect x="4" y="-280" width="14" height="4" fill="#c9a84c" opacity="0.52" rx="1"/><rect x="-18" y="-272" width="14" height="4" fill="#c9a84c" opacity="0.52" rx="1"/><rect x="4" y="-272" width="14" height="4" fill="#c9a84c" opacity="0.52" rx="1"/><rect x="-18" y="-264" width="36" height="4" fill="#c9a84c" opacity="0.52" rx="1"/></g>
+          <g transform="rotate(135)"><rect x="-18" y="-280" width="36" height="4" fill="#c9a84c" opacity="0.44" rx="1"/><rect x="-18" y="-272" width="14" height="4" fill="#c9a84c" opacity="0.44" rx="1"/><rect x="4" y="-272" width="14" height="4" fill="#c9a84c" opacity="0.44" rx="1"/><rect x="-18" y="-264" width="14" height="4" fill="#c9a84c" opacity="0.44" rx="1"/><rect x="4" y="-264" width="14" height="4" fill="#c9a84c" opacity="0.44" rx="1"/></g>
+          <g transform="rotate(180)"><rect x="-18" y="-280" width="14" height="4" fill="#c9a84c" opacity="0.55" rx="1"/><rect x="4" y="-280" width="14" height="4" fill="#c9a84c" opacity="0.55" rx="1"/><rect x="-18" y="-272" width="14" height="4" fill="#c9a84c" opacity="0.55" rx="1"/><rect x="4" y="-272" width="14" height="4" fill="#c9a84c" opacity="0.55" rx="1"/><rect x="-18" y="-264" width="14" height="4" fill="#c9a84c" opacity="0.55" rx="1"/><rect x="4" y="-264" width="14" height="4" fill="#c9a84c" opacity="0.55" rx="1"/></g>
+          <g transform="rotate(225)"><rect x="-18" y="-280" width="14" height="4" fill="#c9a84c" opacity="0.46" rx="1"/><rect x="4" y="-280" width="14" height="4" fill="#c9a84c" opacity="0.46" rx="1"/><rect x="-18" y="-272" width="36" height="4" fill="#c9a84c" opacity="0.46" rx="1"/><rect x="-18" y="-264" width="36" height="4" fill="#c9a84c" opacity="0.46" rx="1"/></g>
+          <g transform="rotate(270)"><rect x="-18" y="-280" width="36" height="4" fill="#c9a84c" opacity="0.52" rx="1"/><rect x="-18" y="-272" width="36" height="4" fill="#c9a84c" opacity="0.52" rx="1"/><rect x="-18" y="-264" width="14" height="4" fill="#c9a84c" opacity="0.52" rx="1"/><rect x="4" y="-264" width="14" height="4" fill="#c9a84c" opacity="0.52" rx="1"/></g>
+          <g transform="rotate(315)"><rect x="-18" y="-280" width="14" height="4" fill="#c9a84c" opacity="0.44" rx="1"/><rect x="4" y="-280" width="14" height="4" fill="#c9a84c" opacity="0.44" rx="1"/><rect x="-18" y="-272" width="14" height="4" fill="#c9a84c" opacity="0.44" rx="1"/><rect x="4" y="-272" width="14" height="4" fill="#c9a84c" opacity="0.44" rx="1"/><rect x="-18" y="-264" width="14" height="4" fill="#c9a84c" opacity="0.44" rx="1"/><rect x="4" y="-264" width="14" height="4" fill="#c9a84c" opacity="0.44" rx="1"/></g>
+        </g>
+      </g>
+      <g class="hbg-taiji">
+        <circle cx="290" cy="290" r="92" fill="none" stroke="#c9a84c" stroke-width="0.7" stroke-opacity="0.25"/>
+        <path d="M290 198 A92 92 0 0 1 290 382 A46 46 0 0 1 290 290 A46 46 0 0 0 290 198 Z" fill="#c9a84c" fill-opacity="0.07"/>
+        <path d="M290 198 A92 92 0 0 0 290 382 A46 46 0 0 0 290 290 A46 46 0 0 1 290 198 Z" fill="#8b3a00" fill-opacity="0.08"/>
+        <circle cx="290" cy="244" r="10" fill="#c9a84c" fill-opacity="0.2"/>
+        <circle cx="290" cy="336" r="10" fill="#8b3a00" fill-opacity="0.16"/>
+      </g>
+      <g class="hbg-gold-ring">
+        <circle cx="290" cy="290" r="124" fill="none" stroke="#e2c26a" stroke-width="0.6" stroke-opacity="0.22" stroke-dasharray="1 7"/>
+      </g>
+      <g class="hbg-center">
+        <text x="290" y="322" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="92" fill="#c9a84c">福</text>
+      </g>
+      <g opacity="0.12">
+        <line x1="290" y1="88" x2="290" y2="492" stroke="#c9a84c" stroke-width="0.3" stroke-dasharray="2 18"/>
+        <line x1="88" y1="290" x2="492" y2="290" stroke="#c9a84c" stroke-width="0.3" stroke-dasharray="2 18"/>
+        <line x1="140" y1="140" x2="440" y2="440" stroke="#c9a84c" stroke-width="0.25" stroke-dasharray="2 18"/>
+        <line x1="440" y1="140" x2="140" y2="440" stroke="#c9a84c" stroke-width="0.25" stroke-dasharray="2 18"/>
+      </g>
+      <g class="hbg-rune-1"><text x="72"  y="90"  text-anchor="middle" font-family="Noto Serif SC,serif" font-size="26" fill="#c9a84c">乾</text></g>
+      <g class="hbg-rune-2"><text x="508" y="90"  text-anchor="middle" font-family="Noto Serif SC,serif" font-size="26" fill="#c9a84c">坤</text></g>
+      <g class="hbg-rune-3"><text x="72"  y="506" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="26" fill="#c9a84c">震</text></g>
+      <g class="hbg-rune-4"><text x="508" y="506" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="26" fill="#c9a84c">巽</text></g>
+      <text x="40"  y="298" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="20" fill="#c9a84c" opacity="0.1">艮</text>
+      <text x="540" y="298" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="20" fill="#c9a84c" opacity="0.1">兌</text>
+      <text x="290" y="44"  text-anchor="middle" font-family="Noto Serif SC,serif" font-size="18" fill="#c9a84c" opacity="0.1">離</text>
+      <text x="290" y="562" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="18" fill="#c9a84c" opacity="0.1">坎</text>
+    </svg>
+    <div class="sdiv"></div>
+
+    <!-- <div class="hcon">
+      <div class="hbadge">Hand-Consecrated by Master Louis Cheung</div>
+      <h1 class="hh1">Feeling stuck<br>in life?</h1>
+      <em class="hh1" style="display:block;margin-top:-8px;margin-bottom:20px">There is a talisman for that.</em>
+      <span class="hchin-title">有符即有解 · 天道自然</span>
+      <p class="hsub">Whether it is money troubles, health worries, a broken relationship or simply bad luck that won't go away — ancient Taoist wisdom has a sacred answer for every struggle.</p>
+      <div class="hpills">
+        <span class="hpill">💰 Wealth blocked</span>
+        <span class="hpill">🌿 Health concerns</span>
+        <span class="hpill">🍀 Constant bad luck</span>
+        <span class="hpill">🏆 Career not moving</span>
+        <span class="hpill">❤️ Love life suffering</span>
+        <span class="hpill">📚 Child struggling in school</span>
+        <span class="hpill">🤱 Trying to conceive</span>
+        <span class="hpill">🤝 No one to help me</span>
+      </div>
+      <div class="hero-ctas">
+        <button class="hcta">Find My Talisman Now</button>
+        <button class="hcta-wa">💬 WhatsApp Consultation</button>
+      </div>
+      <p class="hnote">
+        Over 5,000 clients helped
+        <span class="hnote-sep">·</span>
+        Authentic Taoist rituals
+        <span class="hnote-sep">·</span>
+        SGD $108 per talisman
+      </p>
+    </div>
+     -->
+    <div class="hcon">
+      <div class="hbadge">✦ Hand-Consecrated by Master Louis Cheung ✦</div>
+      <h1 class="hh1">Feeling stuck in life?<br><em>There is a talisman for that.</em></h1>
+      <p class="hsub">Whether it is money troubles, health worries, a broken relationship or simply bad luck that won't go away — ancient Taoist wisdom has a sacred answer for every struggle.</p>
+      <div class="hpills">
+        <span class="hpill">💰 Wealth blocked</span>
+        <span class="hpill">🌿 Health concerns</span>
+        <span class="hpill">🍀 Constant bad luck</span>
+        <span class="hpill">🏆 Career not moving</span>
+        <span class="hpill">❤️ Love life suffering</span>
+        <span class="hpill">📚 Child struggling in school</span>
+        <span class="hpill">🤱 Trying to conceive</span>
+        <span class="hpill">🤝 No one to help me</span>
+      </div>
+      <button class="hcta">Find My Talisman Now</button>
+      <p class="hnote">Over 5,000 clients helped · Authentic Taoist rituals · SGD $108 per talisman</p>
+    </div>
+    <div class="hero-divider"></div>
+  </div>
+  </section>
+
+  <div class="sdiv"></div>
+
+  <!-- CATEGORIES -->
+  <section class="cats-sec">
+    <div class="cats-header">
+      <div class="sec-eyebrow" style="justify-content:center">Shop by Intention</div>
+      <h2 class="sec-title" style="text-align:center">Choose Your Path</h2>
+      <span class="sec-chin" style="text-align:center;display:block">择其所需 · 以符化解</span>
+      <p class="sec-sub" style="text-align:center;max-width:480px;margin:0 auto">Each talisman is hand-drawn and personally consecrated by Master Louis Cheung on an auspicious date.</p>
+    </div>
+    <div class="cats-grid">
+      <div class="cat"><span class="cat-glyph">财</span><div class="cat-icon">💰</div><div class="cat-name">Wealth</div><span class="cat-chin">招财进宝</span><div class="cat-desc">Financial luck &amp; abundance</div><button class="cat-btn">Shop Now</button></div>
+      <div class="cat"><span class="cat-glyph">缘</span><div class="cat-icon">🤝</div><div class="cat-name">Affinity</div><span class="cat-chin">和合人缘</span><div class="cat-desc">Attract helpers &amp; benefactors</div><button class="cat-btn">Shop Now</button></div>
+      <div class="cat"><span class="cat-glyph">业</span><div class="cat-icon">🏆</div><div class="cat-name">Career</div><span class="cat-chin">事业功名</span><div class="cat-desc">Promotion &amp; recognition</div><button class="cat-btn">Shop Now</button></div>
+      <div class="cat"><span class="cat-glyph">学</span><div class="cat-icon">📚</div><div class="cat-name">Study</div><span class="cat-chin">文昌学业</span><div class="cat-desc">Exam success &amp; focus</div><button class="cat-btn">Shop Now</button></div>
+      <div class="cat"><span class="cat-glyph">健</span><div class="cat-icon">🌿</div><div class="cat-name">Health</div><span class="cat-chin">健康平安</span><div class="cat-desc">Vitality &amp; healing energy</div><button class="cat-btn">Shop Now</button></div>
+      <div class="cat"><span class="cat-glyph">情</span><div class="cat-icon">❤️</div><div class="cat-name">Relationship</div><span class="cat-chin">姻缘和合</span><div class="cat-desc">Romance &amp; harmony</div><button class="cat-btn">Shop Now</button></div>
+      <div class="cat"><span class="cat-glyph">护</span><div class="cat-icon">🛡️</div><div class="cat-name">Safety</div><span class="cat-chin">护身平安</span><div class="cat-desc">Ward off evil &amp; bad energy</div><button class="cat-btn">Shop Now</button></div>
+      <div class="cat"><span class="cat-glyph">运</span><div class="cat-icon">🌀</div><div class="cat-name">General Protection</div><span class="cat-chin">改运化煞</span><div class="cat-desc">General luck improvement</div><button class="cat-btn">Shop Now</button></div>
+      <div class="cat"><span class="cat-glyph">孕</span><div class="cat-icon">🤱</div><div class="cat-name">Pregnancy</div><span class="cat-chin">送子安胎</span><div class="cat-desc">Fertility &amp; safe delivery</div><button class="cat-btn">Shop Now</button></div>
+    </div>
+  </section>
+
+  <div class="sdiv"></div>
+
+  <!-- MASTER -->
+  <section class="master-sec" id="master-area">
+    <div class="sec-eyebrow">The Master Behind Every Talisman</div>
+    <h2 class="sec-title">Meet Your Shi Fu</h2>
+    <span class="sec-chin">拜见师傅</span>
+    <div class="master-inner">
+      <div class="master-visual">
+        <div class="master-portrait-frame">
+          <div class="corner-ornament tl"></div>
+          <div class="corner-ornament tr"></div>
+          <div class="corner-ornament bl"></div>
+          <div class="corner-ornament br"></div>
+          <img src="images/shifu_1.png" alt="Master Louis Cheung"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="master-portrait-placeholder" style="display:none">
+            <span class="big-glyph">師</span>
+            <span class="portrait-label">Master Louis Cheung</span>
+          </div>
+        </div>
+        <div class="master-stats-row">
+          <div class="mstat"><span class="mstat-n">20+</span><div class="mstat-l">Years Practice</div></div>
+          <div class="mstat"><span class="mstat-n">5,000+</span><div class="mstat-l">Clients Helped</div></div>
+          <div class="mstat"><span class="mstat-n">Award</span><div class="mstat-l">Winning Master</div></div>
+        </div>
+      </div>
+
+      <div class="master-bio">
+        <h3 class="master-name">Master Louis Cheung</h3>
+        <span class="master-name-chin">张师傅</span>
+        <div class="master-title">Award-Winning Feng Shui Master &amp; Taoist Geomancer · Singapore</div>
+
+        <p class="master-bio-text">
+          With over <strong>20 years</strong> in authentic Taoist Feng Shui and Chinese metaphysics, Master Louis Cheung has guided thousands of families and businesses across Singapore and the region. Trained under a lineage of Taoist grandmasters, every talisman he creates is personally hand-drawn, ritually consecrated and energised on an auspicious date — <strong>never mass produced, never outsourced.</strong>
+        </p>
+
+        <p class="master-bio-text">
+          Master Louis practices in the authentic tradition of <strong>道家法术</strong> — a living lineage of Taoist sacred arts that has guided the Chinese people for over two thousand years. His consultations integrate BaZi destiny analysis, Feng Shui geomancy, and ritual talisman work into a holistic path toward harmony.
+        </p>
+
+        <div class="credentials">
+          <span class="credential">BaZi Analysis</span>
+          <span class="credential">Feng Shui Audit</span>
+          <span class="credential">Taoist Rituals</span>
+          <span class="credential">Talisman Consecration</span>
+          <span class="credential">Date Selection</span>
+          <span class="credential">Name Analysis</span>
+        </div>
+
+        <div class="master-seal">
+          <span class="seal-glyph">印</span>
+          <p class="seal-text">Every talisman bears Master Louis' personal consecration seal — a sacred act performed with prayer, incense, and ritual. Each piece is unique, activated specifically for the recipient's name and birth date.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ornament-divider"><span>天地人和</span></div>
+
+  <!-- MILESTONE / JOURNEY -->
+  <section class="milestone-sec">
+    <div class="milestone-header">
+      <div class="sec-eyebrow">A Living Lineage</div>
+      <h2 class="sec-title">Master Louis' Journey</h2>
+      <span class="sec-chin">修道之路 · 二十载春秋</span>
+      <p class="sec-sub" style="max-width:520px;margin-top:8px">Two decades of devoted practice, from student to master — walking the ancient path of Taoist metaphysics.</p>
+    </div>
+
+    <div class="milestone-columns">
+      <!-- Left column -->
+      <div class="milestone-track">
+        <div class="milestone-item">
+          <div class="milestone-year-col"><span class="milestone-year">2003</span></div>
+          <div class="milestone-dot"></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Began Formal Taoist Discipleship</div>
+            <span class="milestone-chin">正式拜师入门</span>
+            <p class="milestone-desc">Commenced discipleship under a senior Taoist grandmaster in Singapore, immersing in the classical arts of BaZi, Feng Shui, and sacred talisman consecration.</p>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-year-col"><span class="milestone-year">2007</span></div>
+          <div class="milestone-dot"></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Founded DivinewayFengshui</div>
+            <span class="milestone-chin">创立神道风水</span>
+            <p class="milestone-desc">Established his private practice in Singapore, offering residential and commercial Feng Shui consultations and talisman blessings to his first clients.</p>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-year-col"><span class="milestone-year">2011</span></div>
+          <div class="milestone-dot"></div>
+          <div class="milestone-content">
+            <div class="milestone-title">First Major Award Recognition</div>
+            <span class="milestone-chin">荣获风水大师奖</span>
+            <p class="milestone-desc">Received the Outstanding Feng Shui Master award, recognising excellence in Taoist metaphysics practice and remarkable client transformation outcomes.</p>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-year-col"><span class="milestone-year">2014</span></div>
+          <div class="milestone-dot"></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Expanded to Regional Practice</div>
+            <span class="milestone-chin">拓展至东南亚</span>
+            <p class="milestone-desc">Extended practice to Malaysia, Indonesia and Hong Kong, conducting on-site and remote consultations for clients across Southeast Asia.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column -->
+      <div class="milestone-track">
+        <div class="milestone-item">
+          <div class="milestone-year-col"><span class="milestone-year">2016</span></div>
+          <div class="milestone-dot"></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Launched Divine Magic Academy</div>
+            <span class="milestone-chin">创办道法学院</span>
+            <p class="milestone-desc">Founded an online and in-person academy to preserve and transmit authentic Taoist Feng Shui and Chinese metaphysics to the next generation of sincere students.</p>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-year-col"><span class="milestone-year">2019</span></div>
+          <div class="milestone-dot"></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Reached 3,000 Clients Milestone</div>
+            <span class="milestone-chin">三千有缘人</span>
+            <p class="milestone-desc">A profound milestone — over 3,000 families and businesses guided through personal consultations, Feng Shui audits, and sacred talisman blessings.</p>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-year-col"><span class="milestone-year">2022</span></div>
+          <div class="milestone-dot"></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Launched Online Talisman Shop</div>
+            <span class="milestone-chin">开设符咒网店</span>
+            <p class="milestone-desc">Brought authentic hand-consecrated talismans to clients worldwide through a dedicated e-commerce platform, each piece personally blessed by Master Louis.</p>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-year-col"><span class="milestone-year">2024</span></div>
+          <div class="milestone-dot"></div>
+          <div class="milestone-content">
+            <div class="milestone-title">5,000+ Clients Helped Worldwide</div>
+            <span class="milestone-chin">五千有缘 · 广结善缘</span>
+            <p class="milestone-desc">Crossed the milestone of 5,000 satisfied clients globally, cementing Master Louis Cheung's standing as one of Singapore's most trusted and respected Taoist masters.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sdiv"></div>
+
+  <!-- PHILOSOPHY -->
+  <section class="philosophy-sec">
+    <div class="sec-eyebrow">The Ancient Principles</div>
+    <h2 class="sec-title">Foundations of Taoist Practice</h2>
+    <span class="sec-chin">道法自然 · 天人合一</span>
+    <div class="philosophy-inner">
+      <div class="phil-card">
+        <span class="phil-glyph">道</span>
+        <div class="phil-title">The Tao</div>
+        <span class="phil-chin">道法自然</span>
+        <p class="phil-text">The Tao — the Way — is the fundamental principle underlying all existence. Taoist practice aligns human life with the natural order of the universe, restoring harmony where it has been disrupted.</p>
+      </div>
+      <div class="phil-card">
+        <span class="phil-glyph">符</span>
+        <div class="phil-title">Sacred Talismans</div>
+        <span class="phil-chin">符咒之力</span>
+        <p class="phil-text">Talismans are sacred instruments of transformation — channels through which divine energy is directed toward a specific intention. Each stroke is a prayer; each character, a command written in celestial script.</p>
+      </div>
+      <div class="phil-card">
+        <span class="phil-glyph">命</span>
+        <div class="phil-title">Destiny & Fate</div>
+        <span class="phil-chin">命由天定 · 运在人为</span>
+        <p class="phil-text">While destiny is written at birth, fate is shaped by action. Through BaZi analysis and Feng Shui mastery, we illuminate the path — empowering you to navigate life's currents with wisdom and grace.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="sdiv"></div>
+
+  <!-- TESTIMONIALS -->
+  <section class="testi-sec">
+    <div class="sec-eyebrow">Client Experiences</div>
+    <h2 class="sec-title">What Our Clients Say</h2>
+    <span class="sec-chin">有缘人的见证</span>
+    <p class="sec-sub">Real testimonials from those whose lives transformed after their talisman</p>
+    <div class="tgrid">
+      <div class="tcard">
+        <div class="tstars">★★★★★</div>
+        <p class="tquote">"Within 3 months of carrying the Five Directional Wealth Talisman, I closed two major deals I had been chasing for over a year. I was sceptical at first but the results speak for themselves."</p>
+        <div class="tperson"><div class="tavatar">DL</div><div><div class="tname">David Lim</div><div class="tloc">Business Owner · Singapore</div><div class="tbadge">Wealth Talisman</div></div></div>
+      </div>
+      <div class="tcard">
+        <div class="tstars">★★★★★</div>
+        <p class="tquote">"My daughter was struggling badly with her O-Levels. After Master Louis consecrated the Wenchang Academic Talisman, her focus and results improved dramatically. She scored straight As."</p>
+        <div class="tperson"><div class="tavatar">SN</div><div><div class="tname">Sarah Ng</div><div class="tloc">Parent · Singapore</div><div class="tbadge">Academic Talisman</div></div></div>
+      </div>
+      <div class="tcard">
+        <div class="tstars">★★★★★</div>
+        <p class="tquote">"My husband and I had been trying to conceive for 4 years. After receiving the Fertility Blessing Talisman from Master Louis, I was pregnant within 6 months. We are forever grateful."</p>
+        <div class="tperson"><div class="tavatar">JT</div><div><div class="tname">Jenny Tan</div><div class="tloc">Homemaker · Singapore</div><div class="tbadge">Pregnancy Talisman</div></div></div>
+      </div>
+      <div class="tcard">
+        <div class="tstars">★★★★★</div>
+        <p class="tquote">"I was stuck in the same position for 6 years with no promotion. After Master Louis' career consultation and talisman, I was promoted within 4 months. Highly recommended to everyone."</p>
+        <div class="tperson"><div class="tavatar">RK</div><div><div class="tname">Raymond Koh</div><div class="tloc">Manager · Singapore</div><div class="tbadge">Career Talisman</div></div></div>
+      </div>
+      <div class="tcard">
+        <div class="tstars">★★★★★</div>
+        <p class="tquote">"Our restaurant was struggling badly. Master Louis conducted a full Feng Shui audit and blessed the space. Business picked up dramatically within the first month. Truly remarkable."</p>
+        <div class="tperson"><div class="tavatar">WC</div><div><div class="tname">Wei Chen</div><div class="tloc">Restaurant Owner · Singapore</div><div class="tbadge">Feng Shui Audit</div></div></div>
+      </div>
+      <div class="tcard">
+        <div class="tstars">★★★★★</div>
+        <p class="tquote">"I kept feeling drained and unwell despite normal medical checks. Master Louis identified negative energy in my home and provided a Protection Talisman. I feel completely like myself again."</p>
+        <div class="tperson"><div class="tavatar">AL</div><div><div class="tname">Annie Lee</div><div class="tloc">Teacher · Singapore</div><div class="tbadge">Protection Talisman</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sdiv"></div>
+
+  <!-- CART DRAWER -->
+  <div id="cart-drawer">
+    <div class="cart-overlay" onclick="closeCart()"></div>
+    <div class="cart-panel">
+      <div class="cart-head">
+        <span>🛒 Your Cart</span>
+        <button class="cart-close" onclick="closeCart()">×</button>
+      </div>
+      <div id="cart-body" style="flex:1;overflow-y:auto;padding:0 24px"></div>
+      <div id="cart-footer" style="padding:0 24px 24px"></div>
+    </div>
+  </div>
+
+  <!-- PRODUCT MODAL -->
+  <div id="product-modal" onclick="if(event.target===this)closeModal()">
+    <div class="modal-panel">
+      <div class="modal-thumb" id="modal-thumb">
+        <span id="modal-emoji"></span>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-sku" id="modal-sku"></div>
+        <div class="modal-name" id="modal-name"></div>
+        <div class="modal-chin" id="modal-chin"></div>
+        <p class="modal-desc" id="modal-desc"></p>
+        <p class="modal-note">✏️ Each talisman is customised — provide your name, date of birth, time &amp; location when ordering.</p>
+        <span class="modal-price" id="modal-price"></span>
+        <div class="modal-actions">
+          <button class="modal-addcart" id="modal-addcart">Add to Cart</button>
+          <button class="modal-wa" id="modal-wa">💬 WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <section class="cta-sec" id="cta-area">
+    <div class="cta-inner">
+      <div class="cta-eyebrow">Free Consultation</div>
+      <h2 class="cta-title">Not sure which talisman you need?</h2>
+      <span class="cta-chin">不知选何符 · 请问师傅</span>
+      <p class="cta-sub">Let Master Louis Cheung personally recommend the right talisman based on your BaZi birth chart and current life situation. Every consultation is conducted with care and confidentiality.</p>
+      <button class="hcta">Get a Free Consultation</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-top-rule"></div>
+    <div class="footer-animated-bg">
+      <svg viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="fg1" cx="18%" cy="50%" r="38%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0.09"/><stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/></radialGradient>
+          <radialGradient id="fg2" cx="82%" cy="50%" r="38%"><stop offset="0%" stop-color="#6b1010" stop-opacity="0.12"/><stop offset="100%" stop-color="#6b1010" stop-opacity="0"/></radialGradient>
+          <filter id="fblur"><feGaussianBlur stdDeviation="30"/></filter>
+        </defs>
+        <rect width="1200" height="320" fill="transparent"/>
+        <ellipse cx="200" cy="160" rx="280" ry="190" fill="url(#fg1)" filter="url(#fblur)"/>
+        <ellipse cx="1000" cy="160" rx="280" ry="190" fill="url(#fg2)" filter="url(#fblur)"/>
+        <g class="footer-trigrams" opacity="0.06">
+          <text x="55"  y="210" font-family="Noto Serif SC,serif" font-size="140" fill="#c9a84c">道</text>
+          <text x="975" y="220" font-family="Noto Serif SC,serif" font-size="110" fill="#c9a84c">德</text>
+          <text x="510" y="270" font-family="Noto Serif SC,serif" font-size="90"  fill="#c9a84c">天</text>
+        </g>
+      </svg>
+    </div>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="footer-logo-icon">
+              <img src="images/logo.png" onerror="this.style.display='none';this.parentNode.innerHTML='<span style=\'font-family:var(--chinese);color:var(--gold);font-size:22px\'>道</span>'">
+            </div>
+            <div>
+              <div class="footer-wordmark">DivinewayFengshui</div>
+              <div class="footer-tagline">风水 · 道家法术 · 符咒</div>
+            </div>
+          </div>
+          <p class="footer-brand-desc">Authentic Taoist Feng Shui, BaZi consultations, and hand-consecrated talismans by Award-Winning Master Louis Cheung. Serving Singapore and clients worldwide since 2007.</p>
+          <div class="footer-socials">
+            <a class="fsocial" href="https://www.tiktok.com/@divinewayfengshui" target="_blank"><i class="ti ti-brand-tiktok"></i></a>
+            <a class="fsocial" href="https://www.instagram.com/divinewayinc/" target="_blank"><i class="ti ti-brand-instagram"></i></a>
+            <a class="fsocial" href="https://www.facebook.com/divinewaymagic" target="_blank"><i class="ti ti-brand-facebook"></i></a>
+            <a class="fsocial" href="https://www.youtube.com/@masterlouischeung" target="_blank"><i class="ti ti-brand-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Services</div>
+          <ul class="footer-links">
+            <li><a href="#">BaZi Analysis</a></li>
+            <li><a href="#">Feng Shui Audit</a></li>
+            <li><a href="#">Talisman Consecration</a></li>
+            <li><a href="#">Auspicious Date Selection</a></li>
+            <li><a href="#">Name Analysis</a></li>
+            <li><a href="#">Taoist Rituals</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Shop</div>
+          <ul class="footer-links">
+            <li><a href="shop.html?cat=Wealth">Wealth Talismans</a></li>
+            <li><a href="shop.html?cat=Health">Health Talismans</a></li>
+            <li><a href="shop.html?cat=Relationship">Relationship Talismans</a></li>
+            <li><a href="shop.html?cat=Safety">Protection Talismans</a></li>
+            <li><a href="shop.html?cat=Pregnancy">Pregnancy Talismans</a></li>
+            <li><a href="shop.html?cat=Divine+Item">Divine Items &amp; Books</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Contact</div>
+          <ul class="footer-contact-list">
+            <li><i class="ti ti-brand-whatsapp"></i><a href="https://wa.me/6589490437" target="_blank">+65 8949 0437</a></li>
+            <li><i class="ti ti-map-pin"></i><span>Singapore</span></li>
+            <li><i class="ti ti-clock"></i><span>Mon – Sat, 10am – 7pm</span></li>
+            <li><i class="ti ti-globe"></i><span>International consultations available</span></li>
+          </ul>
+          <a class="footer-wa-btn" href="https://wa.me/6589490437?text=Hello%20Master%20Louis%2C%20I%20would%20like%20to%20enquire%20about%20your%20services." target="_blank">
+            <i class="ti ti-brand-whatsapp"></i> WhatsApp Now
+          </a>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-bottom">
+        <div class="footer-bottom-left">
+          <span class="footer-seal">✦</span>
+          <span>© 2025 DivinewayFengshui. All rights reserved.</span>
+          <span class="footer-seal">✦</span>
+        </div>
+        <div class="footer-bottom-right">
+          <span>Crafted with reverence for the ancient arts</span>
+          <span class="footer-chin">天地人和 · 道法自然</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /wrapper -->
+
+<script>
+const WA_NUMBER = '6589490437';
+const WA_BASE   = `https://wa.me/${WA_NUMBER}`;
+const cart = {};
+
+/* ── Cart ── */
+function cartCount() { return Object.values(cart).reduce((s,i)=>s+i.qty,0); }
+function cartTotal() { return Object.values(cart).reduce((s,i)=>s+i.price*i.qty,0); }
+
+function updateCartBadge() {
+  const n = cartCount();
+  const badge = document.getElementById('cart-badge');
+  if (!badge) return;
+  badge.textContent = n;
+  badge.style.display = n > 0 ? 'flex' : 'none';
+}
+
+function addToCart(sku, name, price, btn) {
+  if (cart[sku]) cart[sku].qty++;
+  else cart[sku] = { name, price, qty: 1 };
+  updateCartBadge();
+  btn.textContent = '✓ Added!';
+  btn.style.background = '#2a7a2a';
+  btn.style.color = '#fff';
+  setTimeout(() => { btn.textContent = 'Add to Cart'; btn.style.background = ''; btn.style.color = ''; }, 1200);
+}
+
+function openCart()  { document.getElementById('cart-drawer').style.display = 'flex'; renderCart(); }
+function closeCart() { document.getElementById('cart-drawer').style.display = 'none'; }
+
+function renderCart() {
+  const body = document.getElementById('cart-body');
+  const footer = document.getElementById('cart-footer');
+  const items = Object.entries(cart);
+  if (!items.length) {
+    body.innerHTML = '<p style="color:rgba(242,232,213,0.3);font-size:13px;font-family:sans-serif;text-align:center;padding:44px 0">Your cart is empty.</p>';
+    footer.innerHTML = ''; return;
+  }
+  body.innerHTML = items.map(([sku,i]) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid rgba(201,168,76,0.1);gap:10px">
+      <div style="flex:1"><div style="font-size:12px;color:#f2e8d5;font-weight:500;font-family:sans-serif">${i.name}</div>
+      <div style="font-size:11px;color:rgba(242,232,213,0.38);font-family:sans-serif;margin-top:2px">SGD $${i.price} × ${i.qty}</div></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button onclick="changeQty('${sku}',-1)" style="width:24px;height:24px;border:1px solid rgba(201,168,76,0.22);background:transparent;border-radius:3px;cursor:pointer;font-size:14px;color:rgba(201,168,76,0.7)">−</button>
+        <span style="font-size:13px;font-family:sans-serif;min-width:16px;text-align:center;color:#f2e8d5">${i.qty}</span>
+        <button onclick="changeQty('${sku}',1)" style="width:24px;height:24px;border:1px solid rgba(201,168,76,0.22);background:transparent;border-radius:3px;cursor:pointer;font-size:14px;color:rgba(201,168,76,0.7)">+</button>
+        <button onclick="removeItem('${sku}')" style="width:24px;height:24px;border:none;background:none;cursor:pointer;font-size:16px;color:#c44">×</button>
+      </div>
+    </div>`).join('');
+  footer.innerHTML = `
+    <div style="display:flex;justify-content:space-between;padding:16px 0 12px;font-family:sans-serif">
+      <span style="font-size:11px;color:#f2e8d5;font-weight:600;letter-spacing:.14em;text-transform:uppercase">Total</span>
+      <span style="font-size:17px;color:#e2c26a;font-weight:700">SGD $${cartTotal()}</span>
+    </div>
+    <button onclick="checkoutWhatsApp()" style="width:100%;background:#25d366;color:#fff;border:none;padding:13px;border-radius:3px;font-size:11px;font-weight:700;font-family:sans-serif;cursor:pointer;letter-spacing:.12em;text-transform:uppercase">
+      💬 Order via WhatsApp
+    </button>
+    <p style="font-size:10px;color:rgba(242,232,213,0.28);font-family:sans-serif;text-align:center;margin-top:10px">Master Louis will personally confirm &amp; customise your talisman</p>`;
+}
+
+function changeQty(sku, delta) {
+  if (!cart[sku]) return;
+  cart[sku].qty += delta;
+  if (cart[sku].qty <= 0) delete cart[sku];
+  updateCartBadge(); renderCart();
+}
+function removeItem(sku) { delete cart[sku]; updateCartBadge(); renderCart(); }
+
+function checkoutWhatsApp() {
+  const items = Object.values(cart);
+  if (!items.length) return;
+  const lines = items.map(i => `• ${i.name} × ${i.qty} (SGD $${i.price * i.qty})`).join('\n');
+  const msg = `Hello Master Louis, I would like to order:\n\n${lines}\n\nTotal: SGD $${cartTotal()}\n\nPlease advise on the next steps.`;
+  window.open(`${WA_BASE}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+/* ── Modal ── */
+function openModal(sku) {}
+function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
+
+/* ── Category navigation ── */
+const catMap = {
+  'Wealth':'Wealth','Affinity':'Affinity','Career':'Career','Study':'Study',
+  'Health':'Health','Relationship':'Relationship','Safety':'Safety',
+  'General Protection':'General Protection','Pregnancy':'Pregnancy'
+};
+
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const catName = btn.closest('.cat').querySelector('.cat-name').textContent.trim();
+    const cat = catMap[catName] || 'all';
+    window.location.href = cat !== 'all' ? `shop.html?cat=${encodeURIComponent(cat)}` : 'shop.html';
+  });
+});
+
+/* ── Pills ── */
+const pillMap = {
+  'Wealth blocked':'Wealth','Health concerns':'Health','Constant bad luck':'Safety',
+  'Career not moving':'Career','Love life suffering':'Relationship',
+  'Child struggling in school':'Study','Trying to conceive':'Pregnancy',
+  'No one to help me':'Relationship'
+};
+document.querySelectorAll('.hpill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    const key = pill.textContent.replace(/^[^\s]+\s/,'').trim();
+    const cat = pillMap[key];
+    window.location.href = cat ? `shop.html?cat=${encodeURIComponent(cat)}` : 'shop.html';
+  });
+});
+
+/* ── CTAs ── */
+document.querySelector('.hcta').addEventListener('click', () =>
+  window.location.href = 'shop.html?cat=Talisman');
+
+document.querySelector('.hcta-wa').addEventListener('click', () =>
+  window.open(`${WA_BASE}?text=${encodeURIComponent('Hello Master Louis, I would like a free consultation to find out which talisman suits me.')}`, '_blank'));
+
+document.querySelector('.btn-wa').addEventListener('click', () =>
+  window.open(`${WA_BASE}?text=${encodeURIComponent('Hello Master Louis, I would like to enquire about your talisman services.')}`, '_blank'));
+
+document.querySelector('.cta-sec .hcta').addEventListener('click', () =>
+  window.open(`${WA_BASE}?text=${encodeURIComponent('Hello Master Louis, I would like a free consultation to find out which talisman suits me.')}`, '_blank'));
+</script>
+
+</body>
+</html>
