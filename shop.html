@@ -11,6 +11,8 @@
   <script src="config.js"></script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="nav_style.css">
+  <link rel="stylesheet" href="auth_styles.css">
+  <script type="module" src="firebase-auth.js"></script>
 </head>
 <body>
 
@@ -675,6 +677,7 @@ async function checkoutStripe(btn) {
     });
     const data = await res.json();
     if (data.url) {
+      localStorage.setItem('dw_pending_order', JSON.stringify({ items, total: cartTotal() }));
       window.location.href = data.url;
     } else {
       throw new Error(data.error || 'No checkout URL returned');
@@ -812,9 +815,14 @@ document.querySelector('.cta-sec .hcta').addEventListener('click', () => {
 });
 
 /* ── Boot ─────────────────────────────────────────────────────────── */
-(function handleCheckoutReturn() {
+(async function handleCheckoutReturn() {
   const p = new URLSearchParams(window.location.search);
   if (p.get('checkout') === 'success') {
+    const pending = localStorage.getItem('dw_pending_order');
+    if (pending && window.__currentUser && window.saveOrder) {
+      try { await window.saveOrder({ ...JSON.parse(pending), sessionId: '' }); } catch {}
+    }
+    localStorage.removeItem('dw_pending_order');
     Object.keys(cart).forEach(k => delete cart[k]);
     updateCartBadge();
     history.replaceState(null, '', window.location.pathname);
