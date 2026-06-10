@@ -17,7 +17,7 @@
   <nav class="nav">
     <a href="index.html" class="nav-logo">
       <div class="nav-icon">
-        <img src="images/logo.png" onerror="this.style.display='none';this.parentNode.innerHTML='<span style=&quot;font-family:var(--chinese);color:var(--gold);font-size:18px&quot;>道</span>'">
+        <img src="divineway_logo/divineway_logo.png" onerror="this.style.display='none';this.parentNode.innerHTML='<span style=&quot;font-family:var(--chinese);color:var(--gold);font-size:18px&quot;>道</span>'">
       </div>
       <div class="nav-wordmark">
         <strong>DivinewayFengshui</strong>
