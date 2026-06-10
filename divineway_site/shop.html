@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <script src="config.js"></script>
 </head>
 <body>
 
@@ -1823,9 +1824,9 @@ body {
    ERPNEXT CONFIG — fill in your details
    ═══════════════════════════════════════════════════════════════════ */
 const ERPNEXT = {
-  url:        'https://kingstech-worldorb.s.frappe.cloud',   // e.g. https://erp.divineway.com  (no trailing slash)
-  api_key:    '17138ce640377bc',
-  api_secret: '9405dba1474c538',
+  url:        (window.ERPNEXT_CONFIG || {}).url        || '',
+  api_key:    (window.ERPNEXT_CONFIG || {}).api_key    || '',
+  api_secret: (window.ERPNEXT_CONFIG || {}).api_secret || '',
   // Item Groups to fetch — must match exactly what you have in ERPNext
   item_groups: [,'Talisman','Divine Item','Book','Prosperity Item'],
   talisman_categories: ['Wealth','Health','Relationship','Career','Study','Safety','General Protection','Pregnancy','Affinity'],
