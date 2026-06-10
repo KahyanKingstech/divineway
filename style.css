@@ -240,6 +240,15 @@ body {
 @keyframes driftGlow1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-14px)} }
 @keyframes driftGlow2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-16px,18px)} }
 
+/* ─── PAGE BANNER ANIMATIONS ─── */
+@keyframes pbTaoRotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes pbTaoRotateRev { from{transform:rotate(0deg)} to{transform:rotate(-360deg)} }
+@keyframes pbGlowPulse { 0%,100%{opacity:.06} 50%{opacity:.14} }
+
+.pb-tao-outer { transform-origin:450px 110px; animation:pbTaoRotate 50s linear infinite; }
+.pb-tao-inner { transform-origin:450px 110px; animation:pbTaoRotateRev 35s linear infinite; }
+.pb-glow { animation:pbGlowPulse 6s ease-in-out infinite; }
+
 .hbg-ring-outer { transform-origin:290px 290px; animation:rotSlow 90s linear infinite; }
 .hbg-ring-inner { transform-origin:290px 290px; animation:rotSlowRev 60s linear infinite; }
 .hbg-ring-mid   { transform-origin:290px 290px; animation:rotMed 130s linear infinite; }

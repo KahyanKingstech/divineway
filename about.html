@@ -29,7 +29,26 @@
         <rect width="900" height="220" fill="transparent"/>
         <ellipse cx="100" cy="110" rx="220" ry="140" fill="url(#pbg1)" filter="url(#pbblur)"/>
         <ellipse cx="800" cy="110" rx="220" ry="140" fill="url(#pbg2)" filter="url(#pbblur)"/>
-        <text x="450" y="170" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="130" fill="#c9a84c" opacity="0.05">師</text>
+        
+        <!-- Rotating Outer Bagua Ring -->
+        <g class="pb-tao-outer">
+          <circle cx="450" cy="110" r="48" fill="none" stroke="#c9a84c" stroke-width="1.2" opacity="0.16"/>
+          <circle cx="450" cy="110" r="40" fill="none" stroke="#c9a84c" stroke-width="0.8" opacity="0.12"/>
+        </g>
+        
+        <!-- Rotating Inner Yin-Yang -->
+        <g class="pb-tao-inner">
+          <circle cx="450" cy="110" r="35" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.18"/>
+          <path d="M 450 75 A 35 35 0 0 1 450 145 A 17.5 17.5 0 0 1 450 110 A 17.5 17.5 0 0 0 450 75" fill="none" stroke="#c9a84c" stroke-width="1.5" opacity="0.14"/>
+          <circle cx="450" cy="92.5" r="3.5" fill="#c9a84c" opacity="0.22"/>
+          <circle cx="450" cy="127.5" r="3.5" fill="#c9a84c" opacity="0.22"/>
+        </g>
+        
+        <!-- Central Glow -->
+        <g class="pb-glow">
+          <circle cx="450" cy="110" r="60" fill="none" stroke="#c9a84c" stroke-width="0.5" opacity="0.06"/>
+        </g>
+        
         <line x1="0" y1="219" x2="900" y2="219" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.25"/>
       </svg>
     </div>
