@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@300;400;500;700&family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <link rel="icon" type="image/png" href="../divineway_logo/divineway_logo.png">
+  <link rel="stylesheet" href="nav_style.css">
 </head>
 <body>
 
@@ -88,7 +89,7 @@ body::before {
 }
 
 /* ─── NAV ─── */
-.nav {
+/* .nav {
   display: flex;
   align-items: center;
   padding: 0 32px;
@@ -129,10 +130,10 @@ body::before {
   font-family: var(--chinese);
   font-size: 10px; color: var(--gold);
   letter-spacing: 0.12em;
-} 
+}  */
 
 /* ─── LOGO GLOW EFFECT ─── */
-.nav-icon {
+/* .nav-icon {
   width: 40px; height: 40px;
   position: relative;
 }
@@ -183,10 +184,10 @@ body::before {
       0 0 120px 30px rgba(139,26,26,0.3),
       inset 0 0 26px rgba(255,220,100,0.1);
   }
-}
+} */
 
 /* Wordmark subtle shimmer */
-.nav-wordmark strong {
+/* .nav-wordmark strong {
   background: linear-gradient(90deg, var(--cream) 0%, var(--gold-pale) 40%, var(--cream) 60%, var(--gold-bright) 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -223,9 +224,9 @@ body::before {
 .nav-links a.nav-active { color: var(--gold); }
 .nav-links a.nav-active::after { transform: scaleX(1); }
 
-.nav-buttons { display: flex; gap: 10px; align-items: center; }
+.nav-buttons { display: flex; gap: 10px; align-items: center; } */
 
-.btn-wa {
+/* .btn-wa {
   background: var(--red);
   border: 1px solid rgba(139,26,26,0.6);
   color: var(--cream);
@@ -253,7 +254,7 @@ body::before {
   position: relative; transition: border-color 0.2s;
 }
 
-.btn-cart:hover { border-color: var(--gold); }
+.btn-cart:hover { border-color: var(--gold); } */
 
 /* ─── HERO ─── */
 .hero {
@@ -510,7 +511,7 @@ body::before {
 
 .cats-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
 
@@ -1383,15 +1384,15 @@ body::before {
       <p class="sec-sub" style="text-align:center;max-width:480px;margin:0 auto">Each talisman is hand-drawn and personally consecrated by Master Louis Cheung on an auspicious date.</p>
     </div>
     <div class="cats-grid">
-      <div class="cat"><span class="cat-glyph">财</span><div class="cat-icon">💰</div><div class="cat-name">Wealth</div><span class="cat-chin">招财进宝</span><div class="cat-desc">Financial luck &amp; abundance</div><button class="cat-btn">Shop Now</button></div>
-      <div class="cat"><span class="cat-glyph">缘</span><div class="cat-icon">🤝</div><div class="cat-name">Affinity</div><span class="cat-chin">和合人缘</span><div class="cat-desc">Attract helpers &amp; benefactors</div><button class="cat-btn">Shop Now</button></div>
-      <div class="cat"><span class="cat-glyph">业</span><div class="cat-icon">🏆</div><div class="cat-name">Career</div><span class="cat-chin">事业功名</span><div class="cat-desc">Promotion &amp; recognition</div><button class="cat-btn">Shop Now</button></div>
-      <div class="cat"><span class="cat-glyph">学</span><div class="cat-icon">📚</div><div class="cat-name">Study</div><span class="cat-chin">文昌学业</span><div class="cat-desc">Exam success &amp; focus</div><button class="cat-btn">Shop Now</button></div>
-      <div class="cat"><span class="cat-glyph">健</span><div class="cat-icon">🌿</div><div class="cat-name">Health</div><span class="cat-chin">健康平安</span><div class="cat-desc">Vitality &amp; healing energy</div><button class="cat-btn">Shop Now</button></div>
-      <div class="cat"><span class="cat-glyph">情</span><div class="cat-icon">❤️</div><div class="cat-name">Relationship</div><span class="cat-chin">姻缘和合</span><div class="cat-desc">Romance &amp; harmony</div><button class="cat-btn">Shop Now</button></div>
-      <div class="cat"><span class="cat-glyph">护</span><div class="cat-icon">🛡️</div><div class="cat-name">Safety</div><span class="cat-chin">护身平安</span><div class="cat-desc">Ward off evil &amp; bad energy</div><button class="cat-btn">Shop Now</button></div>
-      <div class="cat"><span class="cat-glyph">运</span><div class="cat-icon">🌀</div><div class="cat-name">General Protection</div><span class="cat-chin">改运化煞</span><div class="cat-desc">General luck improvement</div><button class="cat-btn">Shop Now</button></div>
-      <div class="cat"><span class="cat-glyph">孕</span><div class="cat-icon">🤱</div><div class="cat-name">Pregnancy</div><span class="cat-chin">送子安胎</span><div class="cat-desc">Fertility &amp; safe delivery</div><button class="cat-btn">Shop Now</button></div>
+      <div class="cat"><span class="cat-glyph">财</span><div class="cat-icon">💰</div><div class="cat-name">Wealth</div><span class="cat-chin">招财进宝</span><div class="cat-desc">Financial luck &amp; abundance</div></div>
+      <div class="cat"><span class="cat-glyph">缘</span><div class="cat-icon">🤝</div><div class="cat-name">Affinity</div><span class="cat-chin">和合人缘</span><div class="cat-desc">Attract helpers &amp; benefactors</div></div>
+      <div class="cat"><span class="cat-glyph">业</span><div class="cat-icon">🏆</div><div class="cat-name">Career</div><span class="cat-chin">事业功名</span><div class="cat-desc">Promotion &amp; recognition</div></div>
+      <div class="cat"><span class="cat-glyph">学</span><div class="cat-icon">📚</div><div class="cat-name">Study</div><span class="cat-chin">文昌学业</span><div class="cat-desc">Exam success &amp; focus</div></div>
+      <div class="cat"><span class="cat-glyph">健</span><div class="cat-icon">🌿</div><div class="cat-name">Health</div><span class="cat-chin">健康平安</span><div class="cat-desc">Vitality &amp; healing energy</div></div>
+      <div class="cat"><span class="cat-glyph">情</span><div class="cat-icon">❤️</div><div class="cat-name">Relationship</div><span class="cat-chin">姻缘和合</span><div class="cat-desc">Romance &amp; harmony</div></div>
+      <div class="cat"><span class="cat-glyph">护</span><div class="cat-icon">🛡️</div><div class="cat-name">Safety</div><span class="cat-chin">护身平安</span><div class="cat-desc">Ward off evil &amp; bad energy</div></div>
+      <div class="cat"><span class="cat-glyph">运</span><div class="cat-icon">🌀</div><div class="cat-name">General Protection</div><span class="cat-chin">改运化煞</span><div class="cat-desc">General luck improvement</div></div>
+      <div class="cat"><span class="cat-glyph">孕</span><div class="cat-icon">🤱</div><div class="cat-name">Pregnancy</div><span class="cat-chin">送子安胎</span><div class="cat-desc">Fertility &amp; safe delivery</div></div>
     </div>
   </section>
 
@@ -1845,7 +1846,7 @@ const catMap = {
   'General Protection':'General Protection','Pregnancy':'Pregnancy'
 };
 
-document.querySelectorAll('.cat-btn').forEach(btn => {
+document.querySelectorAll('.cat').forEach(btn => {
   btn.addEventListener('click', () => {
     const catName = btn.closest('.cat').querySelector('.cat-name').textContent.trim();
     const cat = catMap[catName] || 'all';

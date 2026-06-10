@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <script src="config.js"></script>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="nav_style.css">
 </head>
 <body>
 
@@ -105,20 +106,26 @@
   <!-- PRODUCT MODAL -->
   <div id="product-modal" onclick="if(event.target===this)closeModal()" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,0.75);justify-content:center;align-items:center;padding:20px">
     <div class="modal-panel">
-      <div class="modal-thumb" id="modal-thumb">
-        <span id="modal-emoji"></span>
-        <button class="modal-close" onclick="closeModal()">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="modal-sku" id="modal-sku"></div>
-        <div class="modal-name" id="modal-name"></div>
-        <div class="modal-chin" id="modal-chin"></div>
-        <p class="modal-desc" id="modal-desc"></p>
-        <p class="modal-note">✏️ Each talisman is customised — provide your name, date of birth, time &amp; location when ordering.</p>
-        <span class="modal-price" id="modal-price"></span>
-        <div class="modal-actions">
-          <button class="modal-addcart" id="modal-addcart">Add to Cart</button>
-          <button class="modal-wa" id="modal-wa">💬 WhatsApp</button>
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <div style="display:flex;height:100%;flex-direction:row">
+        <div class="modal-thumb" id="modal-thumb">
+          <img id="modal-image" src="" alt="product" style="width:100%;height:100%;object-fit:contain">
+          <span id="modal-emoji" style="position:absolute;font-size:52px;display:none"></span>
+        </div>
+        <div class="modal-body">
+          <div class="modal-sku" id="modal-sku"></div>
+          <div class="modal-name" id="modal-name"></div>
+          <div class="modal-chin" id="modal-chin"></div>
+          <div class="modal-desc-container">
+            <p class="modal-desc" id="modal-desc"></p>
+            <button class="modal-read-more" id="modal-read-more" style="display:none">Read More</button>
+          </div>
+          <p class="modal-note">✏️ Each talisman is customised — provide your name, date of birth, time &amp; location when ordering.</p>
+          <span class="modal-price" id="modal-price"></span>
+          <div class="modal-actions">
+            <button class="modal-addcart" id="modal-addcart">Add to Cart</button>
+            <button class="modal-wa" id="modal-wa">💬 WhatsApp</button>
+          </div>
         </div>
       </div>
     </div>
@@ -266,6 +273,7 @@ const ERPNEXT = {
   // custom_chinese_name: 'custom_chinese_name',  // e.g. "和合贵人招财符"
   currency:            'SGD',
   price_list:          'Standard Selling',
+  stripe_worker_url:   (window.ERPNEXT_CONFIG || {}).stripe_worker_url || 'https://divineway-stripe-checkout.kah-yan.workers.dev',
 };
 /* ═══════════════════════════════════════════════════════════════════ */
 
@@ -303,7 +311,7 @@ async function fetchItems() {
   const groupFilters = ERPNEXT.item_groups.map(g => ['item_group','=',g]);
   const filters = JSON.stringify([['disabled','=',0],['is_sales_item','=',1]]);
   const fields = JSON.stringify(['name','item_name','item_code','item_group','description',
-                               'standard_rate','image','custom_chinese_name',
+                               'image','custom_chinese_name',
                                'custom_talisman_categories']);
   const url = `${ERPNEXT.url}/api/resource/Item?filters=${encodeURIComponent(filters)}&fields=${encodeURIComponent(fields)}&limit_page_length=200&order_by=item_name asc`;
 
@@ -342,6 +350,8 @@ async function loadProducts() {
 
     const codes  = validItems.map(i => i.item_code);
     const prices = await fetchPrices(codes);
+    console.log('Prices object received:', prices);
+    console.log('Sample price lookup (first item):', validItems[0]?.item_code, prices[validItems[0]?.item_code]);
 
     const seenGroups = new Set();
     validItems.forEach(i => { if (i.item_group) seenGroups.add(i.item_group); });
@@ -383,13 +393,35 @@ async function fetchPrices(itemCodes) {
     ['selling','=',1]
   ]);
   const fields = JSON.stringify(['item_code','price_list_rate']);
-  const url = `${ERPNEXT.url}/api/resource/Item Price?filters=${encodeURIComponent(filters)}&fields=${encodeURIComponent(fields)}&limit_page_length=500`;
-  const res = await fetch(url, { headers: erpHeaders() });
-  if (!res.ok) return {};
-  const json = await res.json();
-  const map = {};
-  (json.data || []).forEach(p => { map[p.item_code] = p.price_list_rate; });
-  return map;
+  const url = `${ERPNEXT.url}/api/resource/Item%20Price?filters=${encodeURIComponent(filters)}&fields=${encodeURIComponent(fields)}&limit_page_length=500`;
+  
+  try {
+    const res = await fetch(url, { headers: erpHeaders() });
+    if (!res.ok) {
+      console.warn(`fetchPrices failed: ${res.status} ${res.statusText}`);
+      return {};
+    }
+    const json = await res.json();
+    if (json.data) {
+      const map = {};
+      json.data.forEach(p => { map[p.item_code] = p.price_list_rate; });
+      console.log('📊 Requested item codes:', itemCodes);
+      console.log('💰 Price data returned:', json.data.length, 'records');
+      console.log('📍 Price map:', map);
+      
+      // Show items without prices
+      const missing = itemCodes.filter(code => !map[code]);
+      if (missing.length) {
+        console.warn('⚠️ Items with NO prices found:', missing);
+      }
+      return map;
+    }
+    console.warn('No price data returned');
+    return {};
+  } catch (err) {
+    console.error('Error fetching prices:', err);
+    return {};
+  }
 }
 
 /* ── Build filter tabs dynamically ───────────────────────────────── */
@@ -446,35 +478,31 @@ const productData = {};
 function renderCard(item, price) {
   const sku   = item.item_code;
   const name  = item.item_name;
-  // const chin  = item[ERPNEXT.custom_chinese_name] || '';
   const chin = item.custom_chinese_name || '';
   const group = item.item_group || '';
-  // const desc  = item.description
-  //   ? item.description.replace(/<[^>]+>/g, '').trim()   // strip HTML tags from ERPNext description
-  //   : '';
   const cleanDesc = item.description
     ? item.description.replace(/<[^>]+>/g, '').trim()
     : '';
 
   const words = cleanDesc.split(/\s+/);
 
-  const desc = words.length > 20
+  const descPreview = words.length > 20
       ? words.slice(0, 20).join(' ') + ' ......'
       : cleanDesc;
 
-  const priceVal = price || item.standard_rate || 0;
+  const priceVal = price || 0;
+  const priceDisplay = price ? `${ERPNEXT.currency} $${priceVal}` : 'Price TBA';
   const emoji = GROUP_EMOJI[group] || '✨';
   const badgeLabel = group.replace(' Talisman','');
 
   const talismanCat = Array.isArray(item.custom_talisman_categories) ? item.custom_talisman_categories.map(c => c.category).join(', ') : '';
 
-  productData[sku] = { sku, name, chin, desc, price: priceVal, emoji, group, talismanCat };
+  productData[sku] = { sku, name, chin, desc: cleanDesc, descPreview, price: priceVal, emoji, group, talismanCat, image: item.image || '' };
 
   const card = document.createElement('div');
   card.className = 'pcard';
   card.dataset.cat = group === 'Talisman' && talismanCat ? talismanCat : group;
-  card.dataset.group = group;  // ← add this line
-  // card.datasheet.cat = talismanCat;
+  card.dataset.group = group;
   card.innerHTML = `
     <div class="pthumb">
       <span>${emoji}</span>
@@ -484,10 +512,10 @@ function renderCard(item, price) {
       <div class="psku">${sku}</div>
       <div class="pname">${name}</div>
       <div class="pchin">${chin}</div>
-      <div class="pdesc">${desc || '—'}</div>
+      <div class="pdesc">${descPreview || '—'}</div>
       <span class="pcat-tag">${group === 'Talisman' ? talismanCat : group}</span>
       <div class="pfoot">
-        <div class="pprice">${ERPNEXT.currency} $${priceVal} </div>
+        <div class="pprice">${priceDisplay}</div>
         <button class="pbtn">Add to Cart</button>
       </div>
     </div>`;
@@ -497,10 +525,18 @@ function renderCard(item, price) {
     if (e.target.classList.contains('pbtn')) return;
     openModal(sku);
   });
+
+  // card.querySelector('.pbtn').addEventListener('click', e => {
+  //   e.stopPropagation();
+  //   addToCart(sku, name, priceVal, e.currentTarget);
+  // });
+
   card.querySelector('.pbtn').addEventListener('click', e => {
     e.stopPropagation();
-    addToCart(sku, name, priceVal, e.currentTarget);
+    const stripePriceId = productData[sku]?.stripePriceId;
+    addToCart(sku, name, priceVal, stripePriceId, e.currentTarget);
   });
+
   return card;
 }
 
@@ -557,9 +593,9 @@ function updateCartBadge() {
   badge.style.display  = n > 0 ? 'flex' : 'none';
 }
 
-function addToCart(sku, name, price, btn) {
+function addToCart(sku, name, price, stripePriceId, btn) {
   if (cart[sku]) cart[sku].qty++;
-  else cart[sku] = { name, price, qty: 1 };
+  else cart[sku] = { name, price, stripePriceId, qty: 1 };
   updateCartBadge();
   btn.textContent          = '✓ Added!';
   btn.style.background     = '#2a7a2a';
@@ -598,10 +634,10 @@ function renderCart() {
       <span style="font-size:13px;color:#f7f0e3;font-weight:500;letter-spacing:.06em;text-transform:uppercase">Total</span>
       <span style="font-size:16px;color:#e2c26a;font-weight:700">${ERPNEXT.currency} $${cartTotal()}</span>
     </div>
-    <button onclick="checkoutWhatsApp()" style="width:100%;background:#25d366;color:#fff;border:none;padding:13px;border-radius:4px;font-size:12px;font-weight:700;font-family:sans-serif;cursor:pointer;letter-spacing:.06em;text-transform:uppercase">
-      💬 Order via WhatsApp
+    <button id="stripe-checkout-btn" onclick="checkoutStripe(this)" style="width:100%;background:#635bff;color:#fff;border:none;padding:13px;border-radius:4px;font-size:12px;font-weight:700;font-family:sans-serif;cursor:pointer;letter-spacing:.06em;text-transform:uppercase">
+      💳 Pay with Stripe
     </button>
-    <p style="font-size:10px;color:rgba(247,240,227,0.3);font-family:sans-serif;text-align:center;margin-top:10px">Master Louis will personally confirm &amp; customise your talisman</p>`;
+    <p style="font-size:10px;color:rgba(247,240,227,0.3);font-family:sans-serif;text-align:center;margin-top:10px">Secure checkout — all major cards accepted</p>`;
 }
 
 function changeQty(sku, delta) {
@@ -612,30 +648,124 @@ function changeQty(sku, delta) {
 }
 function removeItem(sku) { delete cart[sku]; updateCartBadge(); renderCart(); }
 
-function checkoutWhatsApp() {
+async function checkoutStripe(btn) {
   const items = Object.values(cart);
   if (!items.length) return;
-  const lines = items.map(i => `• ${i.name} × ${i.qty} (${ERPNEXT.currency} $${i.price * i.qty})`).join('');
-  const msg = `Hello Master Louis, I would like to order:
 
-${lines}
+  btn.disabled    = true;
+  btn.textContent = '⏳ Redirecting…';
 
-Total: ${ERPNEXT.currency} $${cartTotal()}
+  const base       = window.location.origin + window.location.pathname;
+  const successUrl = base + '?checkout=success';
+  const cancelUrl  = base + '?checkout=cancel';
 
-Please advise on next steps.`;
-  window.open(`${WA_BASE}?text=${encodeURIComponent(msg)}`, '_blank');
+  try {
+    const res = await fetch(ERPNEXT.stripe_worker_url, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ 
+        items: Object.values(cart).map(i => ({
+          name:     i.name,
+          price:    i.price,
+          quantity: i.qty,
+        })), 
+        successUrl, 
+        cancelUrl 
+      }),
+    });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error(data.error || 'No checkout URL returned');
+    }
+  } catch (err) {
+    btn.disabled    = false;
+    btn.textContent = '💳 Pay with Stripe';
+    showToast('Checkout failed: ' + err.message, 'error');
+  }
+}
+
+function showToast(msg, type = 'success') {
+  const toast = document.createElement('div');
+  toast.textContent = msg;
+  toast.style.cssText = [
+    'position:fixed', 'bottom:32px', 'left:50%', 'transform:translateX(-50%)',
+    'z-index:99999', 'padding:14px 28px', 'border-radius:6px',
+    'font-size:13px', 'font-family:sans-serif', 'font-weight:500',
+    'box-shadow:0 4px 24px rgba(0,0,0,0.4)', 'max-width:90vw', 'text-align:center',
+    type === 'error'
+      ? 'background:#7a1a00;color:#f7f0e3'
+      : 'background:#1a4a1a;color:#d4f5d4',
+  ].join(';');
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 4500);
 }
 
 /* ── Product modal ────────────────────────────────────────────────── */
 function openModal(sku) {
   const p = productData[sku];
   if (!p) return;
-  document.getElementById('modal-emoji').textContent  = p.emoji;
+  
+  const modalImage = document.getElementById('modal-image');
+  const modalEmoji = document.getElementById('modal-emoji');
+  const modalDesc = document.getElementById('modal-desc');
+  const readMoreBtn = document.getElementById('modal-read-more');
+  
+  if (p.image) {
+    // Construct full image URL - ERPNext stores relative paths like /files/...jpg
+    const imageUrl = p.image.startsWith('http') 
+      ? p.image 
+      : ERPNEXT.url + p.image;
+    
+    modalImage.src = imageUrl;
+    modalImage.style.display = 'block';
+    modalEmoji.style.display = 'none';
+  } else {
+    modalImage.style.display = 'none';
+    modalEmoji.textContent = p.emoji;
+    modalEmoji.style.display = 'block';
+  }
+  
   document.getElementById('modal-name').textContent   = p.name;
   document.getElementById('modal-chin').textContent   = p.chin || '';
   document.getElementById('modal-sku').textContent    = `SKU: ${p.sku}`;
-  document.getElementById('modal-desc').textContent   = p.desc;
   document.getElementById('modal-price').textContent  = `${ERPNEXT.currency} $${p.price}`;
+  
+  // Handle description with read more/less
+  const isDescriptionLong = p.desc !== p.descPreview;
+  
+  modalDesc.textContent = p.descPreview;
+  
+  if (isDescriptionLong) {
+    modalDesc.classList.add('collapsed');
+    readMoreBtn.style.display = 'inline-block';
+    readMoreBtn.textContent = 'Read More';
+    
+    // Remove previous click handlers by cloning
+    const newBtn = readMoreBtn.cloneNode(true);
+    readMoreBtn.parentNode.replaceChild(newBtn, readMoreBtn);
+    
+    newBtn.addEventListener('click', function toggleReadMore() {
+      const isExpanded = modalDesc.classList.contains('expanded');
+      
+      if (isExpanded) {
+        modalDesc.textContent = p.descPreview;
+        modalDesc.classList.remove('expanded');
+        modalDesc.classList.add('collapsed');
+        newBtn.textContent = 'Read More';
+      } else {
+        modalDesc.textContent = p.desc;
+        modalDesc.classList.remove('collapsed');
+        modalDesc.classList.add('expanded');
+        newBtn.textContent = 'Read Less';
+      }
+    });
+  } else {
+    modalDesc.classList.remove('collapsed', 'expanded');
+    readMoreBtn.style.display = 'none';
+  }
+  
   document.getElementById('modal-addcart').onclick    = e => addToCart(p.sku, p.name, p.price, e.currentTarget);
   document.getElementById('modal-wa').onclick = () => {
     const msg = `Hello Master Louis, I am interested in ${p.name}. Please advise on customisation and next steps.`;
@@ -682,6 +812,18 @@ document.querySelector('.cta-sec .hcta').addEventListener('click', () => {
 });
 
 /* ── Boot ─────────────────────────────────────────────────────────── */
+(function handleCheckoutReturn() {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get('checkout') === 'success') {
+    Object.keys(cart).forEach(k => delete cart[k]);
+    updateCartBadge();
+    history.replaceState(null, '', window.location.pathname);
+    setTimeout(() => showToast('Payment successful! Master Louis will be in touch to customise your talisman.'), 300);
+  } else if (p.get('checkout') === 'cancel') {
+    history.replaceState(null, '', window.location.pathname);
+    setTimeout(() => showToast('Checkout cancelled — your cart is still saved.', 'error'), 300);
+  }
+})();
 loadProducts();
 </script>
 

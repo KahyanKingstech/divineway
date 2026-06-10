@@ -32,7 +32,7 @@ ${linksHtml}
         🛒 Cart
         <span id="cart-badge" style="display:none;position:absolute;top:-6px;right:-6px;background:#c0392b;color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;font-family:sans-serif;font-weight:700;align-items:center;justify-content:center;line-height:18px">0</span>
       </button>
-      <button class="btn-wa">📲 WhatsApp Us</button>
+      <button class="btn-wa"><i class="ti ti-brand-whatsapp"></i> WhatsApp Now</button>
     </div>
   </nav>`;
 
