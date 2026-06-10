@@ -265,16 +265,13 @@
    ERPNEXT CONFIG — fill in your details
    ═══════════════════════════════════════════════════════════════════ */
 const ERPNEXT = {
-  url:        (window.ERPNEXT_CONFIG || {}).url        || '',
-  api_key:    (window.ERPNEXT_CONFIG || {}).api_key    || '',
-  api_secret: (window.ERPNEXT_CONFIG || {}).api_secret || '',
-  // Item Groups to fetch — must match exactly what you have in ERPNext
-  item_groups: [,'Talisman','Divine Item','Book','Prosperity Item'],
-  talisman_categories: ['Wealth','Health','Relationship','Career','Study','Safety','General Protection','Pregnancy','Affinity'],
-  // Custom fields on your Item doctype (leave blank string if not set up)
-  // custom_chinese_name: 'custom_chinese_name',  // e.g. "和合贵人招财符"
+  url:                 (window.ERPNEXT_CONFIG || {}).url        || '',
+  api_key:             (window.ERPNEXT_CONFIG || {}).api_key    || '',
+  api_secret:          (window.ERPNEXT_CONFIG || {}).api_secret || '',
   currency:            'SGD',
   price_list:          'Standard Selling',
+  item_groups:         ['Talisman','Divine Item','Book','Prosperity Item'],
+  talisman_categories: ['Wealth','Health','Relationship','Career','Study','Safety','General Protection','Pregnancy','Affinity'],
   stripe_worker_url:   (window.ERPNEXT_CONFIG || {}).stripe_worker_url || 'https://divineway-stripe-checkout.kah-yan.workers.dev',
 };
 /* ═══════════════════════════════════════════════════════════════════ */
@@ -317,7 +314,9 @@ async function fetchItems() {
                                'custom_talisman_categories']);
   const url = `${ERPNEXT.url}/api/resource/Item?filters=${encodeURIComponent(filters)}&fields=${encodeURIComponent(fields)}&limit_page_length=200&order_by=item_name asc`;
 
+  console.log('fetchItems URL:', url);
   const res = await fetch(url, { headers: erpHeaders() });
+  console.log('fetchItems status:', res.status, res.statusText);
   if (!res.ok) throw new Error(`ERPNext responded ${res.status} ${res.statusText}`);
   const json = await res.json();
   return json.data || [];
@@ -342,48 +341,60 @@ async function loadProducts() {
   grid.style.display    = 'none';
   grid.innerHTML        = '';
 
+  // ── Step 0: config check ──────────────────────────────────────────
+  console.group('🛍️ loadProducts()');
+  console.log('ERPNext URL    :', ERPNEXT.url    || '❌ EMPTY — check config.js');
+  console.log('API key loaded :', ERPNEXT.api_key    ? '✅ yes' : '❌ EMPTY');
+  console.log('API secret     :', ERPNEXT.api_secret ? '✅ yes' : '❌ EMPTY');
+
   try {
+    // ── Step 1: fetch item list ────────────────────────────────────
+    console.log('⏳ Step 1 — fetchItems()');
     const items = await fetchItems();
+    console.log(`✅ Step 1 done — ${items.length} items returned`);
     if (!items.length) throw new Error('No items returned from ERPNext.');
 
-    // Fetch full detail for each item to get child tables
-    const detailed = await Promise.all(items.map(i => fetchItemDetail(i.item_code)));
+    // ── Step 2: fetch full detail per item ─────────────────────────
+    console.log('⏳ Step 2 — fetchItemDetail() ×', items.length);
+    const detailed   = await Promise.all(items.map(i => fetchItemDetail(i.item_code)));
     const validItems = detailed.filter(Boolean);
+    console.log(`✅ Step 2 done — ${validItems.length}/${items.length} items with detail`);
 
+    // ── Step 3: fetch prices ───────────────────────────────────────
+    console.log('⏳ Step 3 — fetchPrices()');
     const codes  = validItems.map(i => i.item_code);
     const prices = await fetchPrices(codes);
-    console.log('Prices object received:', prices);
-    console.log('Sample price lookup (first item):', validItems[0]?.item_code, prices[validItems[0]?.item_code]);
+    console.log('✅ Step 3 done — prices:', prices);
 
-    const seenGroups = new Set();
+    // ── Step 4: render ─────────────────────────────────────────────
+    console.log('⏳ Step 4 — rendering cards');
+    const seenGroups  = new Set();
     validItems.forEach(i => { if (i.item_group) seenGroups.add(i.item_group); });
     const orderedGroups = ERPNEXT.item_groups.filter(g => seenGroups.has(g));
     buildTabs(orderedGroups);
 
     validItems.forEach(item => {
-      const card = renderCard(item, prices[item.item_code]);
-      grid.appendChild(card);
+      grid.appendChild(renderCard(item, prices[item.item_code]));
     });
 
     loading.style.display = 'none';
     grid.style.display    = 'grid';
+    console.log(`✅ Step 4 done — ${validItems.length} cards rendered`);
+    console.groupEnd();
 
-    // Auto-filter from URL param e.g. shop.html?cat=Wealth
     const urlCat = new URLSearchParams(window.location.search).get('cat');
     if (urlCat) {
       const tab = [...document.querySelectorAll('.ftab')].find(t => t.dataset.cat === urlCat);
-      if (tab) {
-        filterShop(urlCat, tab);
-        document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
-      }
+      if (tab) { filterShop(urlCat, tab); document.getElementById('shop').scrollIntoView({ behavior: 'smooth' }); }
     }
 
   } catch (err) {
+    console.error('❌ loadProducts failed:', err);
+    console.groupEnd();
     loading.style.display = 'none';
     errorEl.style.display = 'block';
     document.getElementById('shop-error-title').textContent = 'Could not load products';
     document.getElementById('shop-error-msg').textContent   = err.message;
-    console.error('ERPNext load error:', err);
   }
 }
 
@@ -668,14 +679,14 @@ async function checkoutStripe(btn) {
   const cancelUrl  = base + '?checkout=cancel';
 
   try {
-    const res = await fetch(ERPNEXT.stripe_worker_url, {
+    const res = await fetch(`${ERPNEXT.stripe_worker_url}/checkout`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({
         items: Object.values(cart).map(i => ({
-          name:     i.name,
-          price:    i.price,
-          quantity: i.qty,
+          name:  i.name,
+          price: i.price,
+          qty:   i.qty,
         })),
         successUrl,
         cancelUrl,
@@ -897,6 +908,7 @@ async function openOrdersModal() {
     setTimeout(() => showToast('Checkout cancelled — your cart is still saved.', 'error'), 300);
   }
 })();
+loadProducts();
 </script>
 
 </body>
