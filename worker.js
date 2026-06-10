@@ -38,7 +38,7 @@ export default {
 
 // ── /products ─────────────────────────────────────────────────────
 async function handleProducts(env) {
-  const base    = env.ERPNEXT_URL;
+  const base    = env.ERPNEXT_BASE_URL;
   const headers = {
     'Authorization': `token ${env.ERPNEXT_API_KEY}:${env.ERPNEXT_API_SECRET}`,
     'Content-Type':  'application/json',

@@ -898,16 +898,6 @@ async function openOrdersModal() {
   }
 })();
 </script>
-<script type="module">
-  import { currentUser, signInWithGoogle, signOutUser, saveOrder, fetchMyOrders } from './firebase-auth.js';
-  import { onAuthStateChanged, getAuth } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-
-  window.__saveOrder   = saveOrder;
-  window.__fetchOrders = fetchMyOrders;
-
-  const auth = getAuth();
-  onAuthStateChanged(auth, user => { window.__currentUser = user; });
-</script>
 
 </body>
 </html>
