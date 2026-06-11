@@ -262,14 +262,18 @@ async function handleInvoice(request, env) {
     headers,
     body: JSON.stringify({
       customer,
+      company:      'World Orb',
       posting_date: today,
       due_date:     today,
+      debit_to:     'Debtors - WOB',
       update_stock: 1,
       remarks: `Paid via Stripe. Session: ${sessionId || 'N/A'}`,
       items: items.map(i => ({
-        item_code: i.sku,
-        qty:       i.qty,
-        rate:      i.price,
+        item_code:      i.sku,
+        qty:            i.qty,
+        rate:           i.price,
+        income_account: 'Sales - WOB',
+        warehouse:      'ECommerce - WOB',
       })),
     }),
   });
