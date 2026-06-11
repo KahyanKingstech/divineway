@@ -318,7 +318,7 @@ async function handleInvoice(request, env) {
 
   // ── Payment Entry — marks the invoice as Paid ──────────────────
   const grandTotal = fullDoc.grand_total || items.reduce((s, i) => s + i.price * i.qty, 0);
-  const paidTo     = env.ERPNEXT_PAYMENT_ACCOUNT || 'Bank - WOB';
+  const paidTo     = 'Stripe - WOB';
 
   let paymentName  = null;
   let paymentError = null;
