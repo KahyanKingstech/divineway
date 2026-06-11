@@ -40,7 +40,7 @@ export default {
 async function handleProducts(request, env) {
   // Serve from Cloudflare edge cache if available (5 min TTL)
   const cache    = caches.default;
-  const cacheKey = new Request('https://cache.divineway/products/v2');
+  const cacheKey = new Request('https://divineway.kah-yan.workers.dev/products?v=2');
   const cached   = await cache.match(cacheKey);
   if (cached) return cached;
 
