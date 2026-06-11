@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Deploy Worker
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -24,10 +24,12 @@ jobs:
           STRIPE_WORKER_URL: ${{ secrets.STRIPE_WORKER_URL }}
         run: node generate-config.js
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/pages-action@v2
         with:
           apiToken:     ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId:    ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName:  divineway
-          directory:    .
-          gitHubToken:  ${{ secrets.GITHUB_TOKEN }}
+          directory:    ./dist
+          # gitHubToken:  ${{ secrets.GITHUB_TOKEN }}
+
+
