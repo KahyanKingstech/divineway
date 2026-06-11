@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="nav_style.css">
   <link rel="stylesheet" href="auth_styles.css">
   <script type="module" src="firebase-auth.js"></script>
+  <script src="config.js"></script>
 </head>
 <body>
 
@@ -1762,82 +1763,8 @@ body::before {
 
 </div><!-- /wrapper -->
 
+<script src="cart.js"></script>
 <script>
-const WA_NUMBER = '6589490437';
-const WA_BASE   = `https://wa.me/${WA_NUMBER}`;
-const cart = {};
-
-/* ── Cart ── */
-function cartCount() { return Object.values(cart).reduce((s,i)=>s+i.qty,0); }
-function cartTotal() { return Object.values(cart).reduce((s,i)=>s+i.price*i.qty,0); }
-
-function updateCartBadge() {
-  const n = cartCount();
-  const badge = document.getElementById('cart-badge');
-  if (!badge) return;
-  badge.textContent = n;
-  badge.style.display = n > 0 ? 'flex' : 'none';
-}
-
-function addToCart(sku, name, price, btn) {
-  if (cart[sku]) cart[sku].qty++;
-  else cart[sku] = { name, price, qty: 1 };
-  updateCartBadge();
-  btn.textContent = '✓ Added!';
-  btn.style.background = '#2a7a2a';
-  btn.style.color = '#fff';
-  setTimeout(() => { btn.textContent = 'Add to Cart'; btn.style.background = ''; btn.style.color = ''; }, 1200);
-}
-
-function openCart()  { document.getElementById('cart-drawer').style.display = 'flex'; renderCart(); }
-function closeCart() { document.getElementById('cart-drawer').style.display = 'none'; }
-
-function renderCart() {
-  const body = document.getElementById('cart-body');
-  const footer = document.getElementById('cart-footer');
-  const items = Object.entries(cart);
-  if (!items.length) {
-    body.innerHTML = '<p style="color:rgba(242,232,213,0.3);font-size:13px;font-family:sans-serif;text-align:center;padding:44px 0">Your cart is empty.</p>';
-    footer.innerHTML = ''; return;
-  }
-  body.innerHTML = items.map(([sku,i]) => `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid rgba(201,168,76,0.1);gap:10px">
-      <div style="flex:1"><div style="font-size:12px;color:#f2e8d5;font-weight:500;font-family:sans-serif">${i.name}</div>
-      <div style="font-size:11px;color:rgba(242,232,213,0.38);font-family:sans-serif;margin-top:2px">SGD $${i.price} × ${i.qty}</div></div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <button onclick="changeQty('${sku}',-1)" style="width:24px;height:24px;border:1px solid rgba(201,168,76,0.22);background:transparent;border-radius:3px;cursor:pointer;font-size:14px;color:rgba(201,168,76,0.7)">−</button>
-        <span style="font-size:13px;font-family:sans-serif;min-width:16px;text-align:center;color:#f2e8d5">${i.qty}</span>
-        <button onclick="changeQty('${sku}',1)" style="width:24px;height:24px;border:1px solid rgba(201,168,76,0.22);background:transparent;border-radius:3px;cursor:pointer;font-size:14px;color:rgba(201,168,76,0.7)">+</button>
-        <button onclick="removeItem('${sku}')" style="width:24px;height:24px;border:none;background:none;cursor:pointer;font-size:16px;color:#c44">×</button>
-      </div>
-    </div>`).join('');
-  footer.innerHTML = `
-    <div style="display:flex;justify-content:space-between;padding:16px 0 12px;font-family:sans-serif">
-      <span style="font-size:11px;color:#f2e8d5;font-weight:600;letter-spacing:.14em;text-transform:uppercase">Total</span>
-      <span style="font-size:17px;color:#e2c26a;font-weight:700">SGD $${cartTotal()}</span>
-    </div>
-    <button onclick="checkoutWhatsApp()" style="width:100%;background:#25d366;color:#fff;border:none;padding:13px;border-radius:3px;font-size:11px;font-weight:700;font-family:sans-serif;cursor:pointer;letter-spacing:.12em;text-transform:uppercase">
-      💬 Order via WhatsApp
-    </button>
-    <p style="font-size:10px;color:rgba(242,232,213,0.28);font-family:sans-serif;text-align:center;margin-top:10px">Master Louis will personally confirm &amp; customise your talisman</p>`;
-}
-
-function changeQty(sku, delta) {
-  if (!cart[sku]) return;
-  cart[sku].qty += delta;
-  if (cart[sku].qty <= 0) delete cart[sku];
-  updateCartBadge(); renderCart();
-}
-function removeItem(sku) { delete cart[sku]; updateCartBadge(); renderCart(); }
-
-function checkoutWhatsApp() {
-  const items = Object.values(cart);
-  if (!items.length) return;
-  const lines = items.map(i => `• ${i.name} × ${i.qty} (SGD $${i.price * i.qty})`).join('\n');
-  const msg = `Hello Master Louis, I would like to order:\n\n${lines}\n\nTotal: SGD $${cartTotal()}\n\nPlease advise on the next steps.`;
-  window.open(`${WA_BASE}?text=${encodeURIComponent(msg)}`, '_blank');
-}
-
 /* ── Modal ── */
 function openModal(sku) {}
 function closeModal() { document.getElementById('product-modal').style.display = 'none'; }

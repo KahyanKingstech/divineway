@@ -261,27 +261,14 @@
 </div>
 
 
+<script src="cart.js"></script>
 <script>
-/* ═══════════════════════════════════════════════════════════════════
-   ERPNEXT CONFIG — fill in your details
-   ═══════════════════════════════════════════════════════════════════ */
 const ERPNEXT = {
-  url:                 (window.ERPNEXT_CONFIG || {}).url        || '',
-  api_key:             (window.ERPNEXT_CONFIG || {}).api_key    || '',
-  api_secret:          (window.ERPNEXT_CONFIG || {}).api_secret || '',
   currency:            'SGD',
-  price_list:          'Standard Selling',
   item_groups:         ['Talisman','Divine Item','Book','Prosperity Item'],
   talisman_categories: ['Wealth','Health','Relationship','Career','Study','Safety','General Protection','Pregnancy','Affinity'],
   stripe_worker_url:   (window.ERPNEXT_CONFIG || {}).stripe_worker_url || 'https://divineway-stripe-checkout.kah-yan.workers.dev',
 };
-/* ═══════════════════════════════════════════════════════════════════ */
-
-const WA_NUMBER = '6589490437';
-const WA_BASE   = `https://wa.me/${WA_NUMBER}`;
-const cart = JSON.parse(localStorage.getItem('dw_cart') || '{}');
-
-function saveCart() { localStorage.setItem('dw_cart', JSON.stringify(cart)); }
 
 /* ── Emoji map by Item Group ──────────────────────────────────────── */
 const GROUP_EMOJI = {
@@ -301,38 +288,6 @@ const GROUP_EMOJI = {
 };
 
 /* ── Fetch helpers ────────────────────────────────────────────────── */
-function erpHeaders() {
-  return {
-    'Authorization': 'token ' + ERPNEXT.api_key + ':' + ERPNEXT.api_secret,
-    'Content-Type':  'application/json',
-  };
-}
-
-async function fetchItems() {
-  // Build OR filter for all configured item groups
-  const groupFilters = ERPNEXT.item_groups.map(g => ['item_group','=',g]);
-  const filters = JSON.stringify([['disabled','=',0],['is_sales_item','=',1]]);
-  const fields = JSON.stringify(['name','item_name','item_code','item_group','description',
-                               'image','custom_chinese_name',
-                               'custom_talisman_categories']);
-  const url = `${ERPNEXT.url}/api/resource/Item?filters=${encodeURIComponent(filters)}&fields=${encodeURIComponent(fields)}&limit_page_length=200&order_by=item_name asc`;
-
-  console.log('fetchItems URL:', url);
-  const res = await fetch(url, { headers: erpHeaders() });
-  console.log('fetchItems status:', res.status, res.statusText);
-  if (!res.ok) throw new Error(`ERPNext responded ${res.status} ${res.statusText}`);
-  const json = await res.json();
-  return json.data || [];
-}
-
-async function fetchItemDetail(itemCode) {
-  const res = await fetch(`${ERPNEXT.url}/api/resource/Item/${itemCode}`, {
-    headers: erpHeaders()
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.data;
-}
 
 async function loadProducts() {
   const loading = document.getElementById('shop-loading');
@@ -344,45 +299,27 @@ async function loadProducts() {
   grid.style.display    = 'none';
   grid.innerHTML        = '';
 
-  // ── Step 0: config check ──────────────────────────────────────────
   console.group('🛍️ loadProducts()');
-  console.log('ERPNext URL    :', ERPNEXT.url    || '❌ EMPTY — check config.js');
-  console.log('API key loaded :', ERPNEXT.api_key    ? '✅ yes' : '❌ EMPTY');
-  console.log('API secret     :', ERPNEXT.api_secret ? '✅ yes' : '❌ EMPTY');
+  console.log('Worker URL:', ERPNEXT.stripe_worker_url);
 
   try {
-    // ── Step 1: fetch item list ────────────────────────────────────
-    console.log('⏳ Step 1 — fetchItems()');
-    const items = await fetchItems();
-    console.log(`✅ Step 1 done — ${items.length} items returned`);
-    if (!items.length) throw new Error('No items returned from ERPNext.');
+    const res = await fetch(`${ERPNEXT.stripe_worker_url}/products`);
+    if (!res.ok) throw new Error(`Worker responded ${res.status} ${res.statusText}`);
+    const { products = [] } = await res.json();
+    console.log(`✅ ${products.length} products from worker`);
 
-    // ── Step 2: fetch full detail per item ─────────────────────────
-    console.log('⏳ Step 2 — fetchItemDetail() ×', items.length);
-    const detailed   = await Promise.all(items.map(i => fetchItemDetail(i.item_code)));
-    const validItems = detailed.filter(Boolean);
-    console.log(`✅ Step 2 done — ${validItems.length}/${items.length} items with detail`);
+    if (!products.length) throw new Error('No products returned.');
 
-    // ── Step 3: fetch prices ───────────────────────────────────────
-    console.log('⏳ Step 3 — fetchPrices()');
-    const codes  = validItems.map(i => i.item_code);
-    const prices = await fetchPrices(codes);
-    console.log('✅ Step 3 done — prices:', prices);
-
-    // ── Step 4: render ─────────────────────────────────────────────
-    console.log('⏳ Step 4 — rendering cards');
-    const seenGroups  = new Set();
-    validItems.forEach(i => { if (i.item_group) seenGroups.add(i.item_group); });
+    const seenGroups = new Set();
+    products.forEach(p => { if (p.item_group) seenGroups.add(p.item_group); });
     const orderedGroups = ERPNEXT.item_groups.filter(g => seenGroups.has(g));
     buildTabs(orderedGroups);
 
-    validItems.forEach(item => {
-      grid.appendChild(renderCard(item, prices[item.item_code]));
-    });
+    products.forEach(item => grid.appendChild(renderCard(item, item.price)));
 
     loading.style.display = 'none';
     grid.style.display    = 'grid';
-    console.log(`✅ Step 4 done — ${validItems.length} cards rendered`);
+    console.log(`✅ ${products.length} cards rendered`);
     console.groupEnd();
 
     const urlCat = new URLSearchParams(window.location.search).get('cat');
@@ -401,44 +338,6 @@ async function loadProducts() {
   }
 }
 
-async function fetchPrices(itemCodes) {
-  if (!itemCodes.length) return {};
-  const filters = JSON.stringify([
-    ['item_code','in', itemCodes],
-    ['price_list','=', ERPNEXT.price_list],
-    ['selling','=',1]
-  ]);
-  const fields = JSON.stringify(['item_code','price_list_rate']);
-  const url = `${ERPNEXT.url}/api/resource/Item%20Price?filters=${encodeURIComponent(filters)}&fields=${encodeURIComponent(fields)}&limit_page_length=500`;
-  
-  try {
-    const res = await fetch(url, { headers: erpHeaders() });
-    if (!res.ok) {
-      console.warn(`fetchPrices failed: ${res.status} ${res.statusText}`);
-      return {};
-    }
-    const json = await res.json();
-    if (json.data) {
-      const map = {};
-      json.data.forEach(p => { map[p.item_code] = p.price_list_rate; });
-      console.log('📊 Requested item codes:', itemCodes);
-      console.log('💰 Price data returned:', json.data.length, 'records');
-      console.log('📍 Price map:', map);
-      
-      // Show items without prices
-      const missing = itemCodes.filter(code => !map[code]);
-      if (missing.length) {
-        console.warn('⚠️ Items with NO prices found:', missing);
-      }
-      return map;
-    }
-    console.warn('No price data returned');
-    return {};
-  } catch (err) {
-    console.error('Error fetching prices:', err);
-    return {};
-  }
-}
 
 /* ── Build filter tabs dynamically ───────────────────────────────── */
 // function buildTabs(groups) {
@@ -511,7 +410,7 @@ function renderCard(item, price) {
   const emoji = GROUP_EMOJI[group] || '✨';
   const badgeLabel = group.replace(' Talisman','');
 
-  const talismanCat = Array.isArray(item.custom_talisman_categories) ? item.custom_talisman_categories.map(c => c.category).join(', ') : '';
+  const talismanCat = Array.isArray(item.talisman_categories) ? item.talisman_categories.join(', ') : '';
 
   productData[sku] = { sku, name, chin, desc: cleanDesc, descPreview, price: priceVal, emoji, group, talismanCat, image: item.image || '' };
 
@@ -597,138 +496,6 @@ function renderCard(item, price) {
 //   }
 // }
 
-/* ── Cart ─────────────────────────────────────────────────────────── */
-function cartCount() { return Object.values(cart).reduce((s,i)=>s+i.qty,0); }
-function cartTotal() { return Object.values(cart).reduce((s,i)=>s+i.price*i.qty,0); }
-
-function updateCartBadge() {
-  const n = cartCount();
-  const badge = document.getElementById('cart-badge');
-  if (!badge) return;
-  badge.textContent    = n;
-  badge.style.display  = n > 0 ? 'flex' : 'none';
-}
-
-function addToCart(sku, name, price, stripePriceId, btn) {
-  if (cart[sku]) cart[sku].qty++;
-  else cart[sku] = { name, price, stripePriceId, qty: 1 };
-  saveCart();
-  updateCartBadge();
-  btn.textContent          = '✓ Added!';
-  btn.style.background     = '#2a7a2a';
-  btn.style.color          = '#fff';
-  btn.style.borderColor    = '#2a7a2a';
-  setTimeout(() => { btn.textContent = 'Add to Cart'; btn.style.background = ''; btn.style.color = ''; btn.style.borderColor = ''; }, 1200);
-}
-
-function openCart()  { document.getElementById('cart-drawer').style.display = 'flex'; renderCart(); }
-function closeCart() { document.getElementById('cart-drawer').style.display = 'none'; }
-
-function renderCart() {
-  const body   = document.getElementById('cart-body');
-  const footer = document.getElementById('cart-footer');
-  const items  = Object.entries(cart);
-  if (!items.length) {
-    body.innerHTML   = '<p style="color:rgba(247,240,227,0.35);font-size:13px;font-family:sans-serif;text-align:center;padding:40px 0">Your cart is empty.</p>';
-    footer.innerHTML = '';
-    return;
-  }
-  body.innerHTML = items.map(([sku,i]) => `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(201,168,76,0.12);gap:10px">
-      <div style="flex:1">
-        <div style="font-size:12px;color:#f7f0e3;font-weight:500;font-family:sans-serif">${i.name}</div>
-        <div style="font-size:11px;color:rgba(247,240,227,0.4);font-family:sans-serif;margin-top:2px">${ERPNEXT.currency} $${i.price} × ${i.qty}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <button onclick="changeQty('${sku}',-1)" style="width:24px;height:24px;border:1px solid rgba(201,168,76,0.25);background:transparent;border-radius:3px;cursor:pointer;font-size:14px;color:rgba(201,168,76,0.8)">−</button>
-        <span style="font-size:13px;font-family:sans-serif;min-width:16px;text-align:center;color:#f7f0e3">${i.qty}</span>
-        <button onclick="changeQty('${sku}',1)" style="width:24px;height:24px;border:1px solid rgba(201,168,76,0.25);background:transparent;border-radius:3px;cursor:pointer;font-size:14px;color:rgba(201,168,76,0.8)">+</button>
-        <button onclick="removeItem('${sku}')" style="width:24px;height:24px;border:none;background:none;cursor:pointer;font-size:16px;color:#c44">×</button>
-      </div>
-    </div>`).join('');
-  footer.innerHTML = `
-    <div style="display:flex;justify-content:space-between;padding:16px 0 10px;font-family:sans-serif">
-      <span style="font-size:13px;color:#f7f0e3;font-weight:500;letter-spacing:.06em;text-transform:uppercase">Total</span>
-      <span style="font-size:16px;color:#e2c26a;font-weight:700">${ERPNEXT.currency} $${cartTotal()}</span>
-    </div>
-    <button id="stripe-checkout-btn" onclick="checkoutStripe(this)" style="width:100%;background:#635bff;color:#fff;border:none;padding:13px;border-radius:4px;font-size:12px;font-weight:700;font-family:sans-serif;cursor:pointer;letter-spacing:.06em;text-transform:uppercase">
-      💳 Pay with Stripe
-    </button>
-    <p style="font-size:10px;color:rgba(247,240,227,0.3);font-family:sans-serif;text-align:center;margin-top:10px">Secure checkout — all major cards accepted</p>`;
-}
-
-function changeQty(sku, delta) {
-  if (!cart[sku]) return;
-  cart[sku].qty += delta;
-  if (cart[sku].qty <= 0) delete cart[sku];
-  saveCart(); updateCartBadge(); renderCart();
-}
-function removeItem(sku) { delete cart[sku]; saveCart(); updateCartBadge(); renderCart(); }
-
-async function checkoutStripe(btn) {
-  // Require login
-  if (!window.__currentUser) {
-    showLoginGate();
-    return;
-  }
-
-  const items = Object.values(cart);
-  if (!items.length) return;
-
-  btn.disabled    = true;
-  btn.textContent = '⏳ Redirecting…';
-
-  const base       = window.location.origin + window.location.pathname;
-  const successUrl = base + '?checkout=success';
-  const cancelUrl  = base + '?checkout=cancel';
-
-  try {
-    const res = await fetch(`${ERPNEXT.stripe_worker_url}/checkout`, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({
-        items: Object.values(cart).map(i => ({
-          name:  i.name,
-          price: i.price,
-          qty:   i.qty,
-        })),
-        successUrl,
-        cancelUrl,
-      }),
-    });
-    const data = await res.json();
-    if (data.url) {
-      // Save pending order to localStorage to write to Firestore on return
-      localStorage.setItem('pending_order', JSON.stringify({
-        items: Object.values(cart),
-        total: cartTotal(),
-      }));
-      window.location.href = data.url;
-    } else {
-      throw new Error(data.error || 'No checkout URL returned');
-    }
-  } catch (err) {
-    btn.disabled    = false;
-    btn.textContent = '💳 Pay with Stripe';
-    showToast('Checkout failed: ' + err.message, 'error');
-  }
-}
-
-function showToast(msg, type = 'success') {
-  const toast = document.createElement('div');
-  toast.textContent = msg;
-  toast.style.cssText = [
-    'position:fixed', 'bottom:32px', 'left:50%', 'transform:translateX(-50%)',
-    'z-index:99999', 'padding:14px 28px', 'border-radius:6px',
-    'font-size:13px', 'font-family:sans-serif', 'font-weight:500',
-    'box-shadow:0 4px 24px rgba(0,0,0,0.4)', 'max-width:90vw', 'text-align:center',
-    type === 'error'
-      ? 'background:#7a1a00;color:#f7f0e3'
-      : 'background:#1a4a1a;color:#d4f5d4',
-  ].join(';');
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 4500);
-}
 
 /* ── Product modal ────────────────────────────────────────────────── */
 function openModal(sku) {

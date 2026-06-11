@@ -17,7 +17,7 @@ if (fs.existsSync(envPath)) {
     });
 }
 
-const required = ['ERPNEXT_BASE_URL', 'ERPNEXT_API_KEY', 'ERPNEXT_API_SECRET', 'STRIPE_WORKER_URL'];
+const required = ['STRIPE_WORKER_URL'];
 const missing  = required.filter(k => !process.env[k]);
 if (missing.length) {
   console.error('ERROR: Missing required variables:', missing.join(', '));
@@ -25,9 +25,6 @@ if (missing.length) {
 }
 
 const output = `window.ERPNEXT_CONFIG = {
-  url:               '${process.env.ERPNEXT_BASE_URL}',
-  api_key:           '${process.env.ERPNEXT_API_KEY}',
-  api_secret:        '${process.env.ERPNEXT_API_SECRET}',
   stripe_worker_url: '${process.env.STRIPE_WORKER_URL}',
 };
 `;
