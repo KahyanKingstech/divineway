@@ -21,9 +21,17 @@ function updateCartBadge() {
   badge.style.display = n > 0 ? 'flex' : 'none';
 }
 
-function addToCart(sku, name, price, stripePriceId, btn) {
-  if (cart[sku]) cart[sku].qty++;
-  else cart[sku] = { name, price, stripePriceId: stripePriceId || null, qty: 1 };
+function addToCart(sku, name, price, stripePriceId, btn, stock) {
+  const currentQty = cart[sku] ? cart[sku].qty : 0;
+  if (stock !== null && stock !== undefined && currentQty >= stock) {
+    showToast(`Only ${stock} in stock — can't add more.`, 'error');
+    return;
+  }
+  if (cart[sku]) {
+    cart[sku].qty++;
+  } else {
+    cart[sku] = { name, price, stripePriceId: stripePriceId || null, qty: 1, stock: stock ?? null };
+  }
   saveCart();
   updateCartBadge();
   if (btn) {
@@ -82,6 +90,13 @@ function renderCart() {
 
 function changeQty(sku, delta) {
   if (!cart[sku]) return;
+  if (delta > 0) {
+    const stock = cart[sku].stock;
+    if (stock !== null && stock !== undefined && cart[sku].qty >= stock) {
+      showToast(`Only ${stock} in stock.`, 'error');
+      return;
+    }
+  }
   cart[sku].qty += delta;
   if (cart[sku].qty <= 0) delete cart[sku];
   saveCart();
