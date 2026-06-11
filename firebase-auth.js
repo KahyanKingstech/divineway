@@ -31,7 +31,7 @@ onAuthStateChanged(auth, user => {
       : 'Me';
     localStorage.setItem('dw_auth_initials', initials);
     localStorage.setItem('dw_auth_avatar', user.photoURL || '');
-    syncErpCustomer(user);
+    syncErpCustomer(user).then(() => processPendingInvoice());
   } else {
     localStorage.removeItem('dw_auth_initials');
     localStorage.removeItem('dw_auth_avatar');
@@ -102,6 +102,37 @@ async function syncErpCustomer(user) {
     }
   } catch (e) {
     console.warn('ERP customer sync failed:', e);
+  }
+}
+
+// ── Process pending invoice after auth + customer sync ───────────
+async function processPendingInvoice() {
+  const raw = localStorage.getItem('dw_pending_invoice');
+  if (!raw) return;
+  localStorage.removeItem('dw_pending_invoice');
+
+  let items, total, sessionId;
+  try { ({ items, total, sessionId } = JSON.parse(raw)); } catch { return; }
+
+  try { await saveOrder({ items, total, sessionId }); }
+  catch (e) { console.error('[DW] Firestore save failed:', e); }
+
+  const customer = localStorage.getItem('dw_erp_customer');
+  console.log('[DW] invoice: customer=', customer, 'items=', items, 'sessionId=', sessionId);
+  if (!customer) { console.warn('[DW] invoice skipped — no dw_erp_customer'); return; }
+
+  const workerUrl = (window.ERPNEXT_CONFIG || {}).stripe_worker_url
+    || 'https://divineway.kah-yan.workers.dev';
+  try {
+    const res  = await fetch(`${workerUrl}/invoice`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ customer, items, sessionId }),
+    });
+    const data = await res.json();
+    console.log('[DW] invoice response:', data);
+  } catch (e) {
+    console.error('[DW] invoice fetch error:', e);
   }
 }
 

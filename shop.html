@@ -571,19 +571,8 @@ async function openOrdersModal() {
     if (pending) {
       try {
         const { items, total } = JSON.parse(pending);
-        // Save to Firestore
-        if (window.saveOrder) window.saveOrder({ items, total, sessionId }).catch(console.error);
-        // Create submitted Sales Invoice in ERPNext
-        const customer = localStorage.getItem('dw_erp_customer');
-        if (customer) {
-          const workerUrl = (window.ERPNEXT_CONFIG || {}).stripe_worker_url
-            || 'https://divineway.kah-yan.workers.dev';
-          fetch(`${workerUrl}/invoice`, {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ customer, items, sessionId }),
-          }).catch(console.error);
-        }
+        // Defer Firestore + ERPNext invoice to firebase-auth.js after auth + customer sync
+        localStorage.setItem('dw_pending_invoice', JSON.stringify({ items, total, sessionId }));
       } catch(e) {}
       localStorage.removeItem('pending_order');
     }
