@@ -131,6 +131,9 @@ async function processPendingInvoice() {
     });
     const data = await res.json();
     console.log('[DW] invoice response:', data);
+    if (data.submitted && typeof window.loadProducts === 'function') {
+      window.loadProducts();
+    }
   } catch (e) {
     console.error('[DW] invoice fetch error:', e);
   }

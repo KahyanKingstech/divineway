@@ -274,6 +274,7 @@ async function handleInvoice(request, env) {
         rate:           i.price,
         income_account: 'Sales Income - WOB',
         warehouse:      'ECommerce - WOB',
+        status:         'Paid',
       })),
     }),
   });
@@ -315,6 +316,11 @@ async function handleInvoice(request, env) {
       error:   msgs || submitErr.exception || submitErr.message || `ERPNext ${submitRes.status}`,
     }, 502);
   }
+
+  // Bust product cache so stock qty reflects the deduction immediately
+  const cache    = caches.default;
+  const cacheKey = new Request('https://divineway.kah-yan.workers.dev/products?v=2');
+  await cache.delete(cacheKey);
 
   return json({ invoice: invoice.name, submitted: true });
 }
