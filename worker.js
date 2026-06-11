@@ -276,13 +276,25 @@ async function handleInvoice(request, env) {
   }
   const { data: invoice } = await createRes.json();
 
-  // Submit the invoice
-  const submitRes = await fetch(
+  // Fetch full document then submit via frappe.client.submit
+  const getRes = await fetch(
     `${base}/api/resource/Sales Invoice/${encodeURIComponent(invoice.name)}`,
-    { method: 'PUT', headers, body: JSON.stringify({ docstatus: 1 }) },
+    { headers },
   );
+  if (!getRes.ok) return json({ invoice: invoice.name, submitted: false, error: 'Could not fetch draft invoice' }, 502);
+  const { data: fullDoc } = await getRes.json();
 
-  return json({ invoice: invoice.name, submitted: submitRes.ok });
+  const submitRes = await fetch(`${base}/api/method/frappe.client.submit`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ doc: JSON.stringify(fullDoc) }),
+  });
+  if (!submitRes.ok) {
+    const submitErr = await submitRes.json().catch(() => ({}));
+    return json({ invoice: invoice.name, submitted: false, error: submitErr.exception || submitErr.message || 'Submit failed' }, 502);
+  }
+
+  return json({ invoice: invoice.name, submitted: true });
 }
 
 // ── helpers ───────────────────────────────────────────────────────

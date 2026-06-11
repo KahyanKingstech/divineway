@@ -575,6 +575,7 @@ async function openOrdersModal() {
         if (window.saveOrder) window.saveOrder({ items, total, sessionId }).catch(console.error);
         // Create submitted Sales Invoice in ERPNext
         const customer = localStorage.getItem('dw_erp_customer');
+        console.log('[DW] invoice: customer=', customer, 'items=', items, 'sessionId=', sessionId);
         if (customer) {
           const workerUrl = (window.ERPNEXT_CONFIG || {}).stripe_worker_url
             || 'https://divineway.kah-yan.workers.dev';
@@ -582,7 +583,11 @@ async function openOrdersModal() {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({ customer, items, sessionId }),
-          }).catch(console.error);
+          })
+            .then(r => r.json().then(d => console.log('[DW] invoice response:', d)))
+            .catch(e => console.error('[DW] invoice error:', e));
+        } else {
+          console.warn('[DW] invoice skipped: dw_erp_customer not in localStorage');
         }
       } catch(e) {}
       localStorage.removeItem('pending_order');
