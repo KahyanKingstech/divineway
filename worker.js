@@ -185,6 +185,7 @@ async function handleCheckout(request, env) {
 
   const params = new URLSearchParams();
   params.append('mode',        'payment');
+  params.append('currency',    'sgd');
   params.append('success_url', successUrl);
   params.append('cancel_url',  cancelUrl);
 
