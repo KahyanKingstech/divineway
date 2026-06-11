@@ -274,7 +274,6 @@ async function handleInvoice(request, env) {
         rate:           i.price,
         income_account: 'Sales Income - WOB',
         warehouse:      'ECommerce - WOB',
-        status:         'Paid',
       })),
     }),
   });
