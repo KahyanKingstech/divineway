@@ -316,12 +316,78 @@ async function handleInvoice(request, env) {
     }, 502);
   }
 
+  // ── Payment Entry — marks the invoice as Paid ──────────────────
+  const grandTotal = fullDoc.grand_total || items.reduce((s, i) => s + i.price * i.qty, 0);
+  const paidTo     = env.ERPNEXT_PAYMENT_ACCOUNT || 'Bank - WOB';
+
+  let paymentName  = null;
+  let paymentError = null;
+
+  const peCreateRes = await fetch(`${base}/api/resource/Payment Entry`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      company:          'World Orb',
+      payment_type:     'Receive',
+      mode_of_payment:  'Bank Transfer',
+      party_type:       'Customer',
+      party:            customer,
+      posting_date:     today,
+      paid_from:        'Debtors - WOB',
+      paid_to:          paidTo,
+      paid_amount:      grandTotal,
+      received_amount:  grandTotal,
+      reference_no:     sessionId || '',
+      reference_date:   today,
+      remarks:          `Stripe Payment. Session: ${sessionId || 'N/A'}`,
+      references: [{
+        reference_doctype:  'Sales Invoice',
+        reference_name:     invoice.name,
+        total_amount:       grandTotal,
+        outstanding_amount: grandTotal,
+        allocated_amount:   grandTotal,
+      }],
+    }),
+  });
+
+  if (peCreateRes.ok) {
+    const { data: pe } = await peCreateRes.json();
+    paymentName = pe.name;
+
+    const peGetRes = await fetch(`${base}/api/resource/Payment Entry/${encodeURIComponent(pe.name)}`, { headers });
+    if (peGetRes.ok) {
+      const { data: peDoc } = await peGetRes.json();
+      const peSubmitRes = await fetch(`${base}/api/method/frappe.client.submit`, {
+        method: 'POST',
+        headers,
+        body:   JSON.stringify({ doc: JSON.stringify(peDoc) }),
+      });
+      if (!peSubmitRes.ok) {
+        let e = {};
+        try { e = await peSubmitRes.json(); } catch { /* ignore */ }
+        paymentError = e.exception || e.message || 'Payment entry submit failed';
+      }
+    }
+  } else {
+    let e = {};
+    try { e = await peCreateRes.json(); } catch { /* ignore */ }
+    const msgs = e._server_messages
+      ? JSON.parse(e._server_messages).map(m => (typeof m === 'string' ? JSON.parse(m).message : m.message)).join(' | ')
+      : null;
+    paymentError = msgs || e.exception || e.message || 'Payment entry creation failed';
+  }
+
   // Bust product cache so stock qty reflects the deduction immediately
   const cache    = caches.default;
   const cacheKey = new Request('https://divineway.kah-yan.workers.dev/products?v=2');
   await cache.delete(cacheKey);
 
-  return json({ invoice: invoice.name, submitted: true });
+  return json({
+    invoice:      invoice.name,
+    submitted:    true,
+    payment:      paymentName,
+    paymentError: paymentError || undefined,
+  });
 }
 
 // ── helpers ───────────────────────────────────────────────────────
