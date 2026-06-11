@@ -32,7 +32,7 @@
 ${linksHtml}
     </div>
     <div class="nav-buttons">
-      <button class="btn-wa"><i class="ti ti-brand-whatsapp"></i> WhatsApp Now</button>
+      <button class="btn-wa" onclick="window.open('https://wa.me/6589490437?text=Hello%20Master%20Louis%2C%20I%20would%20like%20to%20make%20an%20enquiry.','_blank')"><i class="ti ti-brand-whatsapp"></i> WhatsApp Now</button>
       <button class="btn-cart" id="cart-btn" onclick="openCart()">
         🛒 Cart
         <span id="cart-badge" style="display:none;position:absolute;top:-6px;right:-6px;background:#c0392b;color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;font-family:sans-serif;font-weight:700;align-items:center;justify-content:center;line-height:18px">0</span>
