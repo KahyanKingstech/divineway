@@ -511,7 +511,7 @@ function openModal(sku) {
     // Construct full image URL - ERPNext stores relative paths like /files/...jpg
     const imageUrl = p.image.startsWith('http') 
       ? p.image 
-      : ERPNEXT.url + p.image;
+      : p.image;
     
     modalImage.src = imageUrl;
     modalImage.style.display = 'block';

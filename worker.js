@@ -25,7 +25,7 @@ export default {
     const { pathname } = new URL(request.url);
 
     if (pathname === '/products' && request.method === 'GET') {
-      return handleProducts(env);
+      return handleProducts(request, env);
     }
 
     if (pathname === '/checkout' && request.method === 'POST') {
@@ -37,7 +37,13 @@ export default {
 };
 
 // ── /products ─────────────────────────────────────────────────────
-async function handleProducts(env) {
+async function handleProducts(request, env) {
+  // Serve from Cloudflare edge cache if available (5 min TTL)
+  const cache    = caches.default;
+  const cacheKey = new Request('https://cache.divineway/products');
+  const cached   = await cache.match(cacheKey);
+  if (cached) return cached;
+
   const base    = env.ERPNEXT_BASE_URL;
   const headers = {
     'Authorization': `token ${env.ERPNEXT_API_KEY}:${env.ERPNEXT_API_SECRET}`,
@@ -64,9 +70,18 @@ async function handleProducts(env) {
 
   if (!items.length) return json({ products: [] });
 
-  // 2. Fetch full document for each item in parallel (needed for child table)
-  const details = await Promise.all(
-    items.map(async item => {
+  // 2. Fetch item details (for child table) and prices in parallel
+  const codes = items.map(i => i.item_code);
+
+  const pFilters = encodeURIComponent(JSON.stringify([
+    ['item_code',  'in', codes],
+    ['price_list', '=',  'Standard Selling'],
+    ['selling',    '=',  1],
+  ]));
+  const pFields = encodeURIComponent(JSON.stringify(['item_code', 'price_list_rate']));
+
+  const [details, priceRes] = await Promise.all([
+    Promise.all(items.map(async item => {
       const r = await fetch(
         `${base}/api/resource/Item/${encodeURIComponent(item.item_code)}`,
         { headers },
@@ -74,34 +89,28 @@ async function handleProducts(env) {
       if (!r.ok) return item;
       const d = await r.json();
       return d.data || item;
-    }),
-  );
+    })),
+    fetch(
+      `${base}/api/resource/Item%20Price?filters=${pFilters}&fields=${pFields}&limit_page_length=500`,
+      { headers },
+    ),
+  ]);
 
-  // 3. Fetch prices in one request
-  const codes = items.map(i => i.item_code);
-  const pFilters = encodeURIComponent(JSON.stringify([
-    ['item_code',   'in', codes],
-    ['price_list',  '=',  'Standard Selling'],
-    ['selling',     '=',  1],
-  ]));
-  const pFields = encodeURIComponent(JSON.stringify(['item_code', 'price_list_rate']));
-  const priceRes = await fetch(
-    `${base}/api/resource/Item%20Price?filters=${pFilters}&fields=${pFields}&limit_page_length=500`,
-    { headers },
-  );
   const priceMap = {};
   if (priceRes.ok) {
     const { data: prices = [] } = await priceRes.json();
     prices.forEach(p => { priceMap[p.item_code] = p.price_list_rate; });
   }
 
-  // 4. Shape response — no credentials leak to frontend
+  // 3. Shape response — no credentials leak to frontend
   const products = details.map(item => ({
-    item_code:          item.item_code,
-    item_name:          item.item_name,
-    item_group:         item.item_group || '',
-    description:        item.description || '',
-    image:              item.image || '',
+    item_code:           item.item_code,
+    item_name:           item.item_name,
+    item_group:          item.item_group || '',
+    description:         item.description || '',
+    image:               item.image
+                           ? (item.image.startsWith('http') ? item.image : base + item.image)
+                           : '',
     custom_chinese_name: item.custom_chinese_name || '',
     talisman_categories: Array.isArray(item.custom_talisman_categories)
       ? item.custom_talisman_categories.map(c => c.category).filter(Boolean)
@@ -109,7 +118,13 @@ async function handleProducts(env) {
     price: priceMap[item.item_code] || 0,
   }));
 
-  return json({ products });
+  // Cache for 5 minutes
+  const response = json({ products });
+  const toCache  = new Response(response.body, response);
+  toCache.headers.set('Cache-Control', 'public, max-age=300');
+  await cache.put(cacheKey, toCache);
+
+  return response;
 }
 
 // ── /checkout ─────────────────────────────────────────────────────
