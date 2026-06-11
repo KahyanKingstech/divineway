@@ -254,34 +254,44 @@ async function handleInvoice(request, env) {
     'Content-Type':  'application/json',
   };
 
+  const today = new Date().toISOString().split('T')[0];
+
   // Create Sales Invoice (draft)
   const createRes = await fetch(`${base}/api/resource/Sales Invoice`, {
     method: 'POST',
     headers,
     body: JSON.stringify({
       customer,
+      posting_date: today,
+      due_date:     today,
       update_stock: 1,
       remarks: `Paid via Stripe. Session: ${sessionId || 'N/A'}`,
       items: items.map(i => ({
         item_code: i.sku,
         qty:       i.qty,
         rate:      i.price,
-        warehouse: 'ECommerce - WOB',
       })),
     }),
   });
   if (!createRes.ok) {
-    const err = await createRes.json().catch(() => ({}));
-    return json({ error: err.exception || 'Failed to create invoice' }, 502);
+    let errBody = {};
+    try { errBody = await createRes.json(); } catch { /* ignore */ }
+    const msgs = errBody._server_messages
+      ? JSON.parse(errBody._server_messages).map(m => (typeof m === 'string' ? JSON.parse(m).message : m.message)).join(' | ')
+      : null;
+    return json({
+      step:  'create',
+      error: msgs || errBody.exception || errBody.message || `ERPNext ${createRes.status}`,
+    }, 502);
   }
   const { data: invoice } = await createRes.json();
 
-  // Fetch full document then submit via frappe.client.submit
+  // Fetch full document then submit
   const getRes = await fetch(
     `${base}/api/resource/Sales Invoice/${encodeURIComponent(invoice.name)}`,
     { headers },
   );
-  if (!getRes.ok) return json({ invoice: invoice.name, submitted: false, error: 'Could not fetch draft invoice' }, 502);
+  if (!getRes.ok) return json({ step: 'fetch', invoice: invoice.name, error: 'Could not fetch draft invoice' }, 502);
   const { data: fullDoc } = await getRes.json();
 
   const submitRes = await fetch(`${base}/api/method/frappe.client.submit`, {
@@ -290,8 +300,16 @@ async function handleInvoice(request, env) {
     body: JSON.stringify({ doc: JSON.stringify(fullDoc) }),
   });
   if (!submitRes.ok) {
-    const submitErr = await submitRes.json().catch(() => ({}));
-    return json({ invoice: invoice.name, submitted: false, error: submitErr.exception || submitErr.message || 'Submit failed' }, 502);
+    let submitErr = {};
+    try { submitErr = await submitRes.json(); } catch { /* ignore */ }
+    const msgs = submitErr._server_messages
+      ? JSON.parse(submitErr._server_messages).map(m => (typeof m === 'string' ? JSON.parse(m).message : m.message)).join(' | ')
+      : null;
+    return json({
+      step:    'submit',
+      invoice: invoice.name,
+      error:   msgs || submitErr.exception || submitErr.message || `ERPNext ${submitRes.status}`,
+    }, 502);
   }
 
   return json({ invoice: invoice.name, submitted: true });
