@@ -31,9 +31,11 @@ onAuthStateChanged(auth, user => {
       : 'Me';
     localStorage.setItem('dw_auth_initials', initials);
     localStorage.setItem('dw_auth_avatar', user.photoURL || '');
+    syncErpCustomer(user);
   } else {
     localStorage.removeItem('dw_auth_initials');
     localStorage.removeItem('dw_auth_avatar');
+    localStorage.removeItem('dw_erp_customer');
   }
   updateAuthUI(user);
 });
@@ -78,6 +80,29 @@ export async function fetchMyOrders() {
   );
   const snap = await getDocs(q);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+// ── Sync ERPNext customer on login ───────────────────────────────
+async function syncErpCustomer(user) {
+  try {
+    const workerUrl = (window.ERPNEXT_CONFIG || {}).stripe_worker_url
+      || 'https://divineway.kah-yan.workers.dev';
+    const res = await fetch(`${workerUrl}/customer`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        uid:   user.uid,
+        name:  user.displayName || '',
+        email: user.email,
+      }),
+    });
+    if (res.ok) {
+      const { customer } = await res.json();
+      if (customer) localStorage.setItem('dw_erp_customer', customer);
+    }
+  } catch (e) {
+    console.warn('ERP customer sync failed:', e);
+  }
 }
 
 // ── Update nav UI based on auth state ────────────────────────────

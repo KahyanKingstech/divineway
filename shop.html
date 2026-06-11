@@ -566,12 +566,24 @@ async function openOrdersModal() {
 (function handleCheckoutReturn() {
   const p = new URLSearchParams(window.location.search);
   if (p.get('checkout') === 'success') {
-    // Save order to Firestore
-    const pending = localStorage.getItem('pending_order');
-    if (pending && window.saveOrder) {
+    const sessionId = p.get('session_id') || '';
+    const pending   = localStorage.getItem('pending_order');
+    if (pending) {
       try {
         const { items, total } = JSON.parse(pending);
-        window.saveOrder({ items, total }).catch(console.error);
+        // Save to Firestore
+        if (window.saveOrder) window.saveOrder({ items, total, sessionId }).catch(console.error);
+        // Create submitted Sales Invoice in ERPNext
+        const customer = localStorage.getItem('dw_erp_customer');
+        if (customer) {
+          const workerUrl = (window.ERPNEXT_CONFIG || {}).stripe_worker_url
+            || 'https://divineway.kah-yan.workers.dev';
+          fetch(`${workerUrl}/invoice`, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ customer, items, sessionId }),
+          }).catch(console.error);
+        }
       } catch(e) {}
       localStorage.removeItem('pending_order');
     }

@@ -32,6 +32,14 @@ export default {
       return handleCheckout(request, env);
     }
 
+    if (pathname === '/customer' && request.method === 'POST') {
+      return handleCustomer(request, env);
+    }
+
+    if (pathname === '/invoice' && request.method === 'POST') {
+      return handleInvoice(request, env);
+    }
+
     return json({ error: 'Not found' }, 404);
   },
 };
@@ -192,6 +200,87 @@ async function handleCheckout(request, env) {
     return json({ error: session.error?.message || 'Stripe error' }, stripeRes.status);
   }
   return json({ url: session.url });
+}
+
+// ── /customer ─────────────────────────────────────────────────────
+async function handleCustomer(request, env) {
+  let uid, name, email;
+  try { ({ uid, name, email } = await request.json()); } catch { return json({ error: 'Invalid JSON' }, 400); }
+  if (!uid || !email) return json({ error: 'uid and email required' }, 400);
+
+  const base    = env.ERPNEXT_BASE_URL;
+  const headers = {
+    'Authorization': `token ${env.ERPNEXT_API_KEY}:${env.ERPNEXT_API_SECRET}`,
+    'Content-Type':  'application/json',
+  };
+
+  // Find existing customer by Firebase UID stored in customer_details
+  const searchFilters = encodeURIComponent(JSON.stringify([['customer_details', 'like', `%firebase:${uid}%`]]));
+  const searchFields  = encodeURIComponent(JSON.stringify(['name', 'customer_name']));
+  const searchRes = await fetch(
+    `${base}/api/resource/Customer?filters=${searchFilters}&fields=${searchFields}&limit_page_length=1`,
+    { headers },
+  );
+  if (searchRes.ok) {
+    const { data = [] } = await searchRes.json();
+    if (data.length) return json({ customer: data[0].name, created: false });
+  }
+
+  // Create new customer
+  const createRes = await fetch(`${base}/api/resource/Customer`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      customer_name:    name || email,
+      customer_type:    'Individual',
+      customer_group:   'Individual',
+      customer_details: `firebase:${uid}\nemail: ${email}`,
+    }),
+  });
+  if (!createRes.ok) return json({ error: 'Failed to create customer' }, 502);
+  const { data } = await createRes.json();
+  return json({ customer: data.name, created: true });
+}
+
+// ── /invoice ──────────────────────────────────────────────────────
+async function handleInvoice(request, env) {
+  let customer, items, sessionId;
+  try { ({ customer, items, sessionId } = await request.json()); } catch { return json({ error: 'Invalid JSON' }, 400); }
+  if (!customer || !Array.isArray(items) || !items.length) return json({ error: 'customer and items required' }, 400);
+
+  const base    = env.ERPNEXT_BASE_URL;
+  const headers = {
+    'Authorization': `token ${env.ERPNEXT_API_KEY}:${env.ERPNEXT_API_SECRET}`,
+    'Content-Type':  'application/json',
+  };
+
+  // Create Sales Invoice (draft)
+  const createRes = await fetch(`${base}/api/resource/Sales Invoice`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      customer,
+      remarks: `Paid via Stripe. Session: ${sessionId || 'N/A'}`,
+      items: items.map(i => ({
+        item_code: i.sku,
+        qty:       i.qty,
+        rate:      i.price,
+      })),
+    }),
+  });
+  if (!createRes.ok) {
+    const err = await createRes.json().catch(() => ({}));
+    return json({ error: err.exception || 'Failed to create invoice' }, 502);
+  }
+  const { data: invoice } = await createRes.json();
+
+  // Submit the invoice
+  const submitRes = await fetch(
+    `${base}/api/resource/Sales Invoice/${encodeURIComponent(invoice.name)}`,
+    { method: 'PUT', headers, body: JSON.stringify({ docstatus: 1 }) },
+  );
+
+  return json({ invoice: invoice.name, submitted: submitRes.ok });
 }
 
 // ── helpers ───────────────────────────────────────────────────────

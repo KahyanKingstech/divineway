@@ -96,7 +96,7 @@
       <div class="footer-bottom">
         <div class="footer-bottom-left">
           <span class="footer-seal">✦</span>
-          <span>© 6 DivinewayFengshui. All rights reserved.</span>
+          <span>© 2026 DivinewayFengshui. All rights reserved.</span>
           <span class="footer-seal">✦</span>
         </div>
         <div class="footer-bottom-right">
