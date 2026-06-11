@@ -126,7 +126,7 @@
           <span class="modal-price" id="modal-price"></span>
           <div class="modal-actions">
             <button class="modal-addcart" id="modal-addcart">Add to Cart</button>
-            <button class="modal-wa" id="modal-wa">💬 WhatsApp</button>
+            <!-- <button class="modal-wa" id="modal-wa">💬 WhatsApp</button> -->
           </div>
         </div>
       </div>
@@ -278,7 +278,9 @@ const ERPNEXT = {
 
 const WA_NUMBER = '6589490437';
 const WA_BASE   = `https://wa.me/${WA_NUMBER}`;
-const cart = {};
+const cart = JSON.parse(localStorage.getItem('dw_cart') || '{}');
+
+function saveCart() { localStorage.setItem('dw_cart', JSON.stringify(cart)); }
 
 /* ── Emoji map by Item Group ──────────────────────────────────────── */
 const GROUP_EMOJI = {
@@ -609,6 +611,7 @@ function updateCartBadge() {
 function addToCart(sku, name, price, stripePriceId, btn) {
   if (cart[sku]) cart[sku].qty++;
   else cart[sku] = { name, price, stripePriceId, qty: 1 };
+  saveCart();
   updateCartBadge();
   btn.textContent          = '✓ Added!';
   btn.style.background     = '#2a7a2a';
@@ -657,9 +660,9 @@ function changeQty(sku, delta) {
   if (!cart[sku]) return;
   cart[sku].qty += delta;
   if (cart[sku].qty <= 0) delete cart[sku];
-  updateCartBadge(); renderCart();
+  saveCart(); updateCartBadge(); renderCart();
 }
-function removeItem(sku) { delete cart[sku]; updateCartBadge(); renderCart(); }
+function removeItem(sku) { delete cart[sku]; saveCart(); updateCartBadge(); renderCart(); }
 
 async function checkoutStripe(btn) {
   // Require login
@@ -790,11 +793,11 @@ function openModal(sku) {
     readMoreBtn.style.display = 'none';
   }
   
-  document.getElementById('modal-addcart').onclick    = e => addToCart(p.sku, p.name, p.price, e.currentTarget);
-  document.getElementById('modal-wa').onclick = () => {
-    const msg = `Hello Master Louis, I am interested in ${p.name}. Please advise on customisation and next steps.`;
-    window.open(`${WA_BASE}?text=${encodeURIComponent(msg)}`, '_blank');
-  };
+  document.getElementById('modal-addcart').onclick = e => addToCart(p.sku, p.name, p.price, p.stripePriceId, e.currentTarget);
+  // document.getElementById('modal-wa').onclick = () => {
+  //   const msg = `Hello Master Louis, I am interested in ${p.name}. Please advise on customisation and next steps.`;
+  //   window.open(`${WA_BASE}?text=${encodeURIComponent(msg)}`, '_blank');
+  // };
   document.getElementById('product-modal').style.display = 'flex';
 }
 function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
@@ -850,6 +853,15 @@ function showLoginGate() {
     <button class="login-gate-close" onclick="this.parentNode.remove()">Cancel</button>
   `;
   document.body.appendChild(el);
+
+  setTimeout(() => {
+    document.addEventListener('click', function dismiss(e) {
+      if (!el.contains(e.target)) {
+        el.remove();
+        document.removeEventListener('click', dismiss);
+      }
+    });
+  }, 0);
 }
 
 async function openOrdersModal() {
@@ -900,6 +912,7 @@ async function openOrdersModal() {
       localStorage.removeItem('pending_order');
     }
     Object.keys(cart).forEach(k => delete cart[k]);
+    saveCart();
     updateCartBadge();
     history.replaceState(null, '', window.location.pathname);
     setTimeout(() => showToast('Payment successful! Master Louis will be in touch to customise your talisman.'), 300);
@@ -908,6 +921,7 @@ async function openOrdersModal() {
     setTimeout(() => showToast('Checkout cancelled — your cart is still saved.', 'error'), 300);
   }
 })();
+updateCartBadge();
 loadProducts();
 </script>
 

@@ -33,7 +33,7 @@ ${linksHtml}
         <span id="auth-name">Login</span>
         <div class="auth-dropdown" id="auth-dropdown"></div>
       </button>
-      <button class="btn-cart" onclick="openCart()">
+      <button class="btn-cart" id="cart-btn" onclick="openCart()">
         🛒 Cart
         <span id="cart-badge" style="display:none;position:absolute;top:-6px;right:-6px;background:#c0392b;color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;font-family:sans-serif;font-weight:700;align-items:center;justify-content:center;line-height:18px">0</span>
       </button>
