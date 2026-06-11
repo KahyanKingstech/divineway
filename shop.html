@@ -174,7 +174,7 @@ const GROUP_EMOJI = {
 
 /* ── Fetch helpers ────────────────────────────────────────────────── */
 
-async function loadProducts() {
+async function loadProducts(bust = false) {
   const loading = document.getElementById('shop-loading');
   const errorEl = document.getElementById('shop-error');
   const grid    = document.getElementById('pgrid');
@@ -188,7 +188,10 @@ async function loadProducts() {
   console.log('Worker URL:', ERPNEXT.stripe_worker_url);
 
   try {
-    const res = await fetch(`${ERPNEXT.stripe_worker_url}/products`);
+    const url = bust
+      ? `${ERPNEXT.stripe_worker_url}/products?bust=${Date.now()}`
+      : `${ERPNEXT.stripe_worker_url}/products`;
+    const res = await fetch(url, bust ? { cache: 'no-store' } : undefined);
     if (!res.ok) throw new Error(`Worker responded ${res.status} ${res.statusText}`);
     const { products = [] } = await res.json();
     console.log(`✅ ${products.length} products from worker`);

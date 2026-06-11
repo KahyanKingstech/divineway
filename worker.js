@@ -46,11 +46,16 @@ export default {
 
 // ── /products ─────────────────────────────────────────────────────
 async function handleProducts(request, env) {
-  // Serve from Cloudflare edge cache if available (5 min TTL)
   const cache    = caches.default;
   const cacheKey = new Request('https://divineway.kah-yan.workers.dev/products?v=2');
-  const cached   = await cache.match(cacheKey);
-  if (cached) return cached;
+
+  // ?bust=<timestamp> from the client means: skip cache, fetch fresh, then repopulate cache.
+  // caches.default.delete() only evicts the local PoP; bust param is the reliable cross-PoP fix.
+  const bustParam = new URL(request.url).searchParams.has('bust');
+  if (!bustParam) {
+    const cached = await cache.match(cacheKey);
+    if (cached) return cached;
+  }
 
   const base    = env.ERPNEXT_BASE_URL;
   const headers = {
