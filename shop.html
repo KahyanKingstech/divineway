@@ -303,6 +303,9 @@ function renderCard(item, price) {
   const badgeLabel = group.replace(' Talisman','');
 
   const talismanCat = Array.isArray(item.talisman_categories) ? item.talisman_categories.join(', ') : '';
+  const isStock = item.is_stock_item === 1;
+  const qty     = isStock ? (item.qty || 0) : null;
+  const qtyHtml = isStock ? `<span class="pqty">${qty} left</span>` : '';
 
   productData[sku] = { sku, name, chin, desc: cleanDesc, descPreview, price: priceVal, emoji, group, talismanCat, image: item.image || '' };
 
@@ -323,6 +326,7 @@ function renderCard(item, price) {
       <span class="pcat-tag">${group === 'Talisman' ? talismanCat : group}</span>
       <div class="pfoot">
         <div class="pprice">${priceDisplay}</div>
+        ${qtyHtml}
         <button class="pbtn">Add to Cart</button>
       </div>
     </div>`;

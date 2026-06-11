@@ -895,6 +895,13 @@ body {
 
 .pbtn:hover { background: var(--gold); color: var(--ink-deep); border-color: var(--gold); }
 
+.pqty {
+  font-size: 10px;
+  font-family: var(--sans);
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
 /* ─── CTA ─── */
 .cta-sec {
   background: var(--ink-mid);

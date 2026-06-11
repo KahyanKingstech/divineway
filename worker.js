@@ -40,7 +40,7 @@ export default {
 async function handleProducts(request, env) {
   // Serve from Cloudflare edge cache if available (5 min TTL)
   const cache    = caches.default;
-  const cacheKey = new Request('https://cache.divineway/products');
+  const cacheKey = new Request('https://cache.divineway/products/v2');
   const cached   = await cache.match(cacheKey);
   if (cached) return cached;
 
@@ -82,7 +82,10 @@ async function handleProducts(request, env) {
   const pFields = encodeURIComponent(JSON.stringify(['item_code', 'price_list_rate']));
 
   const bFilters = stockCodes.length
-    ? encodeURIComponent(JSON.stringify([['item_code', 'in', stockCodes]]))
+    ? encodeURIComponent(JSON.stringify([
+        ['item_code', 'in', stockCodes],
+        ['warehouse', '=', 'ECommerce - WOB'],
+      ]))
     : null;
   const bFields = encodeURIComponent(JSON.stringify(['item_code', 'actual_qty']));
 
@@ -111,13 +114,11 @@ async function handleProducts(request, env) {
     prices.forEach(p => { priceMap[p.item_code] = p.price_list_rate; });
   }
 
-  // Sum actual_qty across all warehouses per item
+  // qty from ECommerce - WOB warehouse only
   const stockMap = {};
   if (binRes && binRes.ok) {
     const { data: bins = [] } = await binRes.json();
-    bins.forEach(b => {
-      stockMap[b.item_code] = (stockMap[b.item_code] || 0) + (b.actual_qty || 0);
-    });
+    bins.forEach(b => { stockMap[b.item_code] = b.actual_qty || 0; });
   }
 
   // 3. Shape response — filter out stock items with no stock
@@ -138,7 +139,9 @@ async function handleProducts(request, env) {
       talisman_categories: Array.isArray(item.custom_talisman_categories)
         ? item.custom_talisman_categories.map(c => c.category).filter(Boolean)
         : [],
-      price: priceMap[item.item_code] || 0,
+      price:        priceMap[item.item_code] || 0,
+      is_stock_item: item.is_stock_item ? 1 : 0,
+      qty:           item.is_stock_item ? (stockMap[item.item_code] || 0) : null,
     }));
 
   // Cache for 5 minutes
