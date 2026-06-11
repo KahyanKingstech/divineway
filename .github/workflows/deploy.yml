@@ -15,20 +15,20 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-  deploy-pages:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Generate config.js
-        env:
-          STRIPE_WORKER_URL: ${{ secrets.STRIPE_WORKER_URL }}
-        run: node generate-config.js
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken:     ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId:    ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName:  divineway
-          directory:    .
-          gitHubToken:  ${{ secrets.GITHUB_TOKEN }}
+  # deploy-pages:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Generate config.js
+  #       env:
+  #         STRIPE_WORKER_URL: ${{ secrets.STRIPE_WORKER_URL }}
+  #       run: node generate-config.js
+  #     - name: Deploy to Cloudflare Pages
+  #       uses: cloudflare/pages-action@v1
+  #       with:
+  #         apiToken:     ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  #         accountId:    ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+  #         projectName:  divineway
+  #         directory:    .
+  #         gitHubToken:  ${{ secrets.GITHUB_TOKEN }}
 
