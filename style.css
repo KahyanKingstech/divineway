@@ -721,7 +721,7 @@ body {
 /* ─── SHOP ─── */
 .shop-sec {
   background: var(--ink-deep);
-  padding: 64px 48px;
+  padding: 44px 48px 64px 48px;;
 }
 
 .filter-tabs {
