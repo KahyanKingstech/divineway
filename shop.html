@@ -304,8 +304,7 @@ function renderCard(item, price) {
 
   const talismanCat = Array.isArray(item.talisman_categories) ? item.talisman_categories.join(', ') : '';
   const isStock = item.is_stock_item === 1;
-  const qty     = isStock ? (item.qty || 0) : null;
-  const qtyHtml = isStock ? `<span class="pqty">${qty} left</span>` : '';
+  const qtyHtml = isStock ? `<span class="pqty">${item.qty || 0} left</span>` : '';
 
   productData[sku] = { sku, name, chin, desc: cleanDesc, descPreview, price: priceVal, emoji, group, talismanCat, image: item.image || '' };
 

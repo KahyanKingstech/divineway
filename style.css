@@ -898,7 +898,8 @@ body {
 .pqty {
   font-size: 10px;
   font-family: var(--sans);
-  color: var(--text-muted);
+  color: #e07060;
+  font-weight: 600;
   letter-spacing: 0.04em;
 }
 
