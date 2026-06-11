@@ -272,7 +272,7 @@ async function handleInvoice(request, env) {
         item_code:      i.sku,
         qty:            i.qty,
         rate:           i.price,
-        income_account: 'Sales - WOB',
+        income_account: 'Sales Income - WOB',
         warehouse:      'ECommerce - WOB',
       })),
     }),
