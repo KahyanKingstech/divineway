@@ -4,6 +4,7 @@
   <div class="cta-sec" id="cta-area">
     <div class="sec-label" style="justify-content:center;margin-bottom:16px">Free Consultation</div>
     <h2>Not sure which talisman you need?</h2>
+    <span class="cta-chin" style="display:block;font-family:'Noto Serif SC',serif;font-size:14px;color:rgba(201,168,76,0.6);letter-spacing:0.15em;margin-top:6px;margin-bottom:4px">不知选何符 · 请问师傅</span>
     <p>Let Master Louis Cheung personally recommend the right talisman based on your BaZi birth chart and current life situation.</p>
     <button class="hcta" onclick="window.open('${WA_CONSULT}','_blank')">Get a Free Consultation</button>
   </div>
