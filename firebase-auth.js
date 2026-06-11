@@ -70,16 +70,19 @@ export async function saveOrder({ items, total, sessionId }) {
   });
 }
 
-// ── Fetch orders for current user ─────────────────────────────────
+// ── Fetch orders for current user (from ERPNext Sales Invoice) ────
 export async function fetchMyOrders() {
   if (!currentUser) return [];
-  const q = query(
-    collection(db, 'orders'),
-    where('uid', '==', currentUser.uid),
-    orderBy('createdAt', 'desc')
+  const customer = localStorage.getItem('dw_erp_customer');
+  if (!customer) return [];
+  const workerUrl = (window.ERPNEXT_CONFIG || {}).stripe_worker_url
+    || 'https://divineway.kah-yan.workers.dev';
+  const res = await fetch(
+    `${workerUrl}/orders?customer=${encodeURIComponent(customer)}&uid=${encodeURIComponent(currentUser.uid)}`,
   );
-  const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  if (!res.ok) throw new Error(`Orders fetch failed (${res.status})`);
+  const { orders = [] } = await res.json();
+  return orders;
 }
 
 // ── Sync ERPNext customer on login ───────────────────────────────
@@ -193,11 +196,12 @@ window.openOrdersModal = async function () {
     list.innerHTML = orders.map(o => `
       <div class="order-card">
         <div class="order-card-header">
-          <span class="order-date">${new Date(o.createdAt).toLocaleDateString()}</span>
-          <span class="order-total">SGD $${o.total}</span>
+          <span class="order-date">${o.date || ''}</span>
+          <span class="order-total">SGD $${Number(o.total || 0).toFixed(2)}</span>
         </div>
-        <div class="order-items">${o.items.map(i => `${i.name} × ${i.qty}`).join('<br>')}</div>
-        <span class="order-status">${o.status}</span>
+        <div class="order-ref">${o.name}</div>
+        <div class="order-items">${(o.items || []).map(i => `${i.item_name} × ${i.qty}`).join('<br>')}</div>
+        <span class="order-status order-status-${(o.status || '').toLowerCase().replace(/\s+/g,'-')}">${o.status || ''}</span>
       </div>`).join('');
   } catch {
     document.getElementById('orders-list').innerHTML = '<p class="orders-empty">Could not load orders.</p>';

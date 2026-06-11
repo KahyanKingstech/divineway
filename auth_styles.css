@@ -203,6 +203,13 @@
   font-family: sans-serif;
   line-height: 1.7;
 }
+.order-ref {
+  font-size: 10px;
+  color: rgba(247,240,227,0.25);
+  font-family: sans-serif;
+  letter-spacing: .04em;
+  margin-bottom: 6px;
+}
 .order-status {
   display: inline-block;
   margin-top: 8px;
@@ -211,10 +218,18 @@
   font-weight: 600;
   letter-spacing: .06em;
   text-transform: uppercase;
-  color: #4caf79;
-  background: rgba(76,175,121,0.12);
+  color: rgba(247,240,227,0.4);
+  background: rgba(247,240,227,0.06);
   border-radius: 3px;
   padding: 2px 8px;
+}
+.order-status-paid {
+  color: #4caf79;
+  background: rgba(76,175,121,0.12);
+}
+.order-status-unpaid, .order-status-overdue {
+  color: #e07060;
+  background: rgba(192,57,43,0.12);
 }
 .orders-empty {
   text-align: center;

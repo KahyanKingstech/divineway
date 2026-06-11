@@ -40,6 +40,10 @@ export default {
       return handleInvoice(request, env);
     }
 
+    if (pathname === '/orders' && request.method === 'GET') {
+      return handleOrders(request, env);
+    }
+
     return json({ error: 'Not found' }, 404);
   },
 };
@@ -393,6 +397,78 @@ async function handleInvoice(request, env) {
     payment:      paymentName,
     paymentError: paymentError || undefined,
   });
+}
+
+// ── /orders ───────────────────────────────────────────────────────
+async function handleOrders(request, env) {
+  const url      = new URL(request.url);
+  const customer = url.searchParams.get('customer');
+  const uid      = url.searchParams.get('uid');
+
+  if (!customer || !uid) return json({ error: 'customer and uid required' }, 400);
+
+  const base    = env.ERPNEXT_BASE_URL;
+  const headers = {
+    'Authorization': `token ${env.ERPNEXT_API_KEY}:${env.ERPNEXT_API_SECRET}`,
+    'Content-Type':  'application/json',
+  };
+
+  // Security: verify this customer was created for this Firebase UID
+  const custRes = await fetch(
+    `${base}/api/resource/Customer/${encodeURIComponent(customer)}`,
+    { headers },
+  );
+  if (!custRes.ok) return json({ error: 'Customer not found' }, 404);
+  const { data: custDoc } = await custRes.json();
+  if (!String(custDoc.customer_details || '').includes(`firebase:${uid}`)) {
+    return json({ error: 'Unauthorized' }, 403);
+  }
+
+  // Fetch submitted Sales Invoices for this customer
+  const invFilters = encodeURIComponent(JSON.stringify([
+    ['customer',  '=', customer],
+    ['docstatus', '=', 1],
+  ]));
+  const invFields = encodeURIComponent(JSON.stringify([
+    'name', 'posting_date', 'grand_total', 'status',
+  ]));
+  const invRes = await fetch(
+    `${base}/api/resource/Sales Invoice?filters=${invFilters}&fields=${invFields}&limit_page_length=50&order_by=posting_date%20desc`,
+    { headers },
+  );
+  if (!invRes.ok) return json({ error: 'Failed to fetch invoices' }, 502);
+  const { data: invoices = [] } = await invRes.json();
+
+  if (!invoices.length) return json({ orders: [] });
+
+  // Fetch all line items for these invoices in one query
+  const names      = invoices.map(i => i.name);
+  const itemFilter = encodeURIComponent(JSON.stringify([['parent', 'in', names]]));
+  const itemFields = encodeURIComponent(JSON.stringify([
+    'parent', 'item_name', 'item_code', 'qty', 'rate',
+  ]));
+  const itemRes = await fetch(
+    `${base}/api/resource/Sales Invoice Item?filters=${itemFilter}&fields=${itemFields}&limit_page_length=500`,
+    { headers },
+  );
+  const itemMap = {};
+  if (itemRes.ok) {
+    const { data: rows = [] } = await itemRes.json();
+    rows.forEach(r => {
+      if (!itemMap[r.parent]) itemMap[r.parent] = [];
+      itemMap[r.parent].push({ item_name: r.item_name, item_code: r.item_code, qty: r.qty, rate: r.rate });
+    });
+  }
+
+  const orders = invoices.map(inv => ({
+    name:   inv.name,
+    date:   inv.posting_date,
+    total:  inv.grand_total,
+    status: inv.status,
+    items:  itemMap[inv.name] || [],
+  }));
+
+  return json({ orders });
 }
 
 // ── helpers ───────────────────────────────────────────────────────

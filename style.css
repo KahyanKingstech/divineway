@@ -1477,6 +1477,38 @@ body {
 .blog-read { font-size: 11px; color: var(--gold); font-family: var(--sans); font-weight: 600; text-decoration: none; letter-spacing: 0.06em; transition: color 0.2s; }
 .blog-read:hover { color: var(--gold-bright); }
 
+/* ─── PAGE CONTENT SECTIONS (services / academy / blog) ─── */
+.page-content-sec {
+  padding: 64px 48px;
+  background: var(--ink-deep);
+}
+
+.svc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.acad-intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 48px;
+}
+
+.acad-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-content: start;
+}
+
+.blog-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+}
+
 /* ─── SHOP SPINNER ─── */
 .shop-spinner {
   width: 40px;
@@ -1551,6 +1583,10 @@ body {
   }
 
   .hh1 { font-size: 36px; }
+
+  .page-content-sec { padding: 56px 32px; }
+  .svc-grid { grid-template-columns: repeat(2, 1fr); }
+  .blog-layout { gap: 28px; }
 }
 
 /* ── Mobile / small tablet (≤768px) ──────────────────────────── */
@@ -1588,6 +1624,15 @@ body {
     gap: 28px;
   }
   .footer-brand { grid-column: 1 / -1; }
+
+  .page-content-sec { padding: 40px 20px; }
+  .page-banner-inner { padding: 28px 20px; }
+  .page-banner-title { font-size: 26px; }
+
+  .svc-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .acad-intro-grid { grid-template-columns: 1fr; }
+  .acad-stats-grid { grid-template-columns: repeat(4, 1fr); }
+  .blog-layout { grid-template-columns: 1fr; }
 }
 
 /* ── Mobile portrait (≤480px) ────────────────────────────────── */
@@ -1615,4 +1660,11 @@ body {
 
   .footer-inner { padding: 40px 16px 20px; }
   .footer-top   { grid-template-columns: 1fr; gap: 24px; }
+
+  .page-content-sec { padding: 32px 16px; }
+  .page-banner-inner { padding: 22px 16px; }
+  .page-banner-title { font-size: 22px; }
+
+  .svc-grid { grid-template-columns: 1fr; gap: 14px; }
+  .acad-stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
