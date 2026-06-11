@@ -1,8 +1,8 @@
 (function () {
   const page = location.pathname.split('/').pop() || 'index.html';
   const links = [
-    ['services.html', 'Services'],
     ['shop.html',     'Shop'],
+    ['services.html', 'Services'],
     ['about.html',    'About'],
     ['academy.html',  'Academy'],
     ['blog.html',     'Blog'],
