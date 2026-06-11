@@ -1,4 +1,7 @@
 // Shared cart — persists in localStorage across all pages
+const WA_NUMBER = '6589490437';
+const WA_BASE   = `https://wa.me/${WA_NUMBER}`;
+
 const cart = JSON.parse(localStorage.getItem('dw_cart') || '{}');
 
 function saveCart()  { localStorage.setItem('dw_cart', JSON.stringify(cart)); }

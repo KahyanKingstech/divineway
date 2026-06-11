@@ -50,14 +50,14 @@ async function handleProducts(request, env) {
     'Content-Type':  'application/json',
   };
 
-  // 1. Fetch item list
+  // 1. Fetch item list (include is_stock_item for stock filtering)
   const filters = encodeURIComponent(JSON.stringify([
     ['disabled',       '=', 0],
     ['is_sales_item',  '=', 1],
   ]));
   const fields = encodeURIComponent(JSON.stringify([
     'name', 'item_name', 'item_code', 'item_group',
-    'description', 'image', 'custom_chinese_name',
+    'description', 'image', 'custom_chinese_name', 'is_stock_item',
   ]));
   const listRes = await fetch(
     `${base}/api/resource/Item?filters=${filters}&fields=${fields}&limit_page_length=200&order_by=item_name%20asc`,
@@ -70,8 +70,9 @@ async function handleProducts(request, env) {
 
   if (!items.length) return json({ products: [] });
 
-  // 2. Fetch item details (for child table) and prices in parallel
-  const codes = items.map(i => i.item_code);
+  // 2. Fetch item details, prices, and bin stock in parallel
+  const codes      = items.map(i => i.item_code);
+  const stockCodes = items.filter(i => i.is_stock_item).map(i => i.item_code);
 
   const pFilters = encodeURIComponent(JSON.stringify([
     ['item_code',  'in', codes],
@@ -80,7 +81,12 @@ async function handleProducts(request, env) {
   ]));
   const pFields = encodeURIComponent(JSON.stringify(['item_code', 'price_list_rate']));
 
-  const [details, priceRes] = await Promise.all([
+  const bFilters = stockCodes.length
+    ? encodeURIComponent(JSON.stringify([['item_code', 'in', stockCodes]]))
+    : null;
+  const bFields = encodeURIComponent(JSON.stringify(['item_code', 'actual_qty']));
+
+  const [details, priceRes, binRes] = await Promise.all([
     Promise.all(items.map(async item => {
       const r = await fetch(
         `${base}/api/resource/Item/${encodeURIComponent(item.item_code)}`,
@@ -94,6 +100,9 @@ async function handleProducts(request, env) {
       `${base}/api/resource/Item%20Price?filters=${pFilters}&fields=${pFields}&limit_page_length=500`,
       { headers },
     ),
+    bFilters
+      ? fetch(`${base}/api/resource/Bin?filters=${bFilters}&fields=${bFields}&limit_page_length=500`, { headers })
+      : Promise.resolve(null),
   ]);
 
   const priceMap = {};
@@ -102,21 +111,35 @@ async function handleProducts(request, env) {
     prices.forEach(p => { priceMap[p.item_code] = p.price_list_rate; });
   }
 
-  // 3. Shape response — no credentials leak to frontend
-  const products = details.map(item => ({
-    item_code:           item.item_code,
-    item_name:           item.item_name,
-    item_group:          item.item_group || '',
-    description:         item.description || '',
-    image:               item.image
-                           ? (item.image.startsWith('http') ? item.image : base + item.image)
-                           : '',
-    custom_chinese_name: item.custom_chinese_name || '',
-    talisman_categories: Array.isArray(item.custom_talisman_categories)
-      ? item.custom_talisman_categories.map(c => c.category).filter(Boolean)
-      : [],
-    price: priceMap[item.item_code] || 0,
-  }));
+  // Sum actual_qty across all warehouses per item
+  const stockMap = {};
+  if (binRes && binRes.ok) {
+    const { data: bins = [] } = await binRes.json();
+    bins.forEach(b => {
+      stockMap[b.item_code] = (stockMap[b.item_code] || 0) + (b.actual_qty || 0);
+    });
+  }
+
+  // 3. Shape response — filter out stock items with no stock
+  const products = details
+    .filter(item => {
+      if (!item.is_stock_item) return true;       // service item — always show
+      return (stockMap[item.item_code] || 0) > 0; // stock item — only if in stock
+    })
+    .map(item => ({
+      item_code:           item.item_code,
+      item_name:           item.item_name,
+      item_group:          item.item_group || '',
+      description:         item.description || '',
+      image:               item.image
+                             ? (item.image.startsWith('http') ? item.image : base + item.image)
+                             : '',
+      custom_chinese_name: item.custom_chinese_name || '',
+      talisman_categories: Array.isArray(item.custom_talisman_categories)
+        ? item.custom_talisman_categories.map(c => c.category).filter(Boolean)
+        : [],
+      price: priceMap[item.item_code] || 0,
+    }));
 
   // Cache for 5 minutes
   const response = json({ products });
