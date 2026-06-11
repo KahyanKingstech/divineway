@@ -7,7 +7,7 @@ function cartTotal() { return Object.values(cart).reduce((s, i) => s + i.price *
 
 function stripeWorkerUrl() {
   return (window.ERPNEXT_CONFIG || {}).stripe_worker_url
-    || 'https://divineway-stripe-checkout.kah-yan.workers.dev';
+    || 'https://divineway.kah-yan.workers.dev';
 }
 
 function updateCartBadge() {
