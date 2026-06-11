@@ -329,7 +329,7 @@ async function handleInvoice(request, env) {
     body: JSON.stringify({
       company:          'World Orb',
       payment_type:     'Receive',
-      mode_of_payment:  'Bank Transfer',
+      mode_of_payment:  'Stripe',
       party_type:       'Customer',
       party:            customer,
       posting_date:     today,
