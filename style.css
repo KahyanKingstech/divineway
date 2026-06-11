@@ -1513,16 +1513,106 @@ body {
   .modal-panel {
     max-width: 100%;
   }
-  
+
   .modal-thumb {
     height: 250px;
   }
-  
+
   .modal-body {
     padding: 16px 18px 18px;
   }
-  
+
   .modal-name { font-size: 16px; }
   .modal-desc { font-size: 12px; }
   .modal-price { font-size: 18px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE LAYOUT
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Tablet (≤1024px) ─────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .hero { padding: 64px 36px 56px; }
+  .cats-sec  { padding: 48px 32px; }
+  .master-sec    { padding: 56px 32px; }
+  .milestone-sec { padding: 56px 32px; }
+  .testi-sec     { padding: 56px 32px; }
+  .reels-sec     { padding: 48px 32px; }
+  .shop-sec      { padding: 36px 32px 56px; }
+  .cta-sec       { padding: 64px 32px; }
+  .footer-inner  { padding: 56px 32px 28px; }
+
+  .cats-grid { grid-template-columns: repeat(4, 1fr); }
+  .pgrid     { grid-template-columns: repeat(3, 1fr); }
+  .footer-top {
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 32px;
+  }
+
+  .hh1 { font-size: 36px; }
+}
+
+/* ── Mobile / small tablet (≤768px) ──────────────────────────── */
+@media (max-width: 768px) {
+  .wrapper { border-radius: 0; border-left: none; border-right: none; }
+
+  .hero     { padding: 48px 20px 40px; min-height: auto; }
+  .hh1      { font-size: 28px; }
+  .hsub     { font-size: 14px; }
+
+  .cats-sec  { padding: 40px 20px; }
+  .cats-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+  .master-sec    { padding: 48px 20px; }
+  .master-inner  { grid-template-columns: 1fr; gap: 32px; }
+
+  .milestone-sec  { padding: 48px 20px; }
+  .milestone-grid { grid-template-columns: 1fr; gap: 0; }
+
+  .testi-sec { padding: 48px 20px; }
+  .tgrid     { grid-template-columns: 1fr; }
+
+  .reels-sec { padding: 40px 20px; }
+  .rrow      { grid-template-columns: repeat(2, 1fr); }
+
+  .shop-sec  { padding: 32px 20px 48px; }
+  .pgrid     { grid-template-columns: repeat(2, 1fr); }
+
+  .cta-sec   { padding: 56px 20px; }
+  .cta-sec h2 { font-size: 22px; }
+
+  .footer-inner { padding: 48px 20px 24px; }
+  .footer-top   {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  .footer-brand { grid-column: 1 / -1; }
+}
+
+/* ── Mobile portrait (≤480px) ────────────────────────────────── */
+@media (max-width: 480px) {
+  .hero { padding: 36px 16px 32px; }
+  .hh1  { font-size: 24px; }
+
+  .cats-sec  { padding: 32px 16px; }
+  .cats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+  .master-sec   { padding: 36px 16px; }
+  .master-photos { grid-template-columns: 1fr; }
+
+  .milestone-sec { padding: 36px 16px; }
+
+  .testi-sec { padding: 36px 16px; }
+
+  .reels-sec { padding: 32px 16px; }
+  .rrow      { grid-template-columns: 1fr; }
+
+  .shop-sec { padding: 24px 16px 40px; }
+
+  .cta-sec   { padding: 48px 16px; }
+  .cta-sec h2 { font-size: 20px; }
+
+  .footer-inner { padding: 40px 16px 20px; }
+  .footer-top   { grid-template-columns: 1fr; gap: 24px; }
 }

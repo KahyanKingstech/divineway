@@ -92,7 +92,7 @@ async function handleProducts(request, env) {
   const bFilters = stockCodes.length
     ? encodeURIComponent(JSON.stringify([
         ['item_code', 'in', stockCodes],
-        ['warehouse', '=', 'ECommerce - WOB'],
+        ['warehouse', '=', 'ECommerce - DF'],
       ]))
     : null;
   const bFields = encodeURIComponent(JSON.stringify(['item_code', 'actual_qty']));
@@ -122,7 +122,7 @@ async function handleProducts(request, env) {
     prices.forEach(p => { priceMap[p.item_code] = p.price_list_rate; });
   }
 
-  // qty from ECommerce - WOB warehouse only
+  // qty from ECommerce - DF warehouse only
   const stockMap = {};
   if (binRes && binRes.ok) {
     const { data: bins = [] } = await binRes.json();
@@ -262,18 +262,18 @@ async function handleInvoice(request, env) {
     headers,
     body: JSON.stringify({
       customer,
-      company:      'World Orb',
+      company:      'Divineway Fengshui',
       posting_date: today,
       due_date:     today,
-      debit_to:     'Debtors - WOB',
+      debit_to:     'Debtors - DF',
       update_stock: 1,
       remarks: `Paid via Stripe. Session: ${sessionId || 'N/A'}`,
       items: items.map(i => ({
         item_code:      i.sku,
         qty:            i.qty,
         rate:           i.price,
-        income_account: 'Sales Income - WOB',
-        warehouse:      'ECommerce - WOB',
+        income_account: 'Sales - DF',
+        warehouse:      'ECommerce - DF',
       })),
     }),
   });
@@ -318,7 +318,7 @@ async function handleInvoice(request, env) {
 
   // ── Payment Entry — marks the invoice as Paid ──────────────────
   const grandTotal = fullDoc.grand_total || items.reduce((s, i) => s + i.price * i.qty, 0);
-  const paidTo     = 'Stripe - WOB';
+  const paidTo     = 'Stripe - DF';
 
   let paymentName  = null;
   let paymentError = null;
@@ -327,13 +327,13 @@ async function handleInvoice(request, env) {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      company:          'World Orb',
+      company:          'Divineway Fengshui',
       payment_type:     'Receive',
       mode_of_payment:  'Stripe',
       party_type:       'Customer',
       party:            customer,
       posting_date:     today,
-      paid_from:        'Debtors - WOB',
+      paid_from:        'Debtors - DF',
       paid_to:          paidTo,
       paid_amount:      grandTotal,
       received_amount:  grandTotal,
