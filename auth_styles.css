@@ -6,26 +6,27 @@
 .auth-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background: transparent;
-  border: 1px solid rgba(201,168,76,0.35);
-  border-radius: 4px;
-  padding: 6px 14px;
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius);
+  padding: 8px 16px;
   cursor: pointer;
   color: var(--cream, #f7f0e3);
-  font-family: var(--sans, sans-serif);
-  font-size: 12px;
+  font-family: var(--display, sans-serif);
+  font-size: 10px;
   font-weight: 500;
-  letter-spacing: .06em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
   transition: border-color .2s, background .2s;
   position: relative;
 }
+
 .auth-btn:hover { border-color: var(--gold, #c9a84c); background: rgba(201,168,76,0.08); }
 
 .auth-avatar {
-  width: 22px;
-  height: 22px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -81,9 +82,10 @@
   text-align: left;
   transition: background .15s;
 }
+
 .auth-menu-item:hover { background: rgba(201,168,76,0.1); }
 .auth-menu-google { gap: 10px; }
-.auth-menu-signout { color: rgba(247,240,227,0.5); font-size: 11px; }
+.auth-menu-signout { color: rgba(247,240,227,0.5); font-size: 11px; } */ */
 
 /* Login gate toast */
 .login-gate {

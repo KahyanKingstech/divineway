@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="divineway_logo/divineway_logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account — DivinewayFengshui</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@300;400;500;700&family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <script src="config.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="nav_style.css">
+  <link rel="stylesheet" href="auth_styles.css">
+  <script type="module" src="firebase-auth.js"></script>
+  <style>
+    .account-wrap {
+      min-height: calc(100vh - 72px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 60px 20px 80px;
+    }
+    .account-card {
+      width: 100%;
+      max-width: 480px;
+    }
+    .account-profile {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 28px;
+      background: rgba(201,168,76,0.04);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+    .account-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,168,76,0.3);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .account-avatar-placeholder {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,168,76,0.3);
+      background: rgba(201,168,76,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: #c9a84c;
+      flex-shrink: 0;
+    }
+    .account-info-name {
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: #f7f0e3;
+      letter-spacing: .02em;
+    }
+    .account-info-email {
+      font-size: 12px;
+      color: rgba(247,240,227,0.4);
+      font-family: 'Inter', sans-serif;
+      margin-top: 3px;
+    }
+    .account-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .account-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 16px 20px;
+      background: transparent;
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      color: #f7f0e3;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .02em;
+      transition: border-color .2s, background .2s;
+      text-decoration: none;
+    }
+    .account-menu-item:hover {
+      border-color: rgba(201,168,76,0.35);
+      background: rgba(201,168,76,0.05);
+    }
+    .account-menu-item i {
+      font-size: 18px;
+      color: #c9a84c;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .account-menu-item-label { flex: 1; }
+    .account-menu-item-arrow {
+      color: rgba(247,240,227,0.2);
+      font-size: 16px;
+    }
+    .account-menu-item.signout {
+      border-color: rgba(192,57,43,0.15);
+      color: rgba(247,240,227,0.5);
+      margin-top: 8px;
+    }
+    .account-menu-item.signout:hover {
+      border-color: rgba(192,57,43,0.4);
+      background: rgba(192,57,43,0.06);
+      color: #e07060;
+    }
+    .account-menu-item.signout i { color: #c0392b; }
+    .account-not-logged {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .account-not-logged p {
+      color: rgba(247,240,227,0.4);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+  <script src="nav.js"></script>
+
+  <div class="account-wrap">
+    <div class="account-card" id="account-card">
+      <!-- populated by JS -->
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function renderAccount(user) {
+    const card = document.getElementById('account-card');
+    if (!user) {
+      card.innerHTML = `
+        <div class="account-not-logged">
+          <p>You are not signed in.</p>
+          <a href="login.html?returnUrl=account.html" class="account-menu-item" style="display:inline-flex;width:auto">
+            <i class="ti ti-brand-google"></i>
+            <span class="account-menu-item-label">Sign in with Google</span>
+          </a>
+        </div>`;
+      return;
+    }
+
+    const initials = user.displayName
+      ? user.displayName.split(' ').map(w => w[0]).join('').toUpperCase()
+      : '?';
+
+    const avatarHtml = user.photoURL
+      ? `<img class="account-avatar" src="${user.photoURL}" alt="">`
+      : `<div class="account-avatar-placeholder">${initials}</div>`;
+
+    card.innerHTML = `
+      <div class="account-profile">
+        ${avatarHtml}
+        <div>
+          <div class="account-info-name">${user.displayName || 'Account'}</div>
+          <div class="account-info-email">${user.email}</div>
+        </div>
+      </div>
+      <div class="account-menu">
+        <button class="account-menu-item" onclick="openOrders()">
+          <i class="ti ti-package"></i>
+          <span class="account-menu-item-label">My Orders</span>
+          <span class="account-menu-item-arrow">›</span>
+        </button>
+        <button class="account-menu-item signout" onclick="handleSignOut()">
+          <i class="ti ti-logout"></i>
+          <span class="account-menu-item-label">Sign Out</span>
+        </button>
+      </div>`;
+  }
+
+  async function handleSignOut() {
+    await window.__signOut();
+    location.href = 'index.html';
+  }
+
+  async function openOrders() {
+    await window.openOrdersModal?.();
+  }
+
+  // Wait for Firebase auth to resolve
+  let _poll = 0;
+  const _timer = setInterval(() => {
+    if (window.__authReady) {
+      renderAccount(window.__currentUser);
+      clearInterval(_timer);
+    }
+    if (++_poll >= 20) {
+      renderAccount(null);
+      clearInterval(_timer);
+    }
+  }, 150);
+</script>
+</body>
+</html>
