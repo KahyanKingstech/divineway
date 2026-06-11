@@ -134,13 +134,6 @@
     </div>
   </div>
 
-  <!-- BOTTOM CTA -->
-  <div class="cta-sec" id="cta-area">
-    <div class="sec-label" style="justify-content:center;margin-bottom:16px">Free Consultation</div>
-    <h2>Not sure which talisman you need?</h2>
-    <p>Let Master Louis Cheung personally recommend the right talisman based on your BaZi birth chart and current life situation.</p>
-    <button class="hcta">Get a Free Consultation</button>
-  </div>
 
 
 <!-- FOOTER -->
@@ -497,9 +490,6 @@ function filterShop(cat, btn) {
 /* ── Nav / WA / CTA wiring ────────────────────────────────────────── */
 document.querySelector('.btn-wa').addEventListener('click', () => {
   window.open(`${WA_BASE}?text=${encodeURIComponent('Hello Master Louis, I would like to enquire about your talisman services.')}`, '_blank');
-});
-document.querySelector('.cta-sec .hcta').addEventListener('click', () => {
-  window.open(`${WA_BASE}?text=${encodeURIComponent('Hello Master Louis, I would like a free consultation.')}`, '_blank');
 });
 
 function showLoginGate() {

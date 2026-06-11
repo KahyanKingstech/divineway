@@ -1,5 +1,13 @@
 (function () {
+  const WA_CONSULT = 'https://wa.me/6589490437?text=Hello%20Master%20Louis%2C%20I%20would%20like%20a%20free%20consultation%20to%20find%20out%20which%20talisman%20suits%20me.';
   const html = `
+  <div class="cta-sec" id="cta-area">
+    <div class="sec-label" style="justify-content:center;margin-bottom:16px">Free Consultation</div>
+    <h2>Not sure which talisman you need?</h2>
+    <p>Let Master Louis Cheung personally recommend the right talisman based on your BaZi birth chart and current life situation.</p>
+    <button class="hcta" onclick="window.open('${WA_CONSULT}','_blank')">Get a Free Consultation</button>
+  </div>
+
   <footer class="site-footer">
     <div class="footer-animated-bg">
       <svg viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
