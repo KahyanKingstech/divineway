@@ -260,11 +260,13 @@ async function handleInvoice(request, env) {
     headers,
     body: JSON.stringify({
       customer,
+      update_stock: 1,
       remarks: `Paid via Stripe. Session: ${sessionId || 'N/A'}`,
       items: items.map(i => ({
         item_code: i.sku,
         qty:       i.qty,
         rate:      i.price,
+        warehouse: 'ECommerce - WOB',
       })),
     }),
   });

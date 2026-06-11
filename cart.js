@@ -126,7 +126,7 @@ async function checkoutStripe(btn) {
     return;
   }
 
-  const items = Object.values(cart);
+  const items = Object.entries(cart).map(([sku, i]) => ({ sku, ...i }));
   if (!items.length) return;
 
   btn.disabled    = true;
