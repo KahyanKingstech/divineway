@@ -175,55 +175,71 @@ const GROUP_EMOJI = {
 /* ── Fetch helpers ────────────────────────────────────────────────── */
 
 async function loadProducts(bust = false) {
-  const loading = document.getElementById('shop-loading');
-  const errorEl = document.getElementById('shop-error');
-  const grid    = document.getElementById('pgrid');
+  const loading    = document.getElementById('shop-loading');
+  const errorEl    = document.getElementById('shop-error');
+  const grid       = document.getElementById('pgrid');
+  const loadingMsg = loading.querySelector('p');
 
   loading.style.display = 'block';
   errorEl.style.display = 'none';
   grid.style.display    = 'none';
   grid.innerHTML        = '';
+  if (loadingMsg) loadingMsg.textContent = 'Fetching items from ERPNext…';
 
   console.group('🛍️ loadProducts()');
   console.log('Worker URL:', ERPNEXT.stripe_worker_url);
 
-  try {
-    const url = bust
-      ? `${ERPNEXT.stripe_worker_url}/products?bust=${Date.now()}`
-      : `${ERPNEXT.stripe_worker_url}/products`;
-    const res = await fetch(url, bust ? { cache: 'no-store' } : undefined);
-    if (!res.ok) throw new Error(`Worker responded ${res.status} ${res.statusText}`);
-    const { products = [] } = await res.json();
-    console.log(`✅ ${products.length} products from worker`);
+  const MAX_RETRIES = 3;
+  let lastErr;
 
-    if (!products.length) throw new Error('No products returned.');
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      if (attempt > 1) {
+        if (loadingMsg) loadingMsg.textContent = `Store is waking up… retrying (${attempt}/${MAX_RETRIES})`;
+        await new Promise(r => setTimeout(r, 3000 * (attempt - 1)));
+      }
 
-    const seenGroups = new Set();
-    products.forEach(p => { if (p.item_group) seenGroups.add(p.item_group); });
-    const orderedGroups = ERPNEXT.item_groups.filter(g => seenGroups.has(g));
-    buildTabs(orderedGroups);
+      const url = bust
+        ? `${ERPNEXT.stripe_worker_url}/products?bust=${Date.now()}`
+        : `${ERPNEXT.stripe_worker_url}/products`;
+      const res = await fetch(url, bust ? { cache: 'no-store' } : undefined);
+      if (!res.ok) throw new Error(`Worker responded ${res.status} ${res.statusText}`);
+      const { products = [] } = await res.json();
+      console.log(`✅ ${products.length} products from worker`);
 
-    products.forEach(item => grid.appendChild(renderCard(item, item.price)));
+      if (!products.length) throw new Error('No products returned.');
 
-    loading.style.display = 'none';
-    grid.style.display    = 'grid';
-    console.log(`✅ ${products.length} cards rendered`);
-    console.groupEnd();
+      const seenGroups = new Set();
+      products.forEach(p => { if (p.item_group) seenGroups.add(p.item_group); });
+      const orderedGroups = ERPNEXT.item_groups.filter(g => seenGroups.has(g));
+      buildTabs(orderedGroups);
 
-    const urlCat = new URLSearchParams(window.location.search).get('cat');
-    if (urlCat) {
-      const tab = [...document.querySelectorAll('.ftab')].find(t => t.dataset.cat === urlCat);
-      if (tab) { filterShop(urlCat, tab); document.getElementById('shop').scrollIntoView({ behavior: 'smooth' }); }
+      products.forEach(item => grid.appendChild(renderCard(item, item.price)));
+
+      loading.style.display = 'none';
+      grid.style.display    = 'grid';
+      console.log(`✅ ${products.length} cards rendered`);
+      console.groupEnd();
+
+      const urlCat = new URLSearchParams(window.location.search).get('cat');
+      if (urlCat) {
+        const tab = [...document.querySelectorAll('.ftab')].find(t => t.dataset.cat === urlCat);
+        if (tab) { filterShop(urlCat, tab); document.getElementById('shop').scrollIntoView({ behavior: 'smooth' }); }
+      }
+
+      return;
+    } catch (err) {
+      lastErr = err;
+      console.warn(`⚠️ Attempt ${attempt}/${MAX_RETRIES} failed:`, err.message);
     }
-
-  } catch (err) {
-    console.error('❌ loadProducts failed:', err);
-    console.groupEnd();
-    loading.style.display = 'none';
-    errorEl.style.display = 'block';
-    document.getElementById('shop-error-title').textContent = 'Could not load products';
-    document.getElementById('shop-error-msg').textContent   = err.message;
   }
+
+  console.error('❌ loadProducts failed after all retries:', lastErr);
+  console.groupEnd();
+  loading.style.display = 'none';
+  errorEl.style.display = 'block';
+  document.getElementById('shop-error-title').textContent = 'Could not load products';
+  document.getElementById('shop-error-msg').textContent   = lastErr.message;
 }
 
 
