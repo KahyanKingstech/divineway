@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="divineway_logo/divineway_logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie Policy — DivinewayFengshui</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@300;400;500;700&family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="nav_style.css">
+  <link rel="stylesheet" href="auth_styles.css">
+  <script type="module" src="firebase-auth.js"></script>
+  <script src="config.js"></script>
+  <style>
+    .policy-sec { max-width: 780px; margin: 0 auto; padding: 56px 24px 80px; }
+    .policy-sec h2 { font-family: var(--serif); font-size: 13px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin: 40px 0 14px; }
+    .policy-sec h2:first-child { margin-top: 0; }
+    .policy-sec p, .policy-sec li { font-family: var(--sans); font-size: 13.5px; font-weight: 300; color: rgba(247,240,227,0.62); line-height: 1.85; margin: 0 0 14px; }
+    .policy-sec ul { padding-left: 18px; margin: 0 0 14px; }
+    .policy-sec li { margin-bottom: 6px; }
+    .policy-sec a { color: var(--gold-dim); text-decoration: underline; text-underline-offset: 3px; }
+    .policy-sec a:hover { color: var(--gold); }
+    .policy-meta { font-family: var(--sans); font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid var(--gold-border); }
+    .cookie-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-family: var(--sans); font-size: 12.5px; }
+    .cookie-table th { text-align: left; padding: 9px 12px; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--gold-border); }
+    .cookie-table td { padding: 10px 12px; color: rgba(247,240,227,0.55); border-bottom: 1px solid rgba(201,168,76,0.06); font-weight: 300; vertical-align: top; line-height: 1.6; }
+    .cookie-table td:first-child { color: rgba(247,240,227,0.75); font-family: 'Courier New', monospace; font-size: 11.5px; }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <script src="nav.js"></script>
+
+  <div class="page-banner">
+    <div class="page-banner-bg">
+      <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="pbg1" cx="15%" cy="50%" r="50%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0.12"/><stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/></radialGradient>
+          <radialGradient id="pbg2" cx="85%" cy="50%" r="45%"><stop offset="0%" stop-color="#7a1a00" stop-opacity="0.18"/><stop offset="100%" stop-color="#7a1a00" stop-opacity="0"/></radialGradient>
+          <filter id="pbblur"><feGaussianBlur stdDeviation="22"/></filter>
+        </defs>
+        <rect width="900" height="220" fill="transparent"/>
+        <ellipse cx="100" cy="110" rx="220" ry="140" fill="url(#pbg1)" filter="url(#pbblur)"/>
+        <ellipse cx="800" cy="110" rx="220" ry="140" fill="url(#pbg2)" filter="url(#pbblur)"/>
+        <line x1="0" y1="219" x2="900" y2="219" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.25"/>
+      </svg>
+    </div>
+    <div class="page-banner-inner">
+      <div class="sec-label" style="justify-content:center;margin-bottom:12px">Legal</div>
+      <h1 class="page-banner-title">Cookie Policy</h1>
+      <p class="page-banner-sub">What cookies we use and why.</p>
+    </div>
+  </div>
+
+  <section class="policy-sec">
+    <p class="policy-meta">Last updated: June 2026 &nbsp;·&nbsp; DivinewayFengshui, Singapore</p>
+
+    <h2>1. What Are Cookies</h2>
+    <p>Cookies are small text files stored on your device when you visit a website. We also use similar technologies such as <strong>localStorage</strong> (browser storage) to save preferences like your shopping cart and login state between visits.</p>
+
+    <h2>2. How We Use Cookies</h2>
+    <p>We use only cookies that are necessary for the site to function. We do not use advertising, tracking, or profiling cookies.</p>
+
+    <h2>3. Strictly Necessary Cookies & Storage</h2>
+    <p>These cannot be disabled as they are essential for the site to operate.</p>
+
+    <table class="cookie-table">
+      <thead>
+        <tr>
+          <th>Name / Key</th>
+          <th>Provider</th>
+          <th>Purpose</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>firebase:authUser:*</td>
+          <td>Google Firebase</td>
+          <td>Stores your signed-in session so you remain logged in across page loads.</td>
+          <td>Until sign-out</td>
+        </tr>
+        <tr>
+          <td>dw_cart</td>
+          <td>DivinewayFengshui</td>
+          <td>Saves your shopping cart items between visits.</td>
+          <td>30 days</td>
+        </tr>
+        <tr>
+          <td>dw_erp_customer</td>
+          <td>DivinewayFengshui</td>
+          <td>Stores your internal customer ID to link orders to your account.</td>
+          <td>Until sign-out</td>
+        </tr>
+        <tr>
+          <td>dw_auth_initials</td>
+          <td>DivinewayFengshui</td>
+          <td>Caches your name initials for the navigation display.</td>
+          <td>Until sign-out</td>
+        </tr>
+        <tr>
+          <td>dw_cookie_consent</td>
+          <td>DivinewayFengshui</td>
+          <td>Records that you have acknowledged this cookie notice.</td>
+          <td>1 year</td>
+        </tr>
+        <tr>
+          <td>__stripe_mid / __stripe_sid</td>
+          <td>Stripe</td>
+          <td>Fraud prevention during payment processing. Set only on the Stripe Checkout page.</td>
+          <td>Session / 1 year</td>
+        </tr>
+        <tr>
+          <td>_cfuvid / cf_clearance</td>
+          <td>Cloudflare</td>
+          <td>Security and bot protection by our CDN provider.</td>
+          <td>Session</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>4. No Analytics or Advertising Cookies</h2>
+    <p>We do not currently use Google Analytics, Meta Pixel, or any third-party advertising or behavioural tracking cookies. If this changes, this policy will be updated and your consent sought before any such cookies are set.</p>
+
+    <h2>5. Managing Cookies</h2>
+    <p>You can control cookies through your browser settings. Note that disabling strictly necessary cookies will prevent core features (login, cart) from working. Instructions for common browsers:</p>
+    <ul>
+      <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Google Chrome</a></li>
+      <li><a href="https://support.mozilla.org/en-US/kb/enable-and-disable-cookies-website-preferences" target="_blank" rel="noopener">Mozilla Firefox</a></li>
+      <li><a href="https://support.apple.com/en-sg/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Apple Safari</a></li>
+      <li><a href="https://support.microsoft.com/en-us/windows/manage-cookies-in-microsoft-edge" target="_blank" rel="noopener">Microsoft Edge</a></li>
+    </ul>
+
+    <h2>6. Changes to This Policy</h2>
+    <p>We may update this policy when new cookies are added or removed. The "Last updated" date at the top reflects the most recent change.</p>
+
+    <h2>7. Contact</h2>
+    <p>If you have questions about our use of cookies, please contact us:<br>
+    <strong>DivinewayFengshui</strong> · Singapore<br>
+    WhatsApp: <a href="https://wa.me/6589490437" target="_blank">+65 8949 0437</a></p>
+
+    <p style="margin-top:32px">See also: <a href="privacy-policy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="return-policy.html">Return &amp; Refund Policy</a></p>
+  </section>
+
+  <script src="footer.js"></script>
+</div>
+
+</body>
+</html>

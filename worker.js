@@ -1,14 +1,4 @@
-// Cloudflare Worker — DivinewayFengshui
-//
-// Routes:
-//   GET  /products  → fetch items + prices from ERPNext, return to frontend
-//   POST /checkout  → create Stripe Checkout Session
-//
-// Required secrets (Settings → Variables → Add secret):
-//   ERPNEXT_URL        e.g. https://kingstech-worldorb.s.frappe.cloud
-//   ERPNEXT_API_KEY    token key
-//   ERPNEXT_API_SECRET token secret
-//   STRIPE_SECRET_KEY  sk_test_...
+// Cloudflare Worker — divineway 
 
 const CORS = {
   'Access-Control-Allow-Origin':  '*',

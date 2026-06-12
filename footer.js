@@ -100,6 +100,14 @@
         </div>
       </div>
 
+      <div class="footer-legal">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <span class="footer-legal-sep">·</span>
+        <a href="return-policy.html">Return &amp; Refund Policy</a>
+        <span class="footer-legal-sep">·</span>
+        <a href="cookie-policy.html">Cookie Policy</a>
+      </div>
+
       <div class="footer-divider"></div>
 
       <div class="footer-bottom">
@@ -113,8 +121,14 @@
           <span class="footer-chin">天地人和 · 道法自然</span>
         </div>
       </div>
+      
     </div>
   </footer>`;
 
   document.currentScript.insertAdjacentHTML('afterend', html);
+
+  // Load cookie consent banner on every page that uses this footer
+  const cc = document.createElement('script');
+  cc.src = 'cookie-consent.js';
+  document.body.appendChild(cc);
 })();
