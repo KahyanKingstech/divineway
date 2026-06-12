@@ -1,16 +1,17 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <link rel="icon" type="image/png" href="divineway_logo/divineway_logo.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Order Confirmed — DivinewayFengshui</title>
+  <title>Order Confirmed â€” DivinewayFengshui</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@300;400;500;700&family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="nav_style.css">
+  <link rel="stylesheet" href="footer_style.css">
   <link rel="stylesheet" href="auth_styles.css">
   <script type="module" src="firebase-auth.js"></script>
   <script src="config.js"></script>
@@ -236,7 +237,7 @@
 
   <div id="success-content">
     <div class="success-wrap">
-      <span class="success-glyph">成</span>
+      <span class="success-glyph">æˆ</span>
       <h1 class="success-title">Payment Confirmed</h1>
       <p class="success-sub" id="success-sub">Your order has been received.</p>
 
@@ -245,7 +246,7 @@
           <div>
             <div class="order-ref-label">Order Reference</div>
             <div class="order-ref-value" id="invoice-ref">
-              <span class="order-ref-loading">Confirming with ERPNext…</span>
+              <span class="order-ref-loading">Confirming with ERPNextâ€¦</span>
             </div>
           </div>
           <div class="order-date" id="order-date"></div>
@@ -296,9 +297,9 @@
   // Read pending order from localStorage
   const raw = localStorage.getItem('pending_order');
   if (!raw) {
-    // No pending order — user may have bookmarked the page
+    // No pending order â€” user may have bookmarked the page
     document.getElementById('order-card').innerHTML =
-      '<p class="no-order-msg" style="padding:32px 22px">No order details found. If you completed a payment, your order is confirmed — please contact Master Louis on WhatsApp with your Stripe receipt.</p>';
+      '<p class="no-order-msg" style="padding:32px 22px">No order details found. If you completed a payment, your order is confirmed â€” please contact Master Louis on WhatsApp with your Stripe receipt.</p>';
     document.getElementById('success-sub').textContent = 'Your payment was received.';
     return;
   }
@@ -334,7 +335,7 @@
     await waitUntil(() => window.__authReady, 12000);
 
     if (!window.__currentUser) {
-      setRef('—');
+      setRef('â€”');
       return;
     }
 
@@ -350,7 +351,7 @@
     // Poll until customer sync completes
     await waitUntil(() => localStorage.getItem('dw_erp_customer'), 10000);
     const customer = localStorage.getItem('dw_erp_customer');
-    if (!customer) { setRef('—'); return; }
+    if (!customer) { setRef('â€”'); return; }
 
     try {
       const res  = await fetch(`${workerUrl}/invoice`, {
@@ -364,11 +365,11 @@
         // Bust product cache so stock reflects the purchase
         if (typeof loadProducts === 'function') loadProducts(true);
       } else {
-        setRef('—');
+        setRef('â€”');
         console.warn('[DW] invoice error:', data.error);
       }
     } catch (e) {
-      setRef('—');
+      setRef('â€”');
       console.error('[DW] invoice fetch failed:', e);
     }
   }

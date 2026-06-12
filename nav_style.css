@@ -26,6 +26,7 @@
   align-items: center;
   gap: 14px;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .nav-wordmark { display: flex; flex-direction: column; line-height: 1.25; }
@@ -139,6 +140,7 @@
   letter-spacing: 0.12em; text-transform: uppercase;
   cursor: pointer; display: flex; align-items: center; gap: 6px;
   transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 /* .btn-wa:hover { border-color: var(--gold); } */
 
@@ -153,6 +155,7 @@
   letter-spacing: 0.10em; text-transform: uppercase;
   cursor: pointer; display: flex; align-items: center; gap: 6px;
   position: relative; transition: border-color 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 .btn-cart:hover { border-color: var(--gold); }
 

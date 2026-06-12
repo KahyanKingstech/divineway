@@ -20,6 +20,7 @@
   text-transform: uppercase;
   transition: border-color .2s, background .2s;
   position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .auth-btn:hover { border-color: var(--gold, #c9a84c); background: rgba(201,168,76,0.08); }
