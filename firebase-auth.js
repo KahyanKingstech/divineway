@@ -130,7 +130,13 @@ async function processPendingInvoice() {
     const res  = await fetch(`${workerUrl}/invoice`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ customer, items, sessionId }),
+      body:    JSON.stringify({
+        customer,
+        items,
+        sessionId,
+        email:       currentUser?.email       || '',
+        displayName: currentUser?.displayName || '',
+      }),
     });
     const data = await res.json();
     console.log('[DW] invoice response:', data);

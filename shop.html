@@ -32,6 +32,18 @@
       <button class="ftab active" data-cat="all">All Products</button>
     </div>
 
+    <!-- Search bar (revealed after products load) -->
+    <div class="shop-search" id="shop-search" style="display:none">
+      <div class="search-wrap">
+        <i class="ti ti-search search-icon"></i>
+        <input type="text" id="product-search" class="search-input"
+               placeholder="Search by name, intention, category…"
+               autocomplete="off" spellcheck="false">
+        <button class="search-clear" id="search-clear" style="display:none" aria-label="Clear">×</button>
+      </div>
+      <span class="search-count" id="search-count"></span>
+    </div>
+
     <!-- Loading state -->
     <div id="shop-loading" style="text-align:center;padding:60px 0">
       <div class="shop-spinner"></div>
@@ -67,7 +79,6 @@
   <div id="product-modal" onclick="if(event.target===this)closeModal()" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,0.75);justify-content:center;align-items:center;padding:20px">
     <div class="modal-panel">
       <button class="modal-close" onclick="closeModal()">×</button>
-      <div style="display:flex;height:100%;flex-direction:row">
         <div class="modal-thumb" id="modal-thumb">
           <img id="modal-image" src="" alt="product" style="width:100%;height:100%;object-fit:contain">
           <span id="modal-emoji" style="position:absolute;font-size:52px;display:none"></span>
@@ -90,7 +101,6 @@
             <!-- <button class="modal-wa" id="modal-wa">💬 WhatsApp</button> -->
           </div>
         </div>
-      </div>
     </div>
   </div>
 
@@ -177,6 +187,32 @@ async function loadProducts(bust = false) {
       console.log(`✅ ${products.length} cards rendered`);
       console.groupEnd();
 
+      // Reset & reveal search bar
+      _searchQuery = '';
+      _activeCat   = 'all';
+      const si = document.getElementById('product-search');
+      const sc = document.getElementById('search-clear');
+      const ss = document.getElementById('shop-search');
+      if (si) si.value = '';
+      if (sc) sc.style.display = 'none';
+      if (ss) {
+        ss.style.display = 'block';
+        if (!si._wired) {
+          si._wired = true;
+          si.addEventListener('input', () => {
+            _searchQuery = si.value;
+            sc.style.display = si.value ? 'inline-block' : 'none';
+            applyFilters();
+          });
+          sc.addEventListener('click', () => {
+            si.value = ''; _searchQuery = '';
+            sc.style.display = 'none';
+            si.focus();
+            applyFilters();
+          });
+        }
+      }
+
       const urlCat = new URLSearchParams(window.location.search).get('cat');
       if (urlCat) {
         const tab = [...document.querySelectorAll('.ftab')].find(t => t.dataset.cat === urlCat);
@@ -261,8 +297,9 @@ function renderCard(item, price) {
 
   const card = document.createElement('div');
   card.className = 'pcard';
-  card.dataset.cat = group === 'Talisman' && talismanCat ? talismanCat : group;
+  card.dataset.cat   = group === 'Talisman' && talismanCat ? talismanCat : group;
   card.dataset.group = group;
+  card.dataset.sku   = sku;
   card.innerHTML = `
     <div class="pthumb">
       <span class="pbadge">${badgeLabel}</span>
@@ -382,16 +419,42 @@ function openModal(sku) {
 }
 function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
 
-/* ── Filter ───────────────────────────────────────────────────────── */
+/* ── Filter + Search ─────────────────────────────────────────────── */
+let _searchQuery = '';
+let _activeCat   = 'all';
+
+function applyFilters() {
+  const q = _searchQuery.toLowerCase().trim();
+  let visible = 0;
+
+  document.querySelectorAll('#pgrid .pcard').forEach(card => {
+    const p = productData[card.dataset.sku] || {};
+
+    const catMatch = _activeCat === 'all'
+      || card.dataset.cat.includes(_activeCat)
+      || (_activeCat === 'Talisman' && card.dataset.group === 'Talisman');
+
+    const searchMatch = !q || [p.name, p.sku, p.chin, p.desc, p.talismanCat, p.group]
+      .some(s => s && s.toLowerCase().includes(q));
+
+    const show = catMatch && searchMatch;
+    card.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+
+  const countEl = document.getElementById('search-count');
+  if (countEl) {
+    countEl.textContent = q
+      ? (visible ? `${visible} product${visible !== 1 ? 's' : ''} found` : 'No products found for this search')
+      : '';
+  }
+}
+
 function filterShop(cat, btn) {
   document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('#pgrid .pcard').forEach(card => {
-    const match = cat === 'all'
-      || card.dataset.cat.includes(cat)
-      || (cat === 'Talisman' && card.dataset.group === 'Talisman');
-    card.style.display = match ? '' : 'none';
-  });
+  _activeCat = cat;
+  applyFilters();
 }
 
 /* ── Nav / WA / CTA wiring ────────────────────────────────────────── */

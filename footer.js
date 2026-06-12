@@ -37,7 +37,7 @@
         <div class="footer-brand">
           <div class="footer-logo">
             <div class="footer-logo-icon">
-              <img src="divineway_logo/divineway_logo.png" onerror="this.style.display='none';this.parentNode.innerHTML='<span style=\\'color:var(--gold);font-size:22px;font-family:var(--chinese)\\'>道</span>'">
+              <img src="images/divineway_logo.png" onerror="this.style.display='none';this.parentNode.innerHTML='<span style=\\'color:var(--gold);font-size:22px;font-family:var(--chinese)\\'>道</span>'">
             </div>
             <div>
               <div class="footer-wordmark">DivinewayFengshui</div>

@@ -753,6 +753,73 @@ body {
   font-weight: 600;
 }
 
+/* ── Shop search bar ── */
+.shop-search {
+  margin-bottom: 22px;
+}
+
+.search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--gold-dim);
+  font-size: 15px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-input {
+  width: 100%;
+  background: rgba(201,168,76,0.05);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius);
+  padding: 10px 36px 10px 36px;
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 300;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.search-input::placeholder { color: var(--text-hint); }
+
+.search-input:focus {
+  border-color: rgba(201,168,76,0.5);
+  background: rgba(201,168,76,0.08);
+}
+
+.search-clear {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: color 0.15s;
+}
+.search-clear:hover { color: var(--cream); }
+
+.search-count {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-weight: 300;
+  margin-top: 8px;
+  min-height: 15px;
+  letter-spacing: 0.03em;
+}
+
 .pgrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1542,39 +1609,37 @@ body {
 /* ── Responsive Modal ────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .modal-panel {
-    max-width: 100%;
-    height: auto;
     flex-direction: column;
+    height: auto;
+    max-height: 90vh;
+    overflow-y: auto;
+    width: calc(100vw - 32px);
   }
-  
+
   .modal-thumb {
     width: 100%;
-    height: 300px;
+    height: 200px;
+    flex-shrink: 0;
     border-right: none;
     border-bottom: 1px solid var(--gold-border);
+    min-width: unset;
   }
-  
+
   .modal-body {
-    padding: 20px 22px 22px;
+    padding: 20px 18px 22px;
+    overflow-y: visible;
   }
+
+  .modal-close { top: 8px; right: 10px; }
 }
 
 @media (max-width: 480px) {
-  .modal-panel {
-    max-width: 100%;
-  }
-
-  .modal-thumb {
-    height: 250px;
-  }
-
-  .modal-body {
-    padding: 16px 18px 18px;
-  }
-
-  .modal-name { font-size: 16px; }
-  .modal-desc { font-size: 12px; }
-  .modal-price { font-size: 18px; }
+  .modal-panel { width: calc(100vw - 24px); }
+  .modal-thumb  { height: 160px; }
+  .modal-body   { padding: 16px 14px 18px; }
+  .modal-name   { font-size: 15px; }
+  .modal-desc   { font-size: 12px; }
+  .modal-price  { font-size: 18px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
