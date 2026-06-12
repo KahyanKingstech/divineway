@@ -244,8 +244,8 @@ async function handleCustomer(request, env) {
 
 // ── /invoice ──────────────────────────────────────────────────────
 async function handleInvoice(request, env) {
-  let customer, items, sessionId, email, displayName;
-  try { ({ customer, items, sessionId, email, displayName } = await request.json()); } catch { return json({ error: 'Invalid JSON' }, 400); }
+  let customer, items, sessionId;
+  try { ({ customer, items, sessionId } = await request.json()); } catch { return json({ error: 'Invalid JSON' }, 400); }
   if (!customer || !Array.isArray(items) || !items.length) return json({ error: 'customer and items required' }, 400);
 
   const base    = env.ERPNEXT_BASE_URL;
@@ -382,18 +382,6 @@ async function handleInvoice(request, env) {
   const cacheKey = new Request('https://divineway.kah-yan.workers.dev/products?v=2');
   await cache.delete(cacheKey);
 
-  // Send order confirmation email — fire-and-forget; failure must not block the response
-  if (email) {
-    sendOrderEmail(env, {
-      email,
-      displayName: displayName || 'Valued Customer',
-      invoiceName: invoice.name,
-      items,
-      grandTotal,
-      today,
-    }).catch(e => console.error('[DW] Email send failed:', e));
-  }
-
   return json({
     invoice:      invoice.name,
     submitted:    true,
@@ -472,117 +460,6 @@ async function handleOrders(request, env) {
   }));
 
   return json({ orders });
-}
-
-// ── Email confirmation (Resend API) ──────────────────────────────
-async function sendOrderEmail(env, { email, displayName, invoiceName, items, grandTotal, today }) {
-  if (!env.RESEND_API_KEY) return;
-
-  const rows = items.map(i => `
-      <tr>
-        <td style="padding:10px 14px;border-bottom:1px solid #1e1911;font-size:13px;color:#e8d5a0">${escapeHtml(i.name || i.sku)}</td>
-        <td style="padding:10px 14px;border-bottom:1px solid #1e1911;font-size:13px;color:#b8a070;text-align:center">${i.qty}</td>
-        <td style="padding:10px 14px;border-bottom:1px solid #1e1911;font-size:13px;color:#c9a84c;text-align:right">SGD&nbsp;${(i.price * i.qty).toFixed(2)}</td>
-      </tr>`).join('');
-
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Order Confirmation</title></head>
-<body style="margin:0;padding:0;background:#07060a;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#07060a">
-<tr><td align="center" style="padding:32px 16px">
-<table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%">
-
-  <!-- Header -->
-  <tr><td style="background:#0e0c07;border:1px solid #2a2010;border-radius:8px 8px 0 0;padding:28px 32px 22px;text-align:center">
-    <div style="font-size:20px;letter-spacing:0.14em;color:#c9a84c;font-weight:300">DIVINEWAY FENGSHUI</div>
-    <div style="width:40px;height:1px;background:#2a2010;margin:10px auto 10px"></div>
-    <div style="font-size:10px;letter-spacing:0.3em;color:#6a5820;text-transform:uppercase">Order Confirmation</div>
-  </td></tr>
-
-  <!-- Body -->
-  <tr><td style="background:#0a0806;border:1px solid #2a2010;border-top:none;padding:28px 32px">
-
-    <p style="margin:0 0 20px;font-size:14px;color:#b8a070;line-height:1.6">Dear ${escapeHtml(displayName)},</p>
-    <p style="margin:0 0 24px;font-size:13px;color:#7a6a38;line-height:1.7">Thank you for your order. Your payment has been received and Master Louis will be in touch personally to customise your talisman.</p>
-
-    <!-- Order reference -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="background:#080604;border:1px solid #2a2010;border-radius:4px;margin-bottom:22px">
-      <tr>
-        <td style="padding:14px 18px">
-          <div style="font-size:10px;color:#5a4e28;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:5px">Order Reference</div>
-          <div style="font-size:17px;color:#c9a84c;font-weight:300;letter-spacing:0.06em">${escapeHtml(invoiceName)}</div>
-        </td>
-        <td style="padding:14px 18px;text-align:right;vertical-align:top">
-          <div style="font-size:10px;color:#5a4e28;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:5px">Date</div>
-          <div style="font-size:13px;color:#8a7840">${today}</div>
-        </td>
-      </tr>
-    </table>
-
-    <!-- Items table -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #1e1911;border-radius:4px;margin-bottom:22px">
-      <tr style="background:#080604">
-        <th style="padding:10px 14px;font-size:10px;font-weight:400;color:#5a4e28;text-transform:uppercase;letter-spacing:0.12em;text-align:left;border-bottom:1px solid #1e1911">Item</th>
-        <th style="padding:10px 14px;font-size:10px;font-weight:400;color:#5a4e28;text-transform:uppercase;letter-spacing:0.12em;text-align:center;border-bottom:1px solid #1e1911">Qty</th>
-        <th style="padding:10px 14px;font-size:10px;font-weight:400;color:#5a4e28;text-transform:uppercase;letter-spacing:0.12em;text-align:right;border-bottom:1px solid #1e1911">Amount</th>
-      </tr>
-      ${rows}
-      <tr style="background:#080604">
-        <td colspan="2" style="padding:12px 14px;font-size:11px;color:#5a4e28;letter-spacing:0.1em;text-transform:uppercase;border-top:1px solid #2a2010">Total</td>
-        <td style="padding:12px 14px;font-size:17px;color:#c9a84c;font-weight:400;text-align:right;border-top:1px solid #2a2010">SGD&nbsp;${grandTotal.toFixed(2)}</td>
-      </tr>
-    </table>
-
-    <p style="margin:0 0 26px;font-size:12px;color:#5a4e28;line-height:1.7">If you have any questions about your order, please contact us on WhatsApp and we will be happy to assist you.</p>
-
-    <!-- WhatsApp CTA -->
-    <table cellpadding="0" cellspacing="0" style="margin:0 auto 4px">
-      <tr><td style="background:#0e1e0e;border:1px solid #1e3a1e;border-radius:4px;padding:11px 22px;text-align:center">
-        <a href="https://wa.me/6589490437" style="font-size:13px;color:#4a9a4a;text-decoration:none;letter-spacing:0.06em">Contact Master Louis on WhatsApp</a>
-      </td></tr>
-    </table>
-
-  </td></tr>
-
-  <!-- Footer -->
-  <tr><td style="background:#080604;border:1px solid #2a2010;border-top:none;border-radius:0 0 8px 8px;padding:16px 32px;text-align:center">
-    <p style="margin:0;font-size:10px;color:#3a3020;letter-spacing:0.08em">© Divineway Fengshui &nbsp;·&nbsp; This is an automated message, please do not reply directly.</p>
-  </td></tr>
-
-</table>
-</td></tr>
-</table>
-</body>
-</html>`;
-
-  const fromAddr = env.EMAIL_FROM || 'Divineway Fengshui <orders@divineway.sg>';
-  const res = await fetch('https://api.resend.com/emails', {
-    method:  'POST',
-    headers: {
-      'Authorization': `Bearer ${env.RESEND_API_KEY}`,
-      'Content-Type':  'application/json',
-    },
-    body: JSON.stringify({
-      from:    fromAddr,
-      to:      [email],
-      subject: `Your Order is Confirmed — ${invoiceName}`,
-      html,
-    }),
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Resend ${res.status}: ${err}`);
-  }
-}
-
-function escapeHtml(str) {
-  return String(str ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
 }
 
 // ── helpers ───────────────────────────────────────────────────────

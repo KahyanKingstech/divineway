@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="divineway_logo/divineway_logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed — DivinewayFengshui</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@300;400;500;700&family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="nav_style.css">
+  <link rel="stylesheet" href="auth_styles.css">
+  <script type="module" src="firebase-auth.js"></script>
+  <script src="config.js"></script>
+  <script src="cart.js" defer></script>
+  <style>
+    .success-wrap {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+      text-align: center;
+    }
+
+    .success-glyph {
+      font-family: var(--chinese);
+      font-size: 52px;
+      color: var(--gold);
+      opacity: 0.85;
+      line-height: 1;
+      margin-bottom: 18px;
+      display: block;
+    }
+
+    .success-title {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    .success-sub {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+    }
+
+    .order-card {
+      background: var(--ink-deep);
+      border: 1px solid var(--gold-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      text-align: left;
+      margin-bottom: 28px;
+    }
+
+    .order-card-header {
+      background: rgba(201,168,76,0.05);
+      border-bottom: 1px solid var(--gold-border);
+      padding: 16px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .order-ref-label {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .order-ref-value {
+      font-family: var(--serif);
+      font-size: 18px;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+    }
+
+    @keyframes refPulse { 0%,100%{opacity:.4} 50%{opacity:.9} }
+    .order-ref-loading {
+      font-family: var(--sans);
+      font-size: 12px;
+      color: var(--gold-dim);
+      animation: refPulse 1.4s ease-in-out infinite;
+    }
+
+    .order-date {
+      font-family: var(--sans);
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    .order-items-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .order-items-table th {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 12px 22px 10px;
+      border-bottom: 1px solid rgba(201,168,76,0.08);
+      text-align: left;
+    }
+
+    .order-items-table th:last-child { text-align: right; }
+    .order-items-table th:nth-child(2) { text-align: center; }
+
+    .order-items-table td {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--cream-dim);
+      padding: 11px 22px;
+      border-bottom: 1px solid rgba(201,168,76,0.05);
+    }
+
+    .order-items-table td:last-child {
+      text-align: right;
+      color: rgba(247,240,227,0.75);
+    }
+
+    .order-items-table td:nth-child(2) { text-align: center; }
+
+    .order-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 22px;
+      border-top: 1px solid var(--gold-border);
+      background: rgba(201,168,76,0.04);
+    }
+
+    .order-total-label {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .order-total-value {
+      font-family: var(--serif);
+      font-size: 20px;
+      color: var(--gold);
+    }
+
+    .success-note {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .success-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-wa-success {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #1a2e1a;
+      border: 1px solid #2a4a2a;
+      border-radius: var(--radius);
+      padding: 12px 24px;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 400;
+      color: #5aaa5a;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .btn-wa-success:hover { background: #1e361e; border-color: #3a5e3a; }
+
+    .btn-shop-success {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1px solid var(--gold-border);
+      border-radius: var(--radius);
+      padding: 12px 24px;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--gold-dim);
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .btn-shop-success:hover { background: var(--gold-faint); border-color: var(--gold); color: var(--gold); }
+
+    /* No-order fallback */
+    .no-order-msg {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-muted);
+      padding: 48px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <script src="nav.js"></script>
+
+  <div id="success-content">
+    <div class="success-wrap">
+      <span class="success-glyph">成</span>
+      <h1 class="success-title">Payment Confirmed</h1>
+      <p class="success-sub" id="success-sub">Your order has been received.</p>
+
+      <div class="order-card" id="order-card">
+        <div class="order-card-header">
+          <div>
+            <div class="order-ref-label">Order Reference</div>
+            <div class="order-ref-value" id="invoice-ref">
+              <span class="order-ref-loading">Confirming with ERPNext…</span>
+            </div>
+          </div>
+          <div class="order-date" id="order-date"></div>
+        </div>
+
+        <table class="order-items-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qty</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="order-items-body">
+          </tbody>
+        </table>
+
+        <div class="order-total-row">
+          <span class="order-total-label">Total Paid</span>
+          <span class="order-total-value" id="order-total"></span>
+        </div>
+      </div>
+
+      <p class="success-note">Master Louis will be in touch personally to customise your talisman. If you have any questions, reach out via WhatsApp.</p>
+
+      <div class="success-actions">
+        <a href="https://wa.me/6589490437?text=Hello%20Master%20Louis%2C%20I%20have%20just%20placed%20an%20order%20and%20would%20like%20to%20follow%20up." class="btn-wa-success" target="_blank">
+          <i class="ti ti-brand-whatsapp"></i> WhatsApp Master Louis
+        </a>
+        <a href="shop.html" class="btn-shop-success">
+          <i class="ti ti-shopping-bag"></i> Continue Shopping
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="footer.js"></script>
+</div>
+
+<script>
+(function () {
+  const params    = new URLSearchParams(window.location.search);
+  const sessionId = params.get('session_id') || '';
+  const today     = new Date().toLocaleDateString('en-SG', { year:'numeric', month:'long', day:'numeric' });
+
+  document.getElementById('order-date').textContent = today;
+
+  // Read pending order from localStorage
+  const raw = localStorage.getItem('pending_order');
+  if (!raw) {
+    // No pending order — user may have bookmarked the page
+    document.getElementById('order-card').innerHTML =
+      '<p class="no-order-msg" style="padding:32px 22px">No order details found. If you completed a payment, your order is confirmed — please contact Master Louis on WhatsApp with your Stripe receipt.</p>';
+    document.getElementById('success-sub').textContent = 'Your payment was received.';
+    return;
+  }
+
+  let items, total;
+  try { ({ items, total } = JSON.parse(raw)); } catch { return; }
+
+  // Clear cart + pending order immediately
+  localStorage.removeItem('pending_order');
+  if (typeof cart !== 'undefined') {
+    Object.keys(cart).forEach(k => delete cart[k]);
+    if (typeof saveCart === 'function') saveCart();
+    if (typeof updateCartBadge === 'function') updateCartBadge();
+  }
+
+  // Render items
+  const tbody = document.getElementById('order-items-body');
+  tbody.innerHTML = items.map(i => `
+    <tr>
+      <td>${i.name || i.sku}</td>
+      <td>${i.qty}</td>
+      <td>SGD ${(i.price * i.qty).toFixed(2)}</td>
+    </tr>`).join('');
+
+  document.getElementById('order-total').textContent = `SGD ${Number(total).toFixed(2)}`;
+
+  // Wait for Firebase auth + ERPNext customer sync, then create invoice
+  async function processInvoice() {
+    const workerUrl = (window.ERPNEXT_CONFIG || {}).stripe_worker_url
+      || 'https://divineway.kah-yan.workers.dev';
+
+    // Poll until auth is resolved
+    await waitUntil(() => window.__authReady, 12000);
+
+    if (!window.__currentUser) {
+      setRef('—');
+      return;
+    }
+
+    // Update greeting
+    const name = window.__currentUser.displayName?.split(' ')[0] || '';
+    if (name) document.getElementById('success-sub').textContent = `Thank you, ${name}! Your order has been received.`;
+
+    // Save to Firestore
+    if (typeof saveOrder === 'function') {
+      try { await saveOrder({ items, total, sessionId }); } catch (e) { console.warn('[DW] Firestore save failed:', e); }
+    }
+
+    // Poll until customer sync completes
+    await waitUntil(() => localStorage.getItem('dw_erp_customer'), 10000);
+    const customer = localStorage.getItem('dw_erp_customer');
+    if (!customer) { setRef('—'); return; }
+
+    try {
+      const res  = await fetch(`${workerUrl}/invoice`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ customer, items, sessionId }),
+      });
+      const data = await res.json();
+      if (data.invoice) {
+        setRef(data.invoice);
+        // Bust product cache so stock reflects the purchase
+        if (typeof loadProducts === 'function') loadProducts(true);
+      } else {
+        setRef('—');
+        console.warn('[DW] invoice error:', data.error);
+      }
+    } catch (e) {
+      setRef('—');
+      console.error('[DW] invoice fetch failed:', e);
+    }
+  }
+
+  function setRef(ref) {
+    document.getElementById('invoice-ref').textContent = ref;
+  }
+
+  function waitUntil(condition, timeout) {
+    return new Promise(resolve => {
+      const deadline = Date.now() + timeout;
+      (function poll() {
+        if (condition()) { resolve(); return; }
+        if (Date.now() > deadline) { resolve(); return; }
+        setTimeout(poll, 250);
+      })();
+    });
+  }
+
+  processInvoice();
+})();
+</script>
+
+</body>
+</html>

@@ -110,6 +110,8 @@ async function syncErpCustomer(user) {
 
 // ── Process pending invoice after auth + customer sync ───────────
 async function processPendingInvoice() {
+  // order-success.html handles invoice creation itself
+  if (window.location.pathname.includes('order-success')) return;
   const raw = localStorage.getItem('dw_pending_invoice');
   if (!raw) return;
   localStorage.removeItem('dw_pending_invoice');
@@ -130,13 +132,7 @@ async function processPendingInvoice() {
     const res  = await fetch(`${workerUrl}/invoice`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({
-        customer,
-        items,
-        sessionId,
-        email:       currentUser?.email       || '',
-        displayName: currentUser?.displayName || '',
-      }),
+      body:    JSON.stringify({ customer, items, sessionId }),
     });
     const data = await res.json();
     console.log('[DW] invoice response:', data);

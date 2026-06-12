@@ -525,23 +525,7 @@ async function openOrdersModal() {
 /* ── Boot ─────────────────────────────────────────────────────────── */
 (function handleCheckoutReturn() {
   const p = new URLSearchParams(window.location.search);
-  if (p.get('checkout') === 'success') {
-    const sessionId = p.get('session_id') || '';
-    const pending   = localStorage.getItem('pending_order');
-    if (pending) {
-      try {
-        const { items, total } = JSON.parse(pending);
-        // Defer Firestore + ERPNext invoice to firebase-auth.js after auth + customer sync
-        localStorage.setItem('dw_pending_invoice', JSON.stringify({ items, total, sessionId }));
-      } catch(e) {}
-      localStorage.removeItem('pending_order');
-    }
-    Object.keys(cart).forEach(k => delete cart[k]);
-    saveCart();
-    updateCartBadge();
-    history.replaceState(null, '', window.location.pathname);
-    setTimeout(() => showToast('Payment successful! Master Louis will be in touch to customise your talisman.'), 300);
-  } else if (p.get('checkout') === 'cancel') {
+  if (p.get('checkout') === 'cancel') {
     history.replaceState(null, '', window.location.pathname);
     setTimeout(() => showToast('Checkout cancelled — your cart is still saved.', 'error'), 300);
   }

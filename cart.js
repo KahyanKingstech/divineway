@@ -133,7 +133,7 @@ async function checkoutStripe(btn) {
   btn.textContent = '⏳ Redirecting…';
 
   const dir        = window.location.href.replace(/[^/]*(\?.*)?$/, '');
-  const successUrl = dir + 'shop.html?checkout=success&session_id={CHECKOUT_SESSION_ID}';
+  const successUrl = dir + 'order-success.html?session_id={CHECKOUT_SESSION_ID}';
   const cancelUrl  = dir + 'shop.html?checkout=cancel';
 
   try {
