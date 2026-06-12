@@ -56,24 +56,24 @@
         <div class="footer-col">
           <div class="footer-col-title">Services</div>
           <ul class="footer-links">
-            <li><a href="services.html">BaZi Analysis</a></li>
-            <li><a href="services.html">Feng Shui Audit</a></li>
-            <li><a href="services.html">Talisman Consecration</a></li>
-            <li><a href="services.html">Auspicious Date Selection</a></li>
-            <li><a href="services.html">Name Analysis</a></li>
-            <li><a href="services.html">Taoist Rituals</a></li>
+            <li><a href="services.html#bazi-analysis">BaZi Analysis</a></li>
+            <li><a href="services.html#fengshui-audit">Feng Shui Audit</a></li>
+            <li><a href="services.html#talisman-consecration">Talisman Consecration</a></li>
+            <li><a href="services.html#auspicious-date">Auspicious Date Selection</a></li>
+            <li><a href="services.html#name-analysis-selection">Name Analysis & Selection</a></li>
+            <li><a href="services.html#taoist-rituals-ceremonies">Taoist Ritual Ceremonies</a></li>
           </ul>
         </div>
 
         <div class="footer-col">
           <div class="footer-col-title">Shop</div>
           <ul class="footer-links">
-            <li><a href="shop.html">Wealth Talismans</a></li>
-            <li><a href="shop.html">Health Talismans</a></li>
-            <li><a href="shop.html">Relationship Talismans</a></li>
-            <li><a href="shop.html">Protection Talismans</a></li>
-            <li><a href="shop.html">Pregnancy Talismans</a></li>
-            <li><a href="shop.html">Divine Items &amp; Books</a></li>
+            <li><a href="shop.html?cat=Wealth">Wealth Talismans</a></li>
+            <li><a href="shop.html?cat=Health">Health Talismans</a></li>
+            <li><a href="shop.html?cat=Relationship">Relationship Talismans</a></li>
+            <li><a href="shop.html?cat=General%20Protection">Protection Talismans</a></li>
+            <li><a href="shop.html?cat=Pregnancy">Pregnancy Talismans</a></li>
+            <li><a href="shop.html?cat=Divine%20Item">Divine Items</a></li>
           </ul>
         </div>
 
