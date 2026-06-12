@@ -17,53 +17,10 @@
 </head>
 <body>
 
-
-
 <div class="wrapper">
 
   <!-- NAV -->
   <script src="nav.js"></script>
-
-  <!-- <div class="page-banner">
-    <div class="page-banner-bg">
-      <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <radialGradient id="pbg1" cx="15%" cy="50%" r="50%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0.12"/><stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/></radialGradient>
-          <radialGradient id="pbg2" cx="85%" cy="50%" r="45%"><stop offset="0%" stop-color="#7a1a00" stop-opacity="0.18"/><stop offset="100%" stop-color="#7a1a00" stop-opacity="0"/></radialGradient>
-          <filter id="pbblur"><feGaussianBlur stdDeviation="22"/></filter>
-        </defs>
-        <rect width="900" height="220" fill="transparent"/>
-        <ellipse cx="100" cy="110" rx="220" ry="140" fill="url(#pbg1)" filter="url(#pbblur)"/>
-        <ellipse cx="800" cy="110" rx="220" ry="140" fill="url(#pbg2)" filter="url(#pbblur)"/>
-         -->
-        <!-- Rotating Outer Bagua Ring -->
-        <!-- <g class="pb-tao-outer">
-          <circle cx="450" cy="110" r="48" fill="none" stroke="#c9a84c" stroke-width="1.2" opacity="0.16"/>
-          <circle cx="450" cy="110" r="40" fill="none" stroke="#c9a84c" stroke-width="0.8" opacity="0.12"/>
-        </g> -->
-        
-        <!-- Rotating Inner Yin-Yang -->
-        <!-- <g class="pb-tao-inner">
-          <circle cx="450" cy="110" r="35" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.18"/>
-          <path d="M 450 75 A 35 35 0 0 1 450 145 A 17.5 17.5 0 0 1 450 110 A 17.5 17.5 0 0 0 450 75" fill="none" stroke="#c9a84c" stroke-width="1.5" opacity="0.14"/>
-          <circle cx="450" cy="92.5" r="3.5" fill="#c9a84c" opacity="0.22"/>
-          <circle cx="450" cy="127.5" r="3.5" fill="#c9a84c" opacity="0.22"/>
-        </g> -->
-        
-        <!-- Central Glow -->
-        <!-- <g class="pb-glow">
-          <circle cx="450" cy="110" r="60" fill="none" stroke="#c9a84c" stroke-width="0.5" opacity="0.06"/>
-        </g>
-         -->
-        <!-- <line x1="0" y1="219" x2="900" y2="219" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.25"/>
-      </svg>
-    </div>
-    <div class="page-banner-inner">
-      <div class="sec-label" style="justify-content:center;margin-bottom:12px">DivinewayFengshui</div>
-      <h1 class="page-banner-title">Fengshui Shop</h1>
-      <p class="page-banner-sub">Find the talisman that suits your energy, intention, and current life situation — whether you seek protection, wealth, health, love, career growth, or better luck.</p>
-    </div>
-  </div> -->
 
   <!-- SHOP -->
   <div class="shop-sec" id="shop">
@@ -124,7 +81,10 @@
             <button class="modal-read-more" id="modal-read-more" style="display:none">Read More</button>
           </div>
           <p class="modal-note">✏️ Each talisman is customised — provide your name, date of birth, time &amp; location when ordering.</p>
-          <span class="modal-price" id="modal-price"></span>
+          <div style="display:flex;align-items:center;gap:0;margin-bottom:16px">
+            <span class="modal-price" id="modal-price" style="margin-bottom:0"></span>
+            <span class="modal-qty" id="modal-qty" style="display:none"></span>
+          </div>
           <div class="modal-actions">
             <button class="modal-addcart" id="modal-addcart">Add to Cart</button>
             <!-- <button class="modal-wa" id="modal-wa">💬 WhatsApp</button> -->
@@ -134,8 +94,6 @@
     </div>
   </div>
 
-
-
 <!-- FOOTER -->
   <script src="footer.js"></script>
 
@@ -144,7 +102,6 @@
 </div>
 
 </div>
-
 
 <script src="cart.js"></script>
 <script>
@@ -173,7 +130,6 @@ const GROUP_EMOJI = {
 };
 
 /* ── Fetch helpers ────────────────────────────────────────────────── */
-
 async function loadProducts(bust = false) {
   const loading    = document.getElementById('shop-loading');
   const errorEl    = document.getElementById('shop-error');
@@ -242,25 +198,6 @@ async function loadProducts(bust = false) {
   document.getElementById('shop-error-msg').textContent   = lastErr.message;
 }
 
-
-/* ── Build filter tabs dynamically ───────────────────────────────── */
-// function buildTabs(groups) {
-//   const tabsEl = document.getElementById('filter-tabs');
-//   tabsEl.innerHTML = '<button class="ftab active" data-cat="all">All Products</button>';
-//   const groupEmojis = { ...GROUP_EMOJI };
-//   groups.forEach(g => {
-//     const emoji = groupEmojis[g] || '✨';
-//     const btn = document.createElement('button');
-//     btn.className = 'ftab';
-//     btn.dataset.cat = g;
-//     btn.textContent = emoji + ' ' + g.replace(' Talisman','');
-//     tabsEl.appendChild(btn);
-//   });
-//   tabsEl.querySelectorAll('.ftab').forEach(btn => {
-//     btn.addEventListener('click', () => filterShop(btn.dataset.cat, btn));
-//   });
-// }
-
 function buildTabs(groups) {
   const tabsEl = document.getElementById('filter-tabs');
   tabsEl.innerHTML = '<button class="ftab active" data-cat="all">All Products</button>';
@@ -316,9 +253,10 @@ function renderCard(item, price) {
 
   const talismanCat = Array.isArray(item.talisman_categories) ? item.talisman_categories.join(', ') : '';
   const isStock = item.is_stock_item === 1;
-  const qtyHtml = isStock ? `<span class="pqty">${item.qty || 0} left</span>` : '';
+  const stock   = isStock ? (item.qty || 0) : null;
+  const qtyColor = isStock ? (stock > 10 ? '#4caf50' : '#e53935') : '';
+  const qtyHtml  = isStock ? `<span class="pqty" style="color:${qtyColor}">${stock} left</span>` : '';
 
-  const stock = isStock ? (item.qty || 0) : null;
   productData[sku] = { sku, name, chin, desc: cleanDesc, descPreview, price: priceVal, emoji, group, talismanCat, image: item.image || '', stock };
 
   const card = document.createElement('div');
@@ -327,8 +265,8 @@ function renderCard(item, price) {
   card.dataset.group = group;
   card.innerHTML = `
     <div class="pthumb">
-      <span>${emoji}</span>
       <span class="pbadge">${badgeLabel}</span>
+      ${qtyHtml}
     </div>
     <div class="pbody">
       <div class="psku">${sku}</div>
@@ -338,7 +276,6 @@ function renderCard(item, price) {
       <span class="pcat-tag">${group === 'Talisman' ? talismanCat : group}</span>
       <div class="pfoot">
         <div class="pprice">${priceDisplay}</div>
-        ${qtyHtml}
         <button class="pbtn">Add to Cart</button>
       </div>
     </div>`;
@@ -362,48 +299,6 @@ function renderCard(item, price) {
 
   return card;
 }
-
-/* ── Main load function ───────────────────────────────────────────── */
-// async function loadProducts() {
-//   const loading = document.getElementById('shop-loading');
-//   const errorEl = document.getElementById('shop-error');
-//   const grid    = document.getElementById('pgrid');
-
-//   loading.style.display = 'block';
-//   errorEl.style.display = 'none';
-//   grid.style.display    = 'none';
-//   grid.innerHTML        = '';
-
-//   try {
-//     const items = await fetchItems();
-//     if (!items.length) throw new Error('No items returned from ERPNext. Check your Item Groups and filters.');
-
-//     const codes  = items.map(i => i.item_code);
-//     const prices = await fetchPrices(codes);
-
-//     // Collect unique groups in order of ERPNEXT.item_groups
-//     const seenGroups = new Set();
-//     items.forEach(i => { if (i.item_group) seenGroups.add(i.item_group); });
-//     const orderedGroups = ERPNEXT.item_groups.filter(g => seenGroups.has(g));
-//     buildTabs(orderedGroups);
-
-//     items.forEach(item => {
-//       const card = renderCard(item, prices[item.item_code]);
-//       grid.appendChild(card);
-//     });
-
-//     loading.style.display = 'none';
-//     grid.style.display    = 'grid';
-
-//   } catch (err) {
-//     loading.style.display = 'none';
-//     errorEl.style.display = 'block';
-//     document.getElementById('shop-error-title').textContent = 'Could not load products';
-//     document.getElementById('shop-error-msg').textContent   = err.message;
-//     console.error('ERPNext load error:', err);
-//   }
-// }
-
 
 /* ── Product modal ────────────────────────────────────────────────── */
 function openModal(sku) {
@@ -434,6 +329,15 @@ function openModal(sku) {
   document.getElementById('modal-chin').textContent   = p.chin || '';
   document.getElementById('modal-sku').textContent    = `SKU: ${p.sku}`;
   document.getElementById('modal-price').textContent  = `${ERPNEXT.currency} $${p.price}`;
+
+  const modalQty = document.getElementById('modal-qty');
+  if (p.stock !== null) {
+    modalQty.textContent    = `${p.stock} left`;
+    modalQty.style.color    = p.stock > 10 ? '#4caf50' : '#e53935';
+    modalQty.style.display  = 'inline-block';
+  } else {
+    modalQty.style.display = 'none';
+  }
   
   // Handle description with read more/less
   const isDescriptionLong = p.desc !== p.descPreview;
@@ -479,22 +383,6 @@ function openModal(sku) {
 function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
 
 /* ── Filter ───────────────────────────────────────────────────────── */
-// function filterShop(cat, btn) {
-//   document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
-//   btn.classList.add('active');
-//   document.querySelectorAll('#pgrid .pcard').forEach(card => {
-//     card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
-//   });
-// }
-
-// function filterShop(cat, btn) {
-//   document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
-//   btn.classList.add('active');
-//   document.querySelectorAll('#pgrid .pcard').forEach(card => {
-//     card.style.display = (cat === 'all' || card.dataset.cat.includes(cat)) ? '' : 'none';
-//   });
-// }
-
 function filterShop(cat, btn) {
   document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');

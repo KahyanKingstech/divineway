@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#1e1608"/>
+      <stop offset="100%" stop-color="#07060400"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="42%">
+      <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.17"/>
+      <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="300" height="120" fill="#080604"/>
+  <rect width="300" height="120" fill="url(#bg)"/>
+  <rect width="300" height="120" fill="url(#glow)"/>
+
+  <!-- ── Decorative rings ── -->
+  <circle cx="150" cy="60" r="52" fill="none" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.20"/>
+  <circle cx="150" cy="60" r="38" fill="none" stroke="#c9a84c" stroke-width="0.4" stroke-opacity="0.16"/>
+  <circle cx="150" cy="60" r="16" fill="none" stroke="#c9a84c" stroke-width="0.55" stroke-opacity="0.38"/>
+
+  <!-- ── Subtle cross inside middle ring ── -->
+  <line x1="150" y1="26" x2="150" y2="34" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.18"/>
+  <line x1="150" y1="86" x2="150" y2="94" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.18"/>
+  <line x1="108" y1="60" x2="116" y2="60" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.18"/>
+  <line x1="184" y1="60" x2="192" y2="60" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.18"/>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       8 Ba Gua trigrams — each group rotated so lines face outward.
+       Drawing origin is translate(150,60), lines drawn at local y ≈ -42.
+       Top line = y=-46, middle = y=-43, bottom = y=-40.
+       Solid line: x -5 → 5 | Broken line: x -5→-1.5  and  x 1.5→5
+  ════════════════════════════════════════════════════════════════════ -->
+
+  <!-- ☰ Qian (0° top) — 3 solid -->
+  <g transform="translate(150,60) rotate(0)">
+    <line x1="-5" y1="-46" x2="5" y2="-46" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-43" x2="5" y2="-43" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-40" x2="5" y2="-40" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+  </g>
+
+  <!-- ☱ Dui (45°) — broken / solid / solid -->
+  <g transform="translate(150,60) rotate(45)">
+    <line x1="-5" y1="-46" x2="-1.5" y2="-46" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="1.5" y1="-46" x2="5"   y2="-46" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-43" x2="5"    y2="-43" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-40" x2="5"    y2="-40" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+  </g>
+
+  <!-- ☲ Li (90° right) — solid / broken / solid -->
+  <g transform="translate(150,60) rotate(90)">
+    <line x1="-5" y1="-46" x2="5"    y2="-46" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-43" x2="-1.5" y2="-43" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="1.5" y1="-43" x2="5"   y2="-43" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-40" x2="5"    y2="-40" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+  </g>
+
+  <!-- ☳ Zhen (135°) — solid / broken / broken -->
+  <g transform="translate(150,60) rotate(135)">
+    <line x1="-5" y1="-46" x2="5"    y2="-46" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-43" x2="-1.5" y2="-43" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="1.5" y1="-43" x2="5"   y2="-43" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-40" x2="-1.5" y2="-40" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="1.5" y1="-40" x2="5"   y2="-40" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+  </g>
+
+  <!-- ☷ Kun (180° bottom) — 3 broken -->
+  <g transform="translate(150,60) rotate(180)">
+    <line x1="-5" y1="-46" x2="-1.5" y2="-46" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="1.5" y1="-46" x2="5"   y2="-46" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-43" x2="-1.5" y2="-43" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="1.5" y1="-43" x2="5"   y2="-43" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-40" x2="-1.5" y2="-40" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="1.5" y1="-40" x2="5"   y2="-40" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+  </g>
+
+  <!-- ☴ Xun (225°) — broken / solid / solid -->
+  <g transform="translate(150,60) rotate(225)">
+    <line x1="-5" y1="-46" x2="-1.5" y2="-46" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="1.5" y1="-46" x2="5"   y2="-46" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-43" x2="5"    y2="-43" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-40" x2="5"    y2="-40" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+  </g>
+
+  <!-- ☵ Kan (270° left) — broken / solid / broken -->
+  <g transform="translate(150,60) rotate(270)">
+    <line x1="-5" y1="-46" x2="-1.5" y2="-46" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="1.5" y1="-46" x2="5"   y2="-46" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-43" x2="5"    y2="-43" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-40" x2="-1.5" y2="-40" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="1.5" y1="-40" x2="5"   y2="-40" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+  </g>
+
+  <!-- ☶ Gen (315°) — solid / broken / broken -->
+  <g transform="translate(150,60) rotate(315)">
+    <line x1="-5" y1="-46" x2="5"    y2="-46" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-43" x2="-1.5" y2="-43" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="1.5" y1="-43" x2="5"   y2="-43" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="-5" y1="-40" x2="-1.5" y2="-40" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+    <line x1="1.5" y1="-40" x2="5"   y2="-40" stroke="#c9a84c" stroke-width="1.1" stroke-opacity="0.55"/>
+  </g>
+
+  <!-- ── Yin-Yang (太极) at centre, radius 14 ──
+       Dark circle first; yang (gold) half overlaid; two contrasting dots -->
+  <circle cx="150" cy="60" r="14" fill="#0a0806"/>
+  <!-- Yang (gold) half: clockwise right arc + counterclockwise lower S + clockwise upper S -->
+  <path d="M 150 46 A 14 14 0 0 1 150 74 A 7 7 0 0 0 150 60 A 7 7 0 0 1 150 46 Z"
+        fill="#c9a84c" fill-opacity="0.82"/>
+  <!-- Yin dot inside yang (dark circle in gold region) -->
+  <circle cx="150" cy="53" r="2.5" fill="#0a0806"/>
+  <!-- Yang dot inside yin (gold circle in dark region) -->
+  <circle cx="150" cy="67" r="2.5" fill="#c9a84c" fill-opacity="0.82"/>
+  <!-- Outer border of yin-yang -->
+  <circle cx="150" cy="60" r="14" fill="none" stroke="#c9a84c" stroke-width="0.7" stroke-opacity="0.5"/>
+
+  <!-- ── Edge accent dots (left / right of card) ── -->
+  <circle cx="30" cy="60" r="1.5" fill="#c9a84c" fill-opacity="0.15"/>
+  <circle cx="20" cy="60" r="1"   fill="#c9a84c" fill-opacity="0.10"/>
+  <circle cx="270" cy="60" r="1.5" fill="#c9a84c" fill-opacity="0.15"/>
+  <circle cx="280" cy="60" r="1"   fill="#c9a84c" fill-opacity="0.10"/>
+</svg>
