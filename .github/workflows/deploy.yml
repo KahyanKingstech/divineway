@@ -21,7 +21,7 @@ jobs:
   #     - uses: actions/checkout@v4
   #     - name: Generate config.js
   #       env:
-  #         STRIPE_WORKER_URL: ${{ secrets.STRIPE_WORKER_URL }}
+  #         WORKER_URL: ${{ secrets.WORKER_URL }}
   #       run: node generate-config.js
   #     - name: Deploy to Cloudflare Pages
   #       uses: cloudflare/pages-action@v1
