@@ -845,7 +845,7 @@ body {
   box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 
-.pthumb {
+/* .pthumb {
   height: 90px;
   display: flex;
   align-items: center;
@@ -856,6 +856,64 @@ body {
   position: relative;
   border-bottom: 1px solid var(--gold-border);
   overflow: hidden;
+} */
+
+/* .pthumb {
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('images/talisman-thumb.svg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  border-bottom: 1px solid var(--gold-border);
+  overflow: hidden;
+}
+
+.pthumb::before {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  background-image: url('images/talisman-thumb.svg');
+  background-size: cover;
+  background-position: center;
+  animation: talismanSpin 20s linear infinite;
+  opacity: 0.15;
+  pointer-events: none;
+} */
+
+.pthumb {
+  /* height: 90px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('images/talisman-thumb.svg');
+  background-size: contain;
+  background-position: center;
+  position: relative;
+  border-bottom: 1px solid var(--gold-border);
+  overflow: hidden;
+  z-index: 0;
+  height: 110px;
+}
+
+.pthumb::before {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  background-image: url('images/talisman-thumb-2.svg');
+  background-size: cover;
+  background-position: center;
+  animation: talismanSpin 15s linear infinite;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes talismanSpin {
+  from { transform: rotate(0deg) scale(0.8); }
+  to { transform: rotate(360deg) scale(2); }
 }
 
 .pbadge {
