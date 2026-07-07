@@ -346,10 +346,14 @@ async function handleCustomer(request, env) {
   );
   if (searchRes.ok) {
     const { data = [] } = await searchRes.json();
-    if (data.length) return json({ customer: data[0].name, created: false });
+    if (data.length) {
+      const customerName = data[0].name;
+      await ensureContact(base, headers, customerName, name, email);
+      return json({ customer: customerName, created: false });
+    }
   }
 
-  // Create new customer
+  // Create new customer — email lives on a linked Contact, not this field
   const createRes = await fetch(`${base}/api/resource/Customer`, {
     method: 'POST',
     headers,
@@ -357,12 +361,67 @@ async function handleCustomer(request, env) {
       customer_name:    name || email,
       customer_type:    'Individual',
       customer_group:   'Individual',
-      customer_details: `firebase:${uid}\nemail: ${email}`,
+      customer_details: `firebase:${uid}`,
     }),
   });
   if (!createRes.ok) return json({ error: 'Failed to create customer' }, 502);
   const { data } = await createRes.json();
+
+  await ensureContact(base, headers, data.name, name, email);
+
   return json({ customer: data.name, created: true });
+}
+
+// Creates a Contact holding the email and links it to the given Customer,
+// or reuses an existing Contact for that email and links it if not already.
+async function ensureContact(base, headers, customerName, name, email) {
+  try {
+    const searchRes = await fetch(
+      `${base}/api/resource/Contact?filters=${encodeURIComponent(JSON.stringify([['email_id', '=', email]]))}&fields=${encodeURIComponent(JSON.stringify(['name']))}&limit_page_length=1`,
+      { headers },
+    );
+    if (searchRes.ok) {
+      const { data = [] } = await searchRes.json();
+      if (data.length) {
+        const contactName = data[0].name;
+        const docRes = await fetch(`${base}/api/resource/Contact/${encodeURIComponent(contactName)}`, { headers });
+        if (docRes.ok) {
+          const { data: contact } = await docRes.json();
+          const links = contact.links || [];
+          const alreadyLinked = links.some(l => l.link_doctype === 'Customer' && l.link_name === customerName);
+          if (!alreadyLinked) {
+            await fetch(`${base}/api/resource/Contact/${encodeURIComponent(contactName)}`, {
+              method: 'PUT',
+              headers,
+              body: JSON.stringify({ links: [...links, { link_doctype: 'Customer', link_name: customerName }] }),
+            });
+          }
+        }
+        return contactName;
+      }
+    }
+
+    const [firstName, ...rest] = (name || email).trim().split(/\s+/);
+    const createRes = await fetch(`${base}/api/resource/Contact`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        first_name: firstName,
+        last_name:  rest.join(' '),
+        email_ids:  [{ email_id: email, is_primary: 1 }],
+        links:      [{ link_doctype: 'Customer', link_name: customerName }],
+      }),
+    });
+    if (!createRes.ok) {
+      console.warn('Contact creation failed', await createRes.text());
+      return null;
+    }
+    const { data } = await createRes.json();
+    return data.name;
+  } catch (err) {
+    console.warn('ensureContact failed:', err.message);
+    return null;
+  }
 }
 
 // ── /invoice ──────────────────────────────────────────────────────
