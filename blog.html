@@ -18,7 +18,16 @@
 </head>
 <body>
 
-<style>:root { --ink: #352916; }</style>
+<style>
+  :root { --ink: #352916; }
+  .blog-card { display: flex; gap: 18px; align-items: flex-start; }
+  .blog-card-img { width: 140px; height: 100px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+  .blog-card-body { flex: 1; min-width: 0; }
+  @media (max-width: 560px) {
+    .blog-card { flex-direction: column; }
+    .blog-card-img { width: 100%; height: 160px; }
+  }
+</style>
 
 <div class="wrapper">
 
@@ -68,56 +77,28 @@
   <div class="page-content-sec">
     <div class="blog-layout">
       <div>
-        <div class="sec-label" style="margin-bottom:24px">Latest Articles</div>
-        <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="sec-label" style="margin-bottom:24px">Latest Blogs</div>
 
-          <article class="blog-card">
-            <div class="blog-meta"><span class="blog-cat">Feng Shui</span><span class="blog-date">12 May 2025</span></div>
-            <h2 class="blog-title">How to Identify the Wealth Corner of Your Home</h2>
-            <p class="blog-excerpt">The Southeast sector governs wealth in most Flying Stars charts, but your BaZi determines how you attract it. Master Louis explains the interplay between personal chart and property energy.</p>
-            <a class="blog-read" href="#">Read Article →</a>
-          </article>
-
-          <article class="blog-card">
-            <div class="blog-meta"><span class="blog-cat">BaZi</span><span class="blog-date">28 Apr 2025</span></div>
-            <h2 class="blog-title">What Your Day Master Reveals About Your Destiny</h2>
-            <p class="blog-excerpt">The Day Master is the most important element in your BaZi chart. Whether you are a Wood, Fire, Earth, Metal, or Water person shapes every aspect of how luck flows through your life.</p>
-            <a class="blog-read" href="#">Read Article →</a>
-          </article>
-
-          <article class="blog-card">
-            <div class="blog-meta"><span class="blog-cat">Talismans</span><span class="blog-date">10 Apr 2025</span></div>
-            <h2 class="blog-title">The Difference Between a Blessed and a Consecrated Talisman</h2>
-            <p class="blog-excerpt">Not all talismans are equal. Master Louis explains the ritual steps that separate a genuinely energised talisman from a printed decoration — and why this matters for efficacy.</p>
-            <a class="blog-read" href="#">Read Article →</a>
-          </article>
-
-          <article class="blog-card">
-            <div class="blog-meta"><span class="blog-cat">Annual Forecast</span><span class="blog-date">2 Jan 2025</span></div>
-            <h2 class="blog-title">2025 Yi Si Snake Year — What to Expect and How to Prepare</h2>
-            <p class="blog-excerpt">The Year of the Yi Si Snake brings sharp intelligence and transformation. Master Louis shares the key sectors, affected zodiac signs, and Feng Shui adjustments for the year ahead.</p>
-            <a class="blog-read" href="#">Read Article →</a>
-          </article>
-
-          <article class="blog-card">
-            <div class="blog-meta"><span class="blog-cat">Taoist Practice</span><span class="blog-date">18 Dec 2024</span></div>
-            <h2 class="blog-title">Understanding the Grand Duke (太歲) and Why You Should Not Offend Him</h2>
-            <p class="blog-excerpt">Each year, the Grand Duke occupies a specific direction. Those born in conflicting zodiacs face higher risk of instability. Here's how to identify your risk and protect yourself.</p>
-            <a class="blog-read" href="#">Read Article →</a>
-          </article>
-
+        <!-- Loading state -->
+        <div id="blog-loading" style="text-align:center;padding:60px 0">
+          <div class="shop-spinner"></div>
+          <p style="font-size:13px;color:var(--text-muted);font-family:var(--sans);margin-top:16px;font-weight:300">Fetching articles from ERPNext…</p>
         </div>
+
+        <!-- Error state -->
+        <div id="blog-error" style="display:none;text-align:center;padding:60px 0;background:var(--cream-faint);border:1px solid rgba(201,168,76,0.15);border-radius:8px;margin:0">
+          <div style="font-size:32px;margin-bottom:12px">⚠️</div>
+          <p style="font-size:14px;color:var(--cream);font-family:var(--sans);font-weight:500;margin-bottom:6px" id="blog-error-title">Could not load articles</p>
+          <p style="font-size:12px;color:var(--text-muted);font-family:var(--sans);font-weight:300;margin-bottom:20px" id="blog-error-msg"></p>
+          <button onclick="loadBlogPosts()" style="background:var(--gold);color:var(--ink-deep);border:none;padding:10px 24px;border-radius:4px;font-size:12px;font-family:var(--sans);font-weight:600;cursor:pointer;letter-spacing:.06em;text-transform:uppercase">Retry</button>
+        </div>
+
+        <div id="blog-list" style="display:none;flex-direction:column;gap:24px"></div>
       </div>
 
       <div>
         <div class="sec-label" style="margin-bottom:20px">Categories</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:36px">
-          <li><a href="#" style="font-size:12px;color:var(--text-muted);font-family:var(--sans);text-decoration:none;display:flex;justify-content:space-between;padding:8px 12px;border:1px solid var(--gold-border);border-radius:4px;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--gold-border)'"><span>Feng Shui</span><span style="color:var(--gold)">12</span></a></li>
-          <li><a href="#" style="font-size:12px;color:var(--text-muted);font-family:var(--sans);text-decoration:none;display:flex;justify-content:space-between;padding:8px 12px;border:1px solid var(--gold-border);border-radius:4px;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--gold-border)'"><span>BaZi</span><span style="color:var(--gold)">9</span></a></li>
-          <li><a href="#" style="font-size:12px;color:var(--text-muted);font-family:var(--sans);text-decoration:none;display:flex;justify-content:space-between;padding:8px 12px;border:1px solid var(--gold-border);border-radius:4px;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--gold-border)'"><span>Talismans</span><span style="color:var(--gold)">7</span></a></li>
-          <li><a href="#" style="font-size:12px;color:var(--text-muted);font-family:var(--sans);text-decoration:none;display:flex;justify-content:space-between;padding:8px 12px;border:1px solid var(--gold-border);border-radius:4px;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--gold-border)'"><span>Annual Forecast</span><span style="color:var(--gold)">5</span></a></li>
-          <li><a href="#" style="font-size:12px;color:var(--text-muted);font-family:var(--sans);text-decoration:none;display:flex;justify-content:space-between;padding:8px 12px;border:1px solid var(--gold-border);border-radius:4px;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--gold-border)'"><span>Taoist Practice</span><span style="color:var(--gold)">6</span></a></li>
-        </ul>
+        <ul id="blog-categories" style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:36px"></ul>
 
         <div class="sec-label" style="margin-bottom:16px">Follow Master Louis</div>
         <div style="display:flex;flex-direction:column;gap:8px">
@@ -141,130 +122,103 @@
 
 <script src="cart.js"></script>
 <script>
-  // ─── PRODUCT MODAL ───────────────────────────────────────────────────────────
-  const productData = {};
-  document.querySelectorAll('#pgrid .pcard').forEach(card => {
-    const sku   = card.querySelector('.psku').textContent.trim();
-    const name  = card.querySelector('.pname').textContent.trim();
-    const chin  = card.querySelector('.pchin').textContent.trim();
-    const desc  = card.querySelector('.pdesc').textContent.trim();
-    const price = parseInt(card.querySelector('.pprice').textContent.replace(/\D/g,''));
-    const emoji = card.querySelector('.pthumb span:first-child').textContent;
-    const bg    = card.querySelector('.pthumb').style.background;
-    productData[sku] = { sku, name, chin, desc, price, emoji, bg };
+const BLOG_WORKER_URL = (window.ERPNEXT_CONFIG || {}).stripe_worker_url || 'https://divineway.kah-yan.workers.dev';
+let _allPosts = [];
 
-    card.addEventListener('click', (e) => {
-      if (e.target.classList.contains('pbtn')) return;
-      openModal(sku);
-    });
+function formatBlogDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (isNaN(d)) return dateStr;
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
 
-    const btn = card.querySelector('.pbtn');
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      addToCart(sku, name, price, btn);
-    });
-  });
+async function loadBlogPosts() {
+  const loading = document.getElementById('blog-loading');
+  const errorEl = document.getElementById('blog-error');
+  const list    = document.getElementById('blog-list');
 
-  function openModal(sku) {
-    const p = productData[sku];
-    if (!p) return;
-    document.getElementById('modal-emoji').textContent = p.emoji;
-    document.getElementById('modal-name').textContent = p.name;
-    document.getElementById('modal-chin').textContent = p.chin;
-    document.getElementById('modal-sku').textContent = p.sku !== '—' ? `SKU: ${p.sku}` : '';
-    document.getElementById('modal-desc').textContent = p.desc;
-    document.getElementById('modal-price').textContent = `SGD $${p.price}`;
-    document.getElementById('modal-addcart').onclick = (e) => addToCart(p.sku, p.name, p.price, e.currentTarget);
-    document.getElementById('modal-wa').onclick = () => {
-      const msg = `Hello Master Louis, I am interested in the ${p.name} (${p.chin}). Please advise on the customisation details and next steps.`;
-      window.open(`${WA_BASE}?text=${encodeURIComponent(msg)}`, '_blank');
-    };
-    document.getElementById('product-modal').style.display = 'flex';
+  loading.style.display = 'block';
+  errorEl.style.display = 'none';
+  list.style.display    = 'none';
+  list.innerHTML        = '';
+
+  const MAX_RETRIES = 3;
+  let lastErr;
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      if (attempt > 1) await new Promise(r => setTimeout(r, 3000 * (attempt - 1)));
+
+      const res = await fetch(`${BLOG_WORKER_URL}/blog`);
+      if (!res.ok) throw new Error(`Worker responded ${res.status} ${res.statusText}`);
+      const { posts = [] } = await res.json();
+
+      _allPosts = posts;
+      renderBlogPosts(posts);
+      buildBlogCategories(posts);
+
+      loading.style.display = 'none';
+      list.style.display    = 'flex';
+      return;
+    } catch (err) {
+      lastErr = err;
+      console.warn(`⚠️ Attempt ${attempt}/${MAX_RETRIES} failed:`, err.message);
+    }
   }
 
-  function closeModal() {
-    document.getElementById('product-modal').style.display = 'none';
+  loading.style.display = 'none';
+  errorEl.style.display = 'block';
+  document.getElementById('blog-error-msg').textContent = lastErr.message;
+}
+
+function renderBlogPosts(posts) {
+  const list = document.getElementById('blog-list');
+  if (!posts.length) {
+    list.innerHTML = '<p style="font-size:13px;color:var(--text-muted);font-family:var(--sans)">No articles published yet — check back soon.</p>';
+    return;
   }
+  list.innerHTML = posts.map(p => `
+    <article class="blog-card" data-cat="${p.category}">
+      ${p.image ? `<img class="blog-card-img" src="${p.image}" alt="" loading="lazy">` : ''}
+      <div class="blog-card-body">
+        <div class="blog-meta">
+          <span class="blog-cat">${p.category || 'General'}</span>
+          <span class="blog-date">${formatBlogDate(p.published_on)}</span>
+        </div>
+        <h2 class="blog-title">${p.title}</h2>
+        <p class="blog-excerpt">${p.excerpt}</p>
+        <a class="blog-read" href="blog-post.html?post=${encodeURIComponent(p.name)}">Read Article →</a>
+      </div>
+    </article>`).join('');
+}
 
-  function filterShop(cat, btn) {
-    document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('#pgrid .pcard').forEach(card => {
-      card.style.display = (cat === 'all' || card.dataset.cat.includes(cat)) ? '' : 'none';
-    });
-  }
-
-  const catMap = {
-    'Wealth':'Wealth','Affinity':'Affinity','Career':'Career','Study':'Study',
-    'Health':'Health','Relationship':'Relationship','Safety':'Safety',
-    'General Protection':'General Protection','Pregnancy':'Pregnancy'
-  };
-  document.querySelectorAll('.cat-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const catName = btn.closest('.cat').querySelector('.cat-name').textContent.trim();
-      const mapped  = catMap[catName] || 'all';
-      document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
-      setTimeout(() => {
-        const tab = [...document.querySelectorAll('.ftab')].find(t => t.textContent.includes(mapped));
-        if (tab) filterShop(mapped, tab);
-      }, 400);
-    });
+function buildBlogCategories(posts) {
+  const counts = {};
+  posts.forEach(p => {
+    const cat = p.category || 'General';
+    counts[cat] = (counts[cat] || 0) + 1;
   });
 
-  const navSections = { 'Shop': 'shop', 'Services': 'cta-area', 'About': 'master-area' };
-  document.querySelectorAll('.nav-links span').forEach(span => {
-    span.addEventListener('click', () => {
-      const id = navSections[span.textContent.trim()];
-      if (id) document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-    });
-  });
+  const catsEl = document.getElementById('blog-categories');
+  const entries = Object.entries(counts);
+  if (!entries.length) { catsEl.innerHTML = ''; return; }
 
-  document.querySelector('.hcta').addEventListener('click', () => {
-    document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
-  });
+  catsEl.innerHTML = `<li><a href="#" data-cat="all" class="blog-cat-link active-cat" style="font-size:12px;color:var(--text-muted);font-family:var(--sans);text-decoration:none;display:flex;justify-content:space-between;padding:8px 12px;border:1px solid var(--gold-border);border-radius:4px"><span>All</span><span style="color:var(--gold)">${posts.length}</span></a></li>`
+    + entries.map(([cat, count]) => `
+      <li><a href="#" data-cat="${cat}" class="blog-cat-link" style="font-size:12px;color:var(--text-muted);font-family:var(--sans);text-decoration:none;display:flex;justify-content:space-between;padding:8px 12px;border:1px solid var(--gold-border);border-radius:4px" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--gold-border)'"><span>${cat}</span><span style="color:var(--gold)">${count}</span></a></li>`).join('');
 
-  document.querySelector('.btn-wa').addEventListener('click', () => {
-    window.open(`${WA_BASE}?text=${encodeURIComponent('Hello Master Louis, I would like to enquire about your talisman services.')}`, '_blank');
-  });
-
-
-  const pillMap = {
-    'Wealth blocked':'Wealth','Health concerns':'Health','Constant bad luck':'Safety',
-    'Career not moving':'Career','Love life suffering':'Relationship',
-    'Child struggling in school':'Study','Trying to conceive':'Pregnancy',
-    'No one to help me':'Relationship'
-  };
-  document.querySelectorAll('.hpill').forEach(pill => {
-    pill.addEventListener('click', () => {
-      const key = pill.textContent.replace(/^[^\s]+\s/,'').trim();
-      const cat = pillMap[key];
-      document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
-      if (cat) setTimeout(() => {
-        const tab = [...document.querySelectorAll('.ftab')].find(t => t.textContent.includes(cat));
-        if (tab) filterShop(cat, tab);
-      }, 400);
+  catsEl.querySelectorAll('.blog-cat-link').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const cat = link.dataset.cat;
+      document.querySelectorAll('#blog-list .blog-card').forEach(card => {
+        card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+      });
     });
   });
+}
 
-  document.querySelectorAll('.sbtn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const txt = btn.textContent.trim();
-      if (txt.includes('@divinewayfengshui')) window.open('https://www.tiktok.com/@divinewayfengshui','_blank');
-      if (txt.includes('@divinewayinc')) window.open('https://www.instagram.com/divinewayinc/','_blank');
-      if (txt.includes('@divinewaymagic')) window.open('https://www.facebook.com/divinewaymagic','_blank');
-      if (txt.includes('@masterlouischeung')) window.open('https://www.youtube.com/@masterlouischeung','_blank');
-    });
-  });
-
-  function playVideo(card, embedUrl) {
-    const thumb = card.querySelector('.rthumb');
-    thumb.innerHTML = `<iframe src="${embedUrl}?autoplay=1" width="100%" height="100%" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" style="position:absolute;inset:0;width:100%;height:100%"></iframe>`;
-    thumb.style.position = 'relative';
-    thumb.style.padding = '0';
-  }
+loadBlogPosts();
 </script>
-</body>
-</html>
-
 </body>
 </html>

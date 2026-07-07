@@ -18,6 +18,18 @@ export default {
       return handleProducts(request, env);
     }
 
+    if (pathname === '/blog' && request.method === 'GET') {
+      return handleBlog(request, env);
+    }
+
+    if (pathname === '/blog-post' && request.method === 'GET') {
+      return handleBlogPost(request, env);
+    }
+
+    if (pathname === '/orders' && request.method === 'GET') {
+      return handleOrders(request, env);
+    }
+
     if (pathname === '/checkout' && request.method === 'POST') {
       return handleCheckout(request, env);
     }
@@ -30,10 +42,7 @@ export default {
       return handleInvoice(request, env);
     }
 
-    if (pathname === '/orders' && request.method === 'GET') {
-      return handleOrders(request, env);
-    }
-
+    
     return json({ error: 'Not found' }, 404);
   },
 };
@@ -160,6 +169,110 @@ async function handleProducts(request, env) {
   // two Response objects means whichever reads it first (cache.put) leaves
   // the other unreadable ("Body has already been used").
   const body = JSON.stringify({ products });
+  const toCache = new Response(body, {
+    headers: { ...CORS, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300' },
+  });
+  await cache.put(cacheKey, toCache);
+
+  return new Response(body, {
+    headers: { ...CORS, 'Content-Type': 'application/json' },
+  });
+}
+
+// ── /blog ─────────────────────────────────────────────────────────
+async function handleBlog(request, env) {
+  const cache    = caches.default;
+  const cacheKey = new Request('https://divineway.kah-yan.workers.dev/blog?v=1');
+
+  const bustParam = new URL(request.url).searchParams.has('bust');
+  if (!bustParam) {
+    const cached = await cache.match(cacheKey);
+    if (cached) return cached;
+  }
+
+  const base    = env.ERPNEXT_BASE_URL;
+  const headers = {
+    'Authorization': `token ${env.ERPNEXT_API_KEY}:${env.ERPNEXT_API_SECRET}`,
+    'Content-Type':  'application/json',
+  };
+
+  const filters = encodeURIComponent(JSON.stringify([
+    ['published', '=', 1],
+  ]));
+  const fields = encodeURIComponent(JSON.stringify([
+    'name', 'title', 'blog_intro', 'blog_category', 'published_on',
+    'read_time', 'meta_image', 'route',
+  ]));
+  const listRes = await fetch(
+    `${base}/api/resource/Blog%20Post?filters=${filters}&fields=${fields}&limit_page_length=100&order_by=published_on%20desc`,
+    { headers },
+  );
+  if (!listRes.ok) {
+    return json({ error: `ERPNext blog fetch failed (${listRes.status})` }, 502);
+  }
+  const { data: rawPosts = [] } = await listRes.json();
+
+  const posts = rawPosts.map(p => ({
+    name:         p.name,
+    title:        p.title,
+    excerpt:      p.blog_intro || '',
+    category:     p.blog_category || '',
+    published_on: p.published_on || '',
+    read_time:    p.read_time || null,
+    image:        p.meta_image
+                    ? (p.meta_image.startsWith('http') ? p.meta_image : base + p.meta_image)
+                    : '',
+    url:          base + '/' + (p.route || p.name),
+  }));
+
+  const body = JSON.stringify({ posts });
+  const toCache = new Response(body, {
+    headers: { ...CORS, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300' },
+  });
+  await cache.put(cacheKey, toCache);
+
+  return new Response(body, {
+    headers: { ...CORS, 'Content-Type': 'application/json' },
+  });
+}
+
+// ── /blog-post ────────────────────────────────────────────────────
+async function handleBlogPost(request, env) {
+  const name = new URL(request.url).searchParams.get('name');
+  if (!name) return json({ error: 'Missing name param' }, 400);
+
+  const cache    = caches.default;
+  const cacheKey = new Request(`https://divineway.kah-yan.workers.dev/blog-post?name=${encodeURIComponent(name)}`);
+  const cached   = await cache.match(cacheKey);
+  if (cached) return cached;
+
+  const base    = env.ERPNEXT_BASE_URL;
+  const headers = {
+    'Authorization': `token ${env.ERPNEXT_API_KEY}:${env.ERPNEXT_API_SECRET}`,
+    'Content-Type':  'application/json',
+  };
+
+  const docRes = await fetch(`${base}/api/resource/Blog%20Post/${encodeURIComponent(name)}`, { headers });
+  if (!docRes.ok) {
+    return json({ error: `ERPNext blog post fetch failed (${docRes.status})` }, 502);
+  }
+  const { data: p } = await docRes.json();
+  if (!p || !p.published) return json({ error: 'Post not found' }, 404);
+
+  const post = {
+    name:         p.name,
+    title:        p.title,
+    category:     p.blog_category || '',
+    published_on: p.published_on || '',
+    read_time:    p.read_time || null,
+    content:      p.content || p.content_html || p.content_md || '',
+    content_type: p.content_type || 'Rich Text',
+    image:        p.meta_image
+                    ? (p.meta_image.startsWith('http') ? p.meta_image : base + p.meta_image)
+                    : '',
+  };
+
+  const body = JSON.stringify({ post });
   const toCache = new Response(body, {
     headers: { ...CORS, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300' },
   });
