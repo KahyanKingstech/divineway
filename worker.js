@@ -97,7 +97,11 @@ async function handleProducts(request, env) {
   const bFields = encodeURIComponent(JSON.stringify(['item_code', 'actual_qty']));
 
   const [details, priceRes, binRes] = await Promise.all([
+    // Only Talisman items carry the custom_talisman_categories child table,
+    // which the list call above can't return — fetch the full doc for those
+    // only, instead of once per item (avoids a big subrequest burst to ERPNext).
     Promise.all(items.map(async item => {
+      if (item.item_group !== 'Talisman') return item;
       const r = await fetch(
         `${base}/api/resource/Item/${encodeURIComponent(item.item_code)}`,
         { headers },
@@ -151,13 +155,19 @@ async function handleProducts(request, env) {
       qty:           item.is_stock_item ? (stockMap[item.item_code] || 0) : null,
     }));
 
-  // Cache for 5 minutes
-  const response = json({ products });
-  const toCache  = new Response(response.body, response);
-  toCache.headers.set('Cache-Control', 'public, max-age=300');
+  // Cache for 5 minutes — build the cached copy and the returned copy from
+  // the same string separately; sharing response.body as a stream between
+  // two Response objects means whichever reads it first (cache.put) leaves
+  // the other unreadable ("Body has already been used").
+  const body = JSON.stringify({ products });
+  const toCache = new Response(body, {
+    headers: { ...CORS, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300' },
+  });
   await cache.put(cacheKey, toCache);
 
-  return response;
+  return new Response(body, {
+    headers: { ...CORS, 'Content-Type': 'application/json' },
+  });
 }
 
 // ── /checkout ─────────────────────────────────────────────────────
