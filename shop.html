@@ -162,7 +162,8 @@ async function loadProducts(bust = false) {
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
       if (attempt > 1) {
-        if (loadingMsg) loadingMsg.textContent = `Store is waking up… retrying (${attempt}/${MAX_RETRIES})`;
+        // if (loadingMsg) loadingMsg.textContent = `Store is waking up… retrying (${attempt}/${MAX_RETRIES})`;
+        if (loadingMsg) loadingMsg.textContent = `Getting everything ready...`;
         await new Promise(r => setTimeout(r, 3000 * (attempt - 1)));
       }
 
