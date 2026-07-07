@@ -246,7 +246,7 @@
           <div>
             <div class="order-ref-label">Order Reference</div>
             <div class="order-ref-value" id="invoice-ref">
-              <span class="order-ref-loading">Confirming with ERPNext…</span>
+              <span class="order-ref-loading">Confirming with ERPNextâ€¦</span>
             </div>
           </div>
           <div class="order-date" id="order-date"></div>
@@ -297,9 +297,9 @@
   // Read pending order from localStorage
   const raw = localStorage.getItem('pending_order');
   if (!raw) {
-    // No pending order — user may have bookmarked the page
+    // No pending order â€” user may have bookmarked the page
     document.getElementById('order-card').innerHTML =
-      '<p class="no-order-msg" style="padding:32px 22px">No order details found. If you completed a payment, your order is confirmed — please contact Master Louis on WhatsApp with your Stripe receipt.</p>';
+      '<p class="no-order-msg" style="padding:32px 22px">No order details found. If you completed a payment, your order is confirmed â€” please contact Master Louis on WhatsApp with your Stripe receipt.</p>';
     document.getElementById('success-sub').textContent = 'Your payment was received.';
     return;
   }
@@ -335,7 +335,7 @@
     await waitUntil(() => window.__authReady, 12000);
 
     if (!window.__currentUser) {
-      setRef('—');
+      setRef('â€”');
       return;
     }
 
@@ -351,7 +351,7 @@
     // Poll until customer sync completes
     await waitUntil(() => localStorage.getItem('dw_erp_customer'), 10000);
     const customer = localStorage.getItem('dw_erp_customer');
-    if (!customer) { setRef('—'); return; }
+    if (!customer) { setRef('â€”'); return; }
 
     try {
       const res  = await fetch(`${workerUrl}/invoice`, {
@@ -365,11 +365,11 @@
         // Bust product cache so stock reflects the purchase
         if (typeof loadProducts === 'function') loadProducts(true);
       } else {
-        setRef('—');
+        setRef('â€”');
         console.warn('[DW] invoice error:', data.error);
       }
     } catch (e) {
-      setRef('—');
+      setRef('â€”');
       console.error('[DW] invoice fetch failed:', e);
     }
   }
