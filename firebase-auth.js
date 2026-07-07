@@ -1,8 +1,8 @@
 import { initializeApp }        from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
                                 from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, query, where, getDocs, orderBy }
-                                from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+// import { getFirestore, collection, addDoc, query, where, getDocs, orderBy }
+//                                 from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 // ── Config ────────────────────────────────────────────────────────
 const firebaseConfig = {
@@ -16,7 +16,7 @@ const firebaseConfig = {
 
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db   = getFirestore(app);
+// const db   = getFirestore(app);
 
 // ── Current user (reactive) ───────────────────────────────────────
 export let currentUser = null;
@@ -58,16 +58,17 @@ export async function signOutUser() {
 // ── Save order to Firestore ───────────────────────────────────────
 export async function saveOrder({ items, total, sessionId }) {
   if (!currentUser) throw new Error('Not logged in');
-  await addDoc(collection(db, 'orders'), {
-    uid:       currentUser.uid,
-    email:     currentUser.email,
-    name:      currentUser.displayName,
-    items,
-    total,
-    sessionId: sessionId || '',
-    status:    'paid',
-    createdAt: new Date().toISOString(),
-  });
+  // await addDoc(collection(db, 'orders'), {
+  //   uid:       currentUser.uid,
+  //   email:     currentUser.email,
+  //   name:      currentUser.displayName,
+  //   items,
+  //   total,
+  //   sessionId: sessionId || '',
+  //   status:    'paid',
+  //   createdAt: new Date().toISOString(),
+  // });
+  return true; // Firestore save is optional; ERPNext invoice is primary
 }
 
 // ── Fetch orders for current user (from ERPNext Sales Invoice) ────
