@@ -170,7 +170,11 @@ async function loadProducts(bust = false) {
       const url = bust
         ? `${ERPNEXT.stripe_worker_url}/products?bust=${Date.now()}`
         : `${ERPNEXT.stripe_worker_url}/products`;
-      const res = await fetch(url, bust ? { cache: 'no-store' } : undefined);
+      // Always bypass the browser's own HTTP cache — Cloudflare's edge cache (5min TTL)
+      // already provides the perf benefit; without this, a fetch() to the same /products
+      // URL within 5 minutes silently reuses the stale local response and never hits
+      // the network at all, regardless of what Cloudflare or the Worker are doing.
+      const res = await fetch(url, { cache: 'no-store' });
       if (!res.ok) throw new Error(`Worker responded ${res.status} ${res.statusText}`);
       const { products = [] } = await res.json();
       console.log(`✅ ${products.length} products from worker`);
@@ -525,15 +529,20 @@ async function openOrdersModal() {
 }
 
 /* ── Boot ─────────────────────────────────────────────────────────── */
+let _bootBust = false;
 (function handleCheckoutReturn() {
   const p = new URLSearchParams(window.location.search);
   if (p.get('checkout') === 'cancel') {
     history.replaceState(null, '', window.location.pathname);
     setTimeout(() => showToast('Checkout cancelled — your cart is still saved.', 'error'), 300);
   }
+  if (p.get('refresh') === '1') {
+    _bootBust = true;
+    history.replaceState(null, '', window.location.pathname);
+  }
 })();
 updateCartBadge();
-loadProducts();
+loadProducts(_bootBust);
 </script>
 
 </body>

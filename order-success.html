@@ -276,7 +276,7 @@
         <a href="https://wa.me/6589490437?text=Hello%20Master%20Louis%2C%20I%20have%20just%20placed%20an%20order%20and%20would%20like%20to%20follow%20up." class="btn-wa-success" target="_blank">
           <i class="ti ti-brand-whatsapp"></i> WhatsApp Master Louis
         </a>
-        <a href="shop.html" class="btn-shop-success">
+        <a href="shop.html?refresh=1" class="btn-shop-success">
           <i class="ti ti-shopping-bag"></i> Continue Shopping
         </a>
       </div>
@@ -362,8 +362,6 @@
       const data = await res.json();
       if (data.invoice) {
         setRef(data.invoice);
-        // Bust product cache so stock reflects the purchase
-        if (typeof loadProducts === 'function') loadProducts(true);
       } else {
         setRef('â€”');
         console.warn('[DW] invoice error:', data.error);
