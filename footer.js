@@ -86,15 +86,13 @@
             </li>
             <li>
               <i class="ti ti-map-pin" aria-hidden="true"></i>
-              <span>Singapore</span>
+              <a href="https://maps.app.goo.gl/AThpfabsJ6rMEJFY8" target="_blank">
+                374 Joo Chiat Rd, Singapore 427619
+              </a>
             </li>
             <li>
               <i class="ti ti-clock" aria-hidden="true"></i>
-              <span>Mon – Sat, 10am – 7pm</span>
-            </li>
-            <li>
-              <i class="ti ti-globe" aria-hidden="true"></i>
-              <span>International consultations available</span>
+              <span>Mon – Sat, 11am – 8pm</span>
             </li>
           </ul>
         </div>
