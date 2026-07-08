@@ -17,6 +17,9 @@
   <script src="config.js"></script>
 </head>
 <body>
+  <style>
+    .svc-image { min-height: 220px; object-fit: cover; }
+  </style>
 
 
 
@@ -80,65 +83,29 @@
     </div>
   </div>
   <div class="page-content-sec">
-    <div class="svc-grid">
+    <div>
+      <div class="sec-label">Feng Shui Services</div>
+      <h2 class="sec-title">Creates Harmony in Relationships, Careers, and Inner Peace.</h2><br>
 
-      <div class="svc-card" id="bazi-analysis">
-        <div class="svc-icon">🔯</div>
-        <div class="svc-name">BaZi Analysis</div>
-        <div class="svc-chin">八字命理</div>
-        <p class="svc-desc">Decode the Four Pillars of your destiny chart to understand your innate strengths, luck cycles, and timing for major life decisions including career, marriage, and investments.</p>
-        <!-- <div class="svc-price">From SGD $188</div> -->
-        <button class="svc-btn" onclick="window.open('https://wa.me/6589490437?text=Hello Master Louis, I am interested in a BaZi Analysis.','_blank')">Enquire Now</button>
+      <!-- Loading state -->
+      <div id="svc-loading" style="text-align:center;padding:60px 0">
+        <div class="shop-spinner"></div>
+        <p style="font-size:13px;color:var(--text-muted);font-family:var(--sans);margin-top:16px;font-weight:300">Fetching services from ERPNext…</p>
       </div>
 
-      <div class="svc-card" id="fengshui-audit">
-        <div class="svc-icon">🏠</div>
-        <div class="svc-name">Feng Shui Audit</div>
-        <div class="svc-chin">风水勘察</div>
-        <p class="svc-desc">On-site or remote assessment of your home or office. Identify energy blockages, improve wealth and health sectors, and realign your space for positive qi flow.</p>
-        <!-- <div class="svc-price">From SGD $388</div> -->
-        <button class="svc-btn" onclick="window.open('https://wa.me/6589490437?text=Hello Master Louis, I am interested in a Feng Shui Audit.','_blank')">Enquire Now</button>
+      <!-- Error state -->
+      <div id="svc-error" style="display:none;text-align:center;padding:60px 0;background:var(--cream-faint);border:1px solid rgba(201,168,76,0.15);border-radius:8px;margin:0">
+        <div style="font-size:32px;margin-bottom:12px">⚠️</div>
+        <p style="font-size:14px;color:var(--cream);font-family:var(--sans);font-weight:500;margin-bottom:6px" id="svc-error-title">Could not load services</p>
+        <p style="font-size:12px;color:var(--text-muted);font-family:var(--sans);font-weight:300;margin-bottom:20px" id="svc-error-msg">Check your ERPNext config below and ensure CORS is enabled.</p>
+        <button onclick="loadServices()" style="background:var(--gold);color:var(--ink-deep);border:none;padding:10px 24px;border-radius:4px;font-size:12px;font-family:var(--sans);font-weight:600;cursor:pointer;letter-spacing:.06em;text-transform:uppercase">Retry</button>
       </div>
 
-      <div class="svc-card" id="talisman-consecration">
-        <div class="svc-icon">📜</div>
-        <div class="svc-name">Talisman Consecration</div>
-        <div class="svc-chin">手绘开光符咒</div>
-        <p class="svc-desc">Hand-drawn and ritually consecrated talismans for wealth, health, love, protection and more. Each piece is personalised with your birth data and blessed on an auspicious date.</p>
-        <!-- <div class="svc-price">From SGD $108</div> -->
-        <button class="svc-btn" onclick="window.open('https://wa.me/6589490437?text=Hello Master Louis, I am interested in a Talisman.','_blank')">Enquire Now</button>
-      </div>
+      <div class="svc-grid" id="svc-grid" style="display:none">
 
-      <div class="svc-card" id="auspicious-date">
-        <div class="svc-icon">📅</div>
-        <div class="svc-name">Auspicious Date Selection</div>
-        <div class="svc-chin">择日</div>
-        <p class="svc-desc">Select the most favourable date and time for important life events — weddings, business launches, house moves, contract signings, and caesarean births.</p>
-        <!-- <div class="svc-price">From SGD $128</div> -->
-        <button class="svc-btn" onclick="window.open('https://wa.me/6589490437?text=Hello Master Louis, I need an auspicious date selected.','_blank')">Enquire Now</button>
       </div>
-
-      <div class="svc-card" id="name-analysis-selection">
-        <div class="svc-icon">🔤</div>
-        <div class="svc-name">Name Analysis &amp; Selection</div>
-        <div class="svc-chin">姓名学</div>
-        <p class="svc-desc">Analyse the numerological energy of your name or your child's name. Ensure the strokes, sounds, and elements align with your BaZi for lifelong support.</p>
-        <!-- <div class="svc-price">From SGD $168</div> -->
-        <button class="svc-btn" onclick="window.open('https://wa.me/6589490437?text=Hello Master Louis, I am interested in Name Analysis.','_blank')">Enquire Now</button>
-      </div>
-
-      <div class="svc-card" id="taoist-rituals-ceremonies">
-        <div class="svc-icon">🕯️</div>
-        <div class="svc-name">Taoist Ritual Ceremonies</div>
-        <div class="svc-chin">道教法事</div>
-        <p class="svc-desc">Full ceremonial rituals for cleansing negative energy, deity placement, annual Grand Duke appeasement, space blessing, and ancestral offerings.</p>
-        <!-- <div class="svc-price">From SGD $488</div> -->
-        <button class="svc-btn" onclick="window.open('https://wa.me/6589490437?text=Hello Master Louis, I am interested in a Taoist Ritual.','_blank')">Enquire Now</button>
-      </div>
-
     </div>
-  </div>
-
+    
   <div class="sdiv"></div>
   <!-- TESTIMONIALS -->
   <div class="testi-sec">
@@ -194,6 +161,67 @@
 
 
 <script src="cart.js"></script>
+<script>
+  const SERVICES_WORKER_URL = (window.ERPNEXT_CONFIG || {}).stripe_worker_url || 'https://divineway.kah-yan.workers.dev';
+
+  function svcWaMessage(name) {
+    return `Hello Master Louis, I am interested in ${name}.`;
+  }
+
+  function renderServiceCard(s) {
+    const cleanDesc = (s.short_description || '').replace(/<[^>]+>/g, '').trim();
+    const card = document.createElement('div');
+    card.className = 'svc-card';
+    card.style.cursor = 'pointer';
+    card.innerHTML = `
+      ${s.image ? `<img class="svc-image" src="${s.image}" alt="" loading="lazy">` : ''}
+      <div class="svc-name">${s.name}</div>
+      <p class="svc-desc">${cleanDesc}</p>
+      <button class="svc-btn">Enquire Now</button>
+    `;
+    card.addEventListener('click', () => {
+      window.location.href = `service-post.html?name=${encodeURIComponent(s.name)}`;
+    });
+    card.querySelector('.svc-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      window.open(`${WA_BASE}?text=${encodeURIComponent(svcWaMessage(s.name))}`, '_blank');
+    });
+    return card;
+  }
+
+  async function loadServices(bust = false) {
+    const loading = document.getElementById('svc-loading');
+    const errorEl = document.getElementById('svc-error');
+    const grid    = document.getElementById('svc-grid');
+
+    loading.style.display = 'block';
+    errorEl.style.display = 'none';
+    grid.style.display    = 'none';
+    grid.innerHTML        = '';
+
+    try {
+      const url = bust
+        ? `${SERVICES_WORKER_URL}/services?bust=${Date.now()}`
+        : `${SERVICES_WORKER_URL}/services`;
+      const res = await fetch(url, bust ? { cache: 'no-store' } : undefined);
+      if (!res.ok) throw new Error(`Worker responded ${res.status} ${res.statusText}`);
+      const { services = [] } = await res.json();
+      if (!services.length) throw new Error('No services returned.');
+
+      services.forEach(s => grid.appendChild(renderServiceCard(s)));
+
+      loading.style.display = 'none';
+      grid.style.display    = 'grid';
+    } catch (err) {
+      loading.style.display = 'none';
+      errorEl.style.display = 'block';
+      document.getElementById('svc-error-title').textContent = 'Could not load services';
+      document.getElementById('svc-error-msg').textContent   = err.message;
+    }
+  }
+
+  loadServices();
+</script>
 <script>
   // ─── PRODUCT MODAL ───────────────────────────────────────────────────────────
   const productData = {};

@@ -92,7 +92,7 @@
             </li>
             <li>
               <i class="ti ti-clock" aria-hidden="true"></i>
-              <span>Mon – Sat, 11am – 8pm</span>
+              <span>Mon – Sun, 11am – 8pm</span>
             </li>
           </ul>
         </div>

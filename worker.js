@@ -18,6 +18,14 @@ export default {
       return handleProducts(request, env);
     }
 
+    if (pathname === '/services' && request.method === 'GET') {
+      return handleServices(request, env);
+    }
+
+    if (pathname === '/service-post' && request.method === 'GET') {
+      return handleServicePost(request, env);
+    }
+
     if (pathname === '/blog' && request.method === 'GET') {
       return handleBlog(request, env);
     }
@@ -36,6 +44,10 @@ export default {
 
     if (pathname === '/customer' && request.method === 'POST') {
       return handleCustomer(request, env);
+    }
+
+    if (pathname === '/enquiry' && request.method === 'POST') {
+      return handleEnquiry(request, env);
     }
 
     if (pathname === '/invoice' && request.method === 'POST') {
@@ -169,6 +181,102 @@ async function handleProducts(request, env) {
   // two Response objects means whichever reads it first (cache.put) leaves
   // the other unreadable ("Body has already been used").
   const body = JSON.stringify({ products });
+  const toCache = new Response(body, {
+    headers: { ...CORS, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300' },
+  });
+  await cache.put(cacheKey, toCache);
+
+  return new Response(body, {
+    headers: { ...CORS, 'Content-Type': 'application/json' },
+  });
+}
+
+// ── /services ─────────────────────────────────────────────────────
+async function handleServices(request, env) {
+  const cache    = caches.default;
+  const cacheKey = new Request('https://divineway.kah-yan.workers.dev/services?v=1');
+
+  const bustParam = new URL(request.url).searchParams.has('bust');
+  if (!bustParam) {
+    const cached = await cache.match(cacheKey);
+    if (cached) return cached;
+  }
+
+  const base    = env.ERPNEXT_BASE_URL;
+  const headers = {
+    'Authorization': `token ${env.ERPNEXT_API_KEY}:${env.ERPNEXT_API_SECRET}`,
+    'Content-Type':  'application/json',
+  };
+
+  const fields = encodeURIComponent(JSON.stringify([
+    'name', 'short_description', 'long_description', 'service_image',
+  ]));
+  const listRes = await fetch(
+    `${base}/api/resource/Feng%20Shui%20Service?fields=${fields}&limit_page_length=100&order_by=name%20asc`,
+    { headers },
+  );
+  if (!listRes.ok) {
+    const errBody = await listRes.text().catch(() => '');
+    console.error(`[/services] ERPNext fetch failed: ${listRes.status} ${listRes.statusText} — ${errBody.slice(0, 500)}`);
+    return json({ error: `ERPNext services fetch failed (${listRes.status})` }, 502);
+  }
+  const { data: rawServices = [] } = await listRes.json();
+
+  const services = rawServices.map(s => ({
+    name:               s.name,
+    short_description:  s.short_description || '',
+    long_description:   s.long_description || '',
+    image:              s.service_image
+                          ? (s.service_image.startsWith('http') ? s.service_image : base + s.service_image)
+                          : '',
+  }));
+
+  const body = JSON.stringify({ services });
+  const toCache = new Response(body, {
+    headers: { ...CORS, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300' },
+  });
+  await cache.put(cacheKey, toCache);
+
+  return new Response(body, {
+    headers: { ...CORS, 'Content-Type': 'application/json' },
+  });
+}
+
+// ── /service-post ────────────────────────────────────────────────
+async function handleServicePost(request, env) {
+  const name = new URL(request.url).searchParams.get('name');
+  if (!name) return json({ error: 'Missing name param' }, 400);
+
+  const cache    = caches.default;
+  const cacheKey = new Request(`https://divineway.kah-yan.workers.dev/service-post?name=${encodeURIComponent(name)}`);
+  const cached   = await cache.match(cacheKey);
+  if (cached) return cached;
+
+  const base    = env.ERPNEXT_BASE_URL;
+  const headers = {
+    'Authorization': `token ${env.ERPNEXT_API_KEY}:${env.ERPNEXT_API_SECRET}`,
+    'Content-Type':  'application/json',
+  };
+
+  const docRes = await fetch(`${base}/api/resource/Feng%20Shui%20Service/${encodeURIComponent(name)}`, { headers });
+  if (!docRes.ok) {
+    const errBody = await docRes.text().catch(() => '');
+    console.error(`[/service-post] ERPNext fetch failed for "${name}": ${docRes.status} ${docRes.statusText} — ${errBody.slice(0, 500)}`);
+    return json({ error: `ERPNext service fetch failed (${docRes.status})` }, 502);
+  }
+  const { data: s } = await docRes.json();
+  if (!s) return json({ error: 'Service not found' }, 404);
+
+  const service = {
+    name:               s.name,
+    short_description:  s.short_description || '',
+    long_description:   s.long_description || '',
+    image:              s.service_image
+                          ? (s.service_image.startsWith('http') ? s.service_image : base + s.service_image)
+                          : '',
+  };
+
+  const body = JSON.stringify({ service });
   const toCache = new Response(body, {
     headers: { ...CORS, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300' },
   });
@@ -422,6 +530,55 @@ async function ensureContact(base, headers, customerName, name, email) {
     console.warn('ensureContact failed:', err.message);
     return null;
   }
+}
+
+// ── /enquiry ──────────────────────────────────────────────────────
+async function handleEnquiry(request, env) {
+  let full_name, email, phone, services_needed, message;
+  try {
+    ({ full_name, email, phone, services_needed, message } = await request.json());
+  } catch {
+    return json({ error: 'Invalid JSON body' }, 400);
+  }
+
+  if (!full_name || !email || !message) {
+    return json({ error: 'full_name, email and message are required' }, 400);
+  }
+
+  const base    = env.ERPNEXT_BASE_URL;
+  const headers = {
+    'Authorization': `token ${env.ERPNEXT_API_KEY}:${env.ERPNEXT_API_SECRET}`,
+    'Content-Type':  'application/json',
+  };
+
+  const enquiry_date = new Date().toISOString().split('T')[0];
+
+  const createRes = await fetch(`${base}/api/resource/Website%20Enquiry`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      naming_series:   'ENQ-.#####',
+      full_name,
+      email,
+      phone:           phone || '',
+      services_needed: services_needed || '',
+      message,
+      enquiry_date,
+    }),
+  });
+
+  if (!createRes.ok) {
+    let errBody = {};
+    try { errBody = await createRes.json(); } catch { /* ignore */ }
+    const msgs = errBody._server_messages
+      ? JSON.parse(errBody._server_messages).map(m => (typeof m === 'string' ? JSON.parse(m).message : m.message)).join(' | ')
+      : null;
+    console.error(`[/enquiry] ERPNext create failed: ${createRes.status} — ${msgs || errBody.exception || errBody.message}`);
+    return json({ error: msgs || errBody.exception || errBody.message || `ERPNext ${createRes.status}` }, 502);
+  }
+
+  const { data } = await createRes.json();
+  return json({ success: true, name: data.name });
 }
 
 // ── /invoice ──────────────────────────────────────────────────────

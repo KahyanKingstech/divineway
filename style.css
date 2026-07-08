@@ -326,7 +326,7 @@ body {
 
 /* ─── MASTER ─── */
 .master-sec {
-  padding: 64px 48px;
+  padding: 50px 48px;
   background: var(--ink-deep);
 }
 
@@ -1329,7 +1329,7 @@ body {
   color: var(--text-muted);
   font-family: var(--sans);
   font-weight: 300;
-  max-width: 480px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -1338,6 +1338,7 @@ body {
   background: var(--cream-faint);
   border: 1px solid var(--gold-border);
   border-radius: var(--radius-lg);
+  overflow: hidden;
   padding: 28px 22px;
   display: flex;
   flex-direction: column;
@@ -1345,6 +1346,7 @@ body {
 }
 .svc-card:hover { border-color: var(--gold-dim); transform: translateY(-2px); }
 .svc-icon { font-size: 30px; margin-bottom: 12px; }
+.svc-image { width: calc(100% + 44px); height: 140px; object-fit: cover; margin: -28px -22px 16px; }
 .svc-name { font-size: 15px; color: var(--cream); font-family: var(--serif); font-weight: 400; margin-bottom: 4px; }
 .svc-chin { font-size: 12px; color: var(--gold-dim); font-family: var(--chinese); margin-bottom: 12px; }
 .svc-desc { font-size: 12px; color: var(--text-muted); font-family: var(--sans); line-height: 1.75; font-weight: 300; flex: 1; margin-bottom: 16px; }
@@ -1365,7 +1367,7 @@ body {
 
 /* ─── PAGE CONTENT SECTIONS (services / academy / blog) ─── */
 .page-content-sec {
-  padding: 64px 48px;
+  padding: 50px 48px;
   background: var(--ink-deep);
 }
 

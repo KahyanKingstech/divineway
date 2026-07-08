@@ -55,7 +55,7 @@
 }
 .nav-icon img { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; }
 
-.nav-icon::before {
+/* .nav-icon::before {
   content: '';
   position: absolute;
   inset: -8px;
@@ -64,9 +64,9 @@
   animation: logoAura 2.5s ease-in-out infinite;
   pointer-events: none;
   z-index: -1;
-}
+} */
 
-.nav-icon::after {
+/* .nav-icon::after {
   content: '';
   position: absolute; inset: 0;
   border-radius: 50%;
@@ -77,14 +77,14 @@
     inset 0 0 18px rgba(255,220,100,0.1);
   animation: logoGlow 2.5s ease-in-out infinite;
   pointer-events: none;
-}
+} */
 
-@keyframes logoAura {
+/* @keyframes logoAura {
   0%, 100% { opacity: 0.7; transform: scale(1); }
   50%       { opacity: 1;   transform: scale(1.18); }
-}
+} */
 
-@keyframes logoGlow {
+/* @keyframes logoGlow {
   0%, 100% {
     box-shadow:
       0 0 20px 6px rgba(201,168,76,0.1),
@@ -99,7 +99,7 @@
       0 0 120px 30px rgba(139,26,26,0.2),
       inset 0 0 26px rgba(255,220,100,0.1);
   }
-}
+} */
 
 @keyframes shimmerText {
   0%   { background-position: 200% center; }
