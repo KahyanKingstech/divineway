@@ -50,6 +50,25 @@ ${linksHtml}
 
   document.currentScript.insertAdjacentHTML('afterend', html);
 
+  // The cart button (above) opens #cart-drawer via openCart() in cart.js — inject it
+  // here so every page that includes nav.js has it, instead of relying on each page
+  // to hand-copy the drawer markup (several didn't, so the cart button silently did
+  // nothing on those pages).
+  if (!document.getElementById('cart-drawer')) {
+    document.body.insertAdjacentHTML('beforeend', `
+  <div id="cart-drawer" style="display:none;position:fixed;inset:0;z-index:9999;justify-content:flex-end;align-items:stretch">
+    <div onclick="closeCart()" style="flex:1;background:rgba(0,0,0,0.6)"></div>
+    <div class="cart-panel">
+      <div class="cart-head">
+        <span>🛒 YOUR CART</span>
+        <button class="cart-close" onclick="closeCart()">×</button>
+      </div>
+      <div id="cart-body" style="flex:1;overflow-y:auto;padding:0 22px"></div>
+      <div id="cart-footer" style="padding:0 22px 22px"></div>
+    </div>
+  </div>`);
+  }
+
   const hamburger = document.getElementById('nav-hamburger');
   const nav = document.getElementById('main-nav');
   if (hamburger && nav) {

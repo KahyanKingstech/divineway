@@ -1379,17 +1379,17 @@ body {
 
 .acad-intro-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1.6fr;
   gap: 32px;
   margin-bottom: 48px;
 }
 
-.acad-stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  align-content: start;
-}
+/* .acad-stats-grid {
+  /* display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px; */
+  /* align-content: start; */
+} */
 
 .blog-layout {
   display: grid;

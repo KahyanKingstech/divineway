@@ -17,6 +17,62 @@
   <script src="config.js"></script>
 </head>
 <body>
+  <style>
+    .academy-text {
+      font-size:14px;
+      color:var(--text-body);
+      font-family:var(--sans);
+      font-weight:300;
+      line-height:1.85;
+      margin-bottom:14px;
+    }
+
+    .academy-video-sec {
+      position: relative;
+      padding: 64px 48px;
+      margin-top: 8px;
+      overflow: hidden;
+      background: var(--ink-mid);
+    }
+    .academy-video-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 460px 280px at 15% 15%, rgba(201,168,76,0.10), transparent 70%),
+        radial-gradient(ellipse 460px 280px at 85% 85%, rgba(122,26,0,0.14), transparent 70%);
+    }
+    .academy-video-wrap {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      border: 1px solid var(--gold-border);
+      border-radius: var(--radius-lg);
+      background: var(--cream-faint);
+      padding: 10px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    }
+    .academy-video-frame {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      border-radius: calc(var(--radius-lg) - 4px);
+      overflow: hidden;
+      border: 1px solid var(--gold-border);
+      background: #000;
+    }
+    .academy-video-frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    @media (max-width: 640px) {
+      .academy-video-sec { padding: 48px 20px 56px; }
+      .academy-video-wrap { padding: 6px; }
+    }
+  </style>
 
 
 <div class="wrapper">
@@ -39,113 +95,136 @@
       </svg>
     </div>
 
-    <!-- <div class="page-banner-bg">
-      <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <radialGradient id="pbg1" cx="15%" cy="50%" r="50%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0.12"/><stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/></radialGradient>
-          <radialGradient id="pbg2" cx="85%" cy="50%" r="45%"><stop offset="0%" stop-color="#7a1a00" stop-opacity="0.18"/><stop offset="100%" stop-color="#7a1a00" stop-opacity="0"/></radialGradient>
-          <filter id="pbblur"><feGaussianBlur stdDeviation="22"/></filter>
-        </defs>
-        <rect width="900" height="220" fill="transparent"/>
-        <ellipse cx="100" cy="110" rx="220" ry="140" fill="url(#pbg1)" filter="url(#pbblur)"/>
-        <ellipse cx="800" cy="110" rx="220" ry="140" fill="url(#pbg2)" filter="url(#pbblur)"/>
-         -->
-        <!-- Rotating Outer Bagua Ring -->
-        <!-- <g class="pb-tao-outer">
-          <circle cx="450" cy="110" r="48" fill="none" stroke="#c9a84c" stroke-width="1.2" opacity="0.16"/>
-          <circle cx="450" cy="110" r="40" fill="none" stroke="#c9a84c" stroke-width="0.8" opacity="0.12"/>
-        </g> -->
-        
-        <!-- Rotating Inner Yin-Yang -->
-        <!-- <g class="pb-tao-inner">
-          <circle cx="450" cy="110" r="35" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.18"/>
-          <path d="M 450 75 A 35 35 0 0 1 450 145 A 17.5 17.5 0 0 1 450 110 A 17.5 17.5 0 0 0 450 75" fill="none" stroke="#c9a84c" stroke-width="1.5" opacity="0.14"/>
-          <circle cx="450" cy="92.5" r="3.5" fill="#c9a84c" opacity="0.22"/>
-          <circle cx="450" cy="127.5" r="3.5" fill="#c9a84c" opacity="0.22"/>
-        </g> -->
-        
-        <!-- Central Glow -->
-        <!-- <g class="pb-glow">
-          <circle cx="450" cy="110" r="60" fill="none" stroke="#c9a84c" stroke-width="0.5" opacity="0.06"/>
-        </g>
-        
-        <line x1="0" y1="219" x2="900" y2="219" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.25"/>
-      </svg> -->
-    <!-- </div> -->
     <div class="page-banner-inner">
       <div class="sec-label" style="justify-content:center;margin-bottom:12px">DivinewayFengshui</div>
       <h1 class="page-banner-title">Divine Magic Academy</h1>
       <p class="page-banner-sub">Learn authentic Taoist Feng Shui and metaphysics from Master Louis Cheung.</p>
     </div>
   </div>
+
   <div class="page-content-sec">
     <div class="acad-intro-grid">
       <div>
-        <div class="sec-label">About the Academy</div>
-        <h2 class="sec-title" style="margin-bottom:16px">Learn the Ancient Arts</h2>
-        <p style="font-size:14px;color:var(--text-body);font-family:var(--sans);font-weight:300;line-height:1.85;margin-bottom:14px">Founded in 2016, Divine Magic Academy offers both online and in-person courses in authentic Taoist Feng Shui, BaZi, and Chinese metaphysics. All courses are taught personally by Master Louis Cheung.</p>
-        <p style="font-size:14px;color:var(--text-body);font-family:var(--sans);font-weight:300;line-height:1.85;margin-bottom:24px">Whether you are a complete beginner or a practitioner looking to deepen your knowledge, our structured curriculum takes you from foundational theory to advanced practice.</p>
-        <button class="hcta" onclick="window.open('https://wa.me/6589490437?text=Hello Master Louis, I am interested in the Academy courses.','_blank')">Enquire About Courses</button>
+        <img src="images/divineway_magic.jpg" style="width:100%" alt="Divine Magic" />
       </div>
-      <div class="acad-stats-grid">
-        <div class="stat" style="padding:20px"><div class="stat-n">8+</div><div class="stat-l">Courses available</div></div>
-        <div class="stat" style="padding:20px"><div class="stat-n">500+</div><div class="stat-l">Students trained</div></div>
-        <div class="stat" style="padding:20px"><div class="stat-n">Online</div><div class="stat-l">&amp; in-person</div></div>
-        <div class="stat" style="padding:20px"><div class="stat-n">Cert.</div><div class="stat-l">Upon completion</div></div>
+      <div>
+        <div class="sec-label">The teachings of Divine Magic （六壬仙法）</div>
+        <h2 class="sec-title" style="margin-bottom:16px">Divine Magic</h2>
+        <p class="academy-text">
+          Liu Ren Divine Magic 六壬仙法 is a simple and convenient skill to master. 
+          In the past, people studied this ancient art mainly for self protection. 
+          As times have changed, students who learn these days usually do it mainly to help attune their energies to improve their Careers, People Affinity, Wealth Luck and Health.
+        </p>
+        <p class="academy-text">
+          Students need to provide their name and Date of Birth. 
+          The master will then write a letter and hold a ritual to invite the gods to witness the initiation ceremony.
+        </p>
+        <p class="academy-text">
+          After which the letter is burnt to be reported to the gods. 
+          The students will then drink a bowl of talisman water which will help them ward of evil and bring about good luck. 
+          After which a ceremony will be held to ‘seal’ the student’s body using magical spells and chants. 
+          This is finalized by affixing a seal. After all this is done, the initiation process will be held (Also know as the crossing of Sect). 
+          The student will receive the divine energy and will also be taught a magical verse to use when communicating with the divine.
+        </p>
+        <p class="academy-text">
+          Grand Master Lee Chun Feng(六壬仙师 李淳風) is the founder of Taoist Sect the Liu Ren Sect 六壬法门. 
+          He passed on his teachings in the form of Mediation, Talisman Drawing, Rituals, and Chants with the goal of aiding people in need.
+        </p>
+        <p class="academy-text">
+          We welcome new students who are interested to learn Liu Ren Divine Magic(六壬仙法).
+        </p>   
       </div>
     </div>
+  </div>
 
-    <!-- <div class="sec-label" style="margin-bottom:24px">Course Catalogue</div>
-    <div class="svc-grid">
-      <div class="svc-card">
-        <div class="svc-icon">🔯</div>
-        <div class="svc-name">BaZi Foundations</div>
-        <div class="svc-chin">八字入门</div>
-        <p class="svc-desc">Learn to read a Four Pillars chart from scratch. Covers the Ten Heavenly Stems, Twelve Earthly Branches, and basic luck cycle analysis.</p> -->
-        <!-- <div class="svc-price">SGD $688</div> -->
-        <!-- <button class="svc-btn" onclick="window.open('https://wa.me/6589490437?text=Hello Master Louis, I am interested in the BaZi Foundations course.','_blank')">Register Interest</button>
+  <div class="academy-video-sec">
+    <div class="academy-video-glow"></div>
+    <div class="academy-video-wrap">
+      <div class="academy-video-frame">
+        <iframe src="https://www.youtube.com/embed/eVV_488VEr8?si=IkWTGyQ-XNgpS6NW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
-      <div class="svc-card">
-        <div class="svc-icon">🏠</div>
-        <div class="svc-name">Flying Stars Feng Shui</div>
-        <div class="svc-chin">玄空飞星</div>
-        <p class="svc-desc">Master the Xuan Kong Flying Stars system for residential and commercial space analysis. Includes period charts, annual stars, and remedies.</p> -->
-        <!-- <div class="svc-price">SGD $888</div> -->
-        <!-- <button class="svc-btn" onclick="window.open('https://wa.me/6589490437?text=Hello Master Louis, I am interested in the Flying Stars course.','_blank')">Register Interest</button>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">📜</div>
-        <div class="svc-name">Talisman Drawing &amp; Consecration</div>
-        <div class="svc-chin">符咒书写与开光</div> -->
-        <!-- <p class="svc-desc">Learn to write and consecrate authentic Taoist talismans. Covers the ritual protocols, brush techniques, and energisation methods used by Master Louis.</p> -->
-        <!-- <div class="svc-price">SGD $1,288</div> -->
-        <!-- <button class="svc-btn" onclick="window.open('https://wa.me/6589490437?text=Hello Master Louis, I am interested in the Talisman course.','_blank')">Register Interest</button>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">🧭</div>
-        <div class="svc-name">Liu Ren Divine Magic</div>
-        <div class="svc-chin">六壬神课</div>
-        <p class="svc-desc">An introduction to the ancient divination system used for forecasting and decision-making. Based on Master Louis' published textbook.</p> -->
-        <!-- <div class="svc-price">SGD $988</div> -->
-        <!-- <button class="svc-btn" onclick="window.open('https://wa.me/6589490437?text=Hello Master Louis, I am interested in the Liu Ren course.','_blank')">Register Interest</button>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">🌙</div>
-        <div class="svc-name">Zi Wei Dou Shu</div>
-        <div class="svc-chin">紫微斗数</div>
-        <p class="svc-desc">The Emperor's astrology — chart construction, palace analysis, and destiny reading using the Purple Star system.</p> -->
-        <!-- <div class="svc-price">SGD $1,088</div> -->
-        <!-- <button class="svc-btn" onclick="window.open('https://wa.me/6589490437?text=Hello Master Louis, I am interested in the Zi Wei course.','_blank')">Register Interest</button>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">📅</div>
-        <div class="svc-name">Auspicious Date Selection</div>
-        <div class="svc-chin">择日学</div>
-        <p class="svc-desc">Master the Tong Shu and advanced date selection systems for weddings, business openings, house moves, and major life milestones.</p> -->
-        <!-- <div class="svc-price">SGD $588</div> -->
-        <!-- <button class="svc-btn" onclick="window.open('https://wa.me/6589490437?text=Hello Master Louis, I am interested in the Date Selection course.','_blank')">Register Interest</button>
-      </div>
-    </div> -->
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 40px; margin-bottom: 0px">
+    <h1>Different Levels of Learning</h1>
+  </div>
+  
+  <div class="page-content-sec">
+    <table>
+      <tr>
+        <td width="35%;"><img src="images/divine-level-1.jpg" style="width:100%" alt="Divine Magic" /></td>
+        <td style="vertical-align:top; padding-left:20px;">
+           <h2 class="sec-title" style="margin-bottom:16px">Level 1 (Middle Sect)</h2>
+            <p class="academy-text">
+              Includes a Small Sect which is mainly for self protection, warding off evil. 
+              Students will also learn some basic spells to stop bleeding, dissolve bones, treat scalding, ward evil, treat headaches etc.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td width="20%;" style="margin-right:20px;"><img src="images/divine-level-2.jpg" style="width:100%" alt="Divine Magic" /></td>
+        <td style="vertical-align:top;">
+           <h2 class="sec-title" style="margin-bottom:16px">Level 2 (Big Sect)</h2>
+            <p class="academy-text">
+              Students will learn how to cultivate their energy and learn more advance spells and chants.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td width="20%;" style="margin-right:20px;"><img src="images/divine-level-3.jpg" style="width:100%" alt="Divine Magic" /></td>
+        <td style="vertical-align:top;">
+           <h2 class="sec-title" style="margin-bottom:16px">Level 3 (3 Mountain Sect)</h2>
+            <p class="academy-text">
+              Students will learn to draw talismans and increase their positive energy.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td><img src="images/divine-level-4.jpg" style="width:100%" alt="Divine Magic" /></td>
+        <td style="vertical-align:top;">
+           <h2 class="sec-title" style="margin-bottom:16px">Level 4 (5 Thunder Sect)</h2>
+            <p class="academy-text">
+              Students will be able to learn to draw more advanced talismans and spells. 
+              They will also learn skills to help themselves and others ward off evil, danger and preparators and also relieve health problems. 
+              They will also be able to learn chants and spells to aid them in improving their People Affinity and Wealth.
+            </p>
+            <p class="academy-text">
+              After this stage, students might also wish to take up specialized courses in specific fields of interest which include Rituals related to Wealth, Health, Relationships, etc. 
+              Upon completion of mastering all the specialized courses, students with further interests might raise the desire of being a Teacher to guide and accept students of their own themselves to the Master.
+            </p>
+            <p class="academy-text">
+              (Without the Master’s official decree and approval, disciples who accept students are unqualified and their students are not considered official students of the Liu Ren Sect Lineage). 
+              Please check if the person you are learning from has a qualified approval from his/her master to teach as it will do more harm than good learning under an unqualified master).
+            </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="page-content-sec">
+    <div style="text-align: center; margin-top: 40px; margin-bottom: 0px">
+      <h1>Criteria to learn</h1>
+    </div>
+    <p class="academy-text">
+      This is a skill that has no restrains to gender, age, occupation, race, nationality, religious background, and prior knowledge. 
+      Students only need to have a sincere heart and strong belief.
+    </p>
+    <p class="academy-text">
+      There are no Taboos!
+    </p>
+    <p class="academy-text">
+      There are no restrictions of any sort and after becoming a student it can improve your general luck, help to ward of danger and prevent black magic. 
+      There are no side effects if you have crossed under a qualified master who has bestowed real teachings to you.
+    </p>
+    <p class="academy-text">
+      There is a secret password to every level and students have to memorize it by hard. 
+      This code is chanted whenever the student wants to invoke any spells or chants.
+    </p>
+    <p class="academy-text">
+      **Please note that the password should not be recited out loud nor should it be disclosed to anyone else. 
+      As such students have to respect and adhere to this tradition as a rule.**
+    </p>
   </div>
 
 
